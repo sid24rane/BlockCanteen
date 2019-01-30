@@ -73,6 +73,10 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
         };
     }
 
+    public void setData(ArrayList<MenuItemModel> data) {
+        this.menuItemArrayList = data;
+    }
+
     protected ArrayList<MenuItemModel> getFilteredResults(String query){
 
         ArrayList<MenuItemModel> results = new ArrayList<>();

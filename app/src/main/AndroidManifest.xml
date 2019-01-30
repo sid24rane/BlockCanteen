@@ -7,14 +7,22 @@
     m
     <application
         android:allowBackup="true"
+        android:fullBackupContent="false"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Dashboard.DashboardActivity" />
-        <activity android:name=".QRScannerActivity" />
+        <activity android:name=".Dashboard.DashboardActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".QRScannerActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".SplashScreenActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -23,8 +31,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".KeyGenerationActivity" />
-        <activity android:name=".QRGeneratorActivity"></activity>
+        <activity android:name=".KeyGenerationActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".QRGeneratorActivity"
+            android:screenOrientation="portrait"
+            ></activity>
     </application>
 
 </manifest>
