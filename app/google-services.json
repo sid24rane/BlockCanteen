@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "466327935463",
+    "firebase_url": "https://blockcanteenvjti.firebaseio.com",
+    "project_id": "blockcanteenvjti",
+    "storage_bucket": "blockcanteenvjti.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466327935463:android:1fc63ee97ad7d8fa",
+        "android_client_info": {
+          "package_name": "com.example.sid24rane.blockcanteen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "466327935463-12n1pqnclhkd7smcso7dihj8e3eq7mkp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhhFWsEg8OXWiaUSP8ruN8sRJYRQoFK30"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

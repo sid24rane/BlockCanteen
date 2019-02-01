@@ -3,11 +3,19 @@ package com.example.sid24rane.blockcanteen;
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.os.Build;
+<<<<<<< HEAD
 import android.os.Bundle;
+=======
+import android.support.annotation.NonNull;
+>>>>>>> b241a847cd2dd3ced133c634efc56f3237ad4e04
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -27,9 +35,10 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 
-//https://github.com/scottyab/secure-preferences ==> can be used to store values securely
 public class KeyGenerationActivity extends AppCompatActivity {
 
     private final String PREFS_NAME = "KeyFile";
@@ -43,9 +52,15 @@ public class KeyGenerationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
 
+=======
+        setContentView(R.layout.activity_key_generation);
+        // Access a Cloud Firestore instance from your Activity
+>>>>>>> b241a847cd2dd3ced133c634efc56f3237ad4e04
         try {
             generateKeyPair();
+            getKeysAsString();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -144,6 +159,31 @@ public class KeyGenerationActivity extends AppCompatActivity {
     }
 
 
+    public void sendRegistrationDetails(){
+        // Create a new user with a first and last name
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Map<String, Object> user = new HashMap<>();
+        user.put("first", "Ada");
+        user.put("last", "Lovelace");
+        user.put("born", 1815);
+
+        db.collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(CLASS_NAME, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(CLASS_NAME, "Error adding document", e);
+                    }
+                });
+    }
+
     public void generateKeyPair() throws Exception {
         Log.d(CLASS_NAME, "generateKeyPair invoked");
         // Generate a Key Pair
@@ -173,7 +213,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.O)
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private static void getKeysAsString(){
+    private void getKeysAsString(){
         PublicKey mPublicKey = mKeyPair.getPublic();
         PrivateKey mPrivateKey = mKeyPair.getPrivate();
 
