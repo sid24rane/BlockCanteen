@@ -1,15 +1,11 @@
 package com.example.sid24rane.blockcanteen;
 
-<<<<<<< HEAD
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-=======
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -19,7 +15,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
-import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -33,7 +28,6 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Base64;
 
->>>>>>> b4158f447ce6fbd8a867db63feed1b4af6e39c78
 
 //https://github.com/scottyab/secure-preferences ==> can be used to store values securely
 public class KeyGenerationActivity extends AppCompatActivity {
@@ -49,11 +43,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_key_generation);
-<<<<<<< HEAD
 
-
-=======
         try {
             generateKeyPair();
         } catch (Exception e) {
@@ -77,7 +67,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
     public static PrivateKey getPrivateKey(String filename) throws IOException, GeneralSecurityException {
         String privateKeyPEM = getKey(filename);
         return getPrivateKeyFromString(privateKeyPEM);
->>>>>>> b4158f447ce6fbd8a867db63feed1b4af6e39c78
     }
 
     public static PrivateKey getPrivateKeyFromString(String key) throws IOException, GeneralSecurityException {
