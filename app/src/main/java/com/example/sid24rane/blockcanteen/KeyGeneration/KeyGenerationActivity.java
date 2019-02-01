@@ -55,7 +55,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
         // Access a Cloud Firestore instance from your Activity
 
         try {
-            UserModel user = newUser();
             generateKeyPair();
             getKeysAsString();
         } catch (Exception e) {
@@ -63,11 +62,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
         }
 
     }
-
-    private UserModel newUser(){
-            return null;
-    }
-
+    
     private static String getKey(String filename) throws IOException {
         // Read key from file
         String strKeyPEM = "";
