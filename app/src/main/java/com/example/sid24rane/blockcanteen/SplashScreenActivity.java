@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import com.androidnetworking.AndroidNetworking;
 import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
+import com.example.sid24rane.blockcanteen.KeyGeneration.KeyGenerationActivity;
 
 import okhttp3.OkHttpClient;
 

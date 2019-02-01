@@ -1,4 +1,4 @@
-package com.example.sid24rane.blockcanteen;
+package com.example.sid24rane.blockcanteen.KeyGeneration;
 
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.sid24rane.blockcanteen.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -52,13 +53,19 @@ public class KeyGenerationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_key_generation);
         // Access a Cloud Firestore instance from your Activity
+
         try {
+            UserModel user = newUser();
             generateKeyPair();
             getKeysAsString();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    private UserModel newUser(){
+            return null;
     }
 
     private static String getKey(String filename) throws IOException {
@@ -73,12 +80,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
         return strKeyPEM;
     }
 
-    public static PrivateKey getPrivateKey(String filename) throws IOException, GeneralSecurityException {
-        String privateKeyPEM = getKey(filename);
-        return getPrivateKeyFromString(privateKeyPEM);
-    }
-
-    public static PrivateKey getPrivateKeyFromString(String key) throws IOException, GeneralSecurityException {
+    private  PrivateKey getPrivateKeyFromString(String key) throws IOException, GeneralSecurityException {
         String privateKeyPEM = key;
         privateKeyPEM = privateKeyPEM.replace("-----BEGIN PRIVATE KEY-----\n", "");
         privateKeyPEM = privateKeyPEM.replace("-----END PRIVATE KEY-----", "");
@@ -93,12 +95,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
         return privKey;
     }
 
-    public static PublicKey getPublicKey(String filename) throws IOException, GeneralSecurityException {
-        String publicKeyPEM = getKey(filename);
-        return getPublicKeyFromString(publicKeyPEM);
-    }
-
-    public static PublicKey getPublicKeyFromString(String key) throws IOException, GeneralSecurityException {
+    private PublicKey getPublicKeyFromString(String key) throws IOException, GeneralSecurityException {
         String publicKeyPEM = key;
         publicKeyPEM = publicKeyPEM.replace("-----BEGIN PUBLIC KEY-----\n", "");
         publicKeyPEM = publicKeyPEM.replace("-----END PUBLIC KEY-----", "");
@@ -153,17 +150,19 @@ public class KeyGenerationActivity extends AppCompatActivity {
     }
 
 
-    public void sendRegistrationDetails(){
+    public void sendRegistrationDetails(UserModel user){
         // Create a new user with a first and last name
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Map<String, Object> user = new HashMap<>();
-        user.put("first", "Ada");
-        user.put("last", "Lovelace");
-        user.put("born", 1815);
+        Map<String, Object> object = new HashMap<>();
+        object.put("firstName", user.getFirstName());
+        object.put("lastName", user.getLastName());
+        object.put("email", user.getEmail());
+        object.put("id", user.getId());
+        object.put("publicKey", user.getPublicKey());
 
         db.collection("users")
-                .add(user)
+                .add(object)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
