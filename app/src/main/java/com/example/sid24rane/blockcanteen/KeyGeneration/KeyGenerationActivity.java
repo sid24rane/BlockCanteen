@@ -1,17 +1,22 @@
-package com.example.sid24rane.blockcanteen;
+package com.example.sid24rane.blockcanteen.KeyGeneration;
 
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.os.Build;
+<<<<<<< HEAD:app/src/main/java/com/example/sid24rane/blockcanteen/KeyGenerationActivity.java
 import android.os.Bundle;
+=======
+>>>>>>> 3e00393282356bb2b87792b809ee78d6e858d834:app/src/main/java/com/example/sid24rane/blockcanteen/KeyGeneration/KeyGenerationActivity.java
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.sid24rane.blockcanteen.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -23,6 +28,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
+import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -58,6 +64,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD:app/src/main/java/com/example/sid24rane/blockcanteen/KeyGenerationActivity.java
 
         setContentView(R.layout.activity_key_generation);
 
@@ -86,9 +93,20 @@ public class KeyGenerationActivity extends AppCompatActivity {
                 }
             }
         });
+=======
+        setContentView(R.layout.activity_key_generation);
+        // Access a Cloud Firestore instance from your Activity
+
+        try {
+            generateKeyPair();
+            getKeysAsString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+>>>>>>> 3e00393282356bb2b87792b809ee78d6e858d834:app/src/main/java/com/example/sid24rane/blockcanteen/KeyGeneration/KeyGenerationActivity.java
 
     }
-
+    
     private static String getKey(String filename) throws IOException {
         // Read key from file
         String strKeyPEM = "";
@@ -101,12 +119,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
         return strKeyPEM;
     }
 
-    public static PrivateKey getPrivateKey(String filename) throws IOException, GeneralSecurityException {
-        String privateKeyPEM = getKey(filename);
-        return getPrivateKeyFromString(privateKeyPEM);
-    }
-
-    public static PrivateKey getPrivateKeyFromString(String key) throws IOException, GeneralSecurityException {
+    private  PrivateKey getPrivateKeyFromString(String key) throws IOException, GeneralSecurityException {
         String privateKeyPEM = key;
         privateKeyPEM = privateKeyPEM.replace("-----BEGIN PRIVATE KEY-----\n", "");
         privateKeyPEM = privateKeyPEM.replace("-----END PRIVATE KEY-----", "");
@@ -121,12 +134,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
         return privKey;
     }
 
-    public static PublicKey getPublicKey(String filename) throws IOException, GeneralSecurityException {
-        String publicKeyPEM = getKey(filename);
-        return getPublicKeyFromString(publicKeyPEM);
-    }
-
-    public static PublicKey getPublicKeyFromString(String key) throws IOException, GeneralSecurityException {
+    private PublicKey getPublicKeyFromString(String key) throws IOException, GeneralSecurityException {
         String publicKeyPEM = key;
         publicKeyPEM = publicKeyPEM.replace("-----BEGIN PUBLIC KEY-----\n", "");
         publicKeyPEM = publicKeyPEM.replace("-----END PUBLIC KEY-----", "");
@@ -181,17 +189,19 @@ public class KeyGenerationActivity extends AppCompatActivity {
     }
 
 
-    public void sendRegistrationDetails(){
+    public void sendRegistrationDetails(UserModel user){
         // Create a new user with a first and last name
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Map<String, Object> user = new HashMap<>();
-        user.put("first", "Ada");
-        user.put("last", "Lovelace");
-        user.put("born", 1815);
+        Map<String, Object> object = new HashMap<>();
+        object.put("firstName", user.getFirstName());
+        object.put("lastName", user.getLastName());
+        object.put("email", user.getEmail());
+        object.put("id", user.getId());
+        object.put("publicKey", user.getPublicKey());
 
         db.collection("users")
-                .add(user)
+                .add(object)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {

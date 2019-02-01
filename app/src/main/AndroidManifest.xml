@@ -27,7 +27,7 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name=".KeyGenerationActivity"
+        <activity android:name=".KeyGeneration.KeyGenerationActivity"
             android:screenOrientation="portrait">
 
             <intent-filter>
