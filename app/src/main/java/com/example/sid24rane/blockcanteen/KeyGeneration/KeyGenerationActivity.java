@@ -3,14 +3,10 @@ package com.example.sid24rane.blockcanteen.KeyGeneration;
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.os.Build;
-<<<<<<< HEAD:app/src/main/java/com/example/sid24rane/blockcanteen/KeyGenerationActivity.java
 import android.os.Bundle;
-=======
->>>>>>> 3e00393282356bb2b87792b809ee78d6e858d834:app/src/main/java/com/example/sid24rane/blockcanteen/KeyGeneration/KeyGenerationActivity.java
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +24,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
-import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -64,7 +59,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD:app/src/main/java/com/example/sid24rane/blockcanteen/KeyGenerationActivity.java
 
         setContentView(R.layout.activity_key_generation);
 
@@ -93,17 +87,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
                 }
             }
         });
-=======
-        setContentView(R.layout.activity_key_generation);
-        // Access a Cloud Firestore instance from your Activity
 
-        try {
-            generateKeyPair();
-            getKeysAsString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
->>>>>>> 3e00393282356bb2b87792b809ee78d6e858d834:app/src/main/java/com/example/sid24rane/blockcanteen/KeyGeneration/KeyGenerationActivity.java
 
     }
     

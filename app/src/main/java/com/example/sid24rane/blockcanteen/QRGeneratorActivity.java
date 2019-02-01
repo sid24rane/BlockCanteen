@@ -9,11 +9,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 
-<<<<<<< HEAD
 import com.google.gson.Gson;
-=======
 import com.example.sid24rane.blockcanteen.KeyGeneration.KeyGenerationActivity;
->>>>>>> 3e00393282356bb2b87792b809ee78d6e858d834
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
