@@ -47,23 +47,6 @@
                 android:layout_margin="10dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="#000000"
-                    android:textStyle="italic"
-                    android:layout_marginBottom="5dp"
-                    android:text="Enrollment Id:"/>
-
-                <EditText
-                    android:id="@+id/enroll_id"
-                    android:layout_margin="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
 
                 <TextView
                     android:textColor="#000000"
@@ -120,6 +103,57 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:textStyle="italic"
+                    android:layout_marginBottom="5dp"
+                    android:text="User Type :"/>
+
+                <Spinner
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:id="@+id/userType"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:textStyle="italic"
+                    android:layout_marginBottom="5dp"
+                    android:text="Year of Entry/Admission :"/>
+
+                <Spinner
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:id="@+id/entry"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:textStyle="italic"
+                    android:layout_marginBottom="5dp"
+                    android:text="Department :"/>
+
+                <Spinner
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:id="@+id/department"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <Button
                     android:id="@+id/submit"

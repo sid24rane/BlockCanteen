@@ -65,7 +65,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
         firstname = (EditText) findViewById(R.id.firstname);
         lastname = (EditText) findViewById(R.id.lastname);
         email = (EditText) findViewById(R.id.email_id);
-        id = (EditText) findViewById(R.id.enroll_id);
         register = (Button) findViewById(R.id.submit);
 
         register.setOnClickListener(new View.OnClickListener() {
