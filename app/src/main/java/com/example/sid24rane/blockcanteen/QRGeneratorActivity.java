@@ -4,16 +4,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+import java.security.KeyPair;
+import java.security.PublicKey;
+
 public class QRGeneratorActivity extends AppCompatActivity {
+
+    private final String PREFS_NAME = "KeyFile";
 
     // qr code generation
     public final static int WHITE = 0xFFFFFFFF;
@@ -33,9 +40,17 @@ public class QRGeneratorActivity extends AppCompatActivity {
     }
 
     private void generateQRCode() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(QRGeneratorActivity.this);
-        String publicKey= preferences.getString("publicKey",null);
-        if (publicKey == null){
+
+        Gson gson = new Gson();
+        SharedPreferences preferences =  getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String jsonPair = preferences.getString("keyPair",null);
+        KeyPair keyPair = gson.fromJson(jsonPair, KeyPair.class);
+        PublicKey Key = keyPair.getPublic();
+        String publicKey = new String(android.util.Base64.encode(Key.getEncoded(), Base64.DEFAULT));
+
+        Log.d("PUBLIC KEY",publicKey);
+
+        if (keyPair == null){
             Intent intent = new Intent(QRGeneratorActivity.this,KeyGenerationActivity.class);
             startActivity(intent);
             finish();

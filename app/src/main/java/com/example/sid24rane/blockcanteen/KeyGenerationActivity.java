@@ -3,14 +3,14 @@ package com.example.sid24rane.blockcanteen;
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.os.Build;
-<<<<<<< HEAD
 import android.os.Bundle;
-=======
 import android.support.annotation.NonNull;
->>>>>>> b241a847cd2dd3ced133c634efc56f3237ad4e04
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,23 +47,45 @@ public class KeyGenerationActivity extends AppCompatActivity {
     private static String privateKey;
     private static KeyPair mKeyPair;
 
+    private EditText firstname;
+    private EditText lastname;
+    private EditText email;
+    private EditText id;
+    private Button register;
+
     @TargetApi(Build.VERSION_CODES.O)
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
 
-=======
         setContentView(R.layout.activity_key_generation);
-        // Access a Cloud Firestore instance from your Activity
->>>>>>> b241a847cd2dd3ced133c634efc56f3237ad4e04
-        try {
-            generateKeyPair();
-            getKeysAsString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        firstname = (EditText) findViewById(R.id.firstname);
+        lastname = (EditText) findViewById(R.id.lastname);
+        email = (EditText) findViewById(R.id.email_id);
+        id = (EditText) findViewById(R.id.enroll_id);
+        register = (Button) findViewById(R.id.submit);
+
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String fname = firstname.getText().toString();
+                String lname = lastname.getText().toString();
+                String email_address = email.getText().toString();
+                String enrollment_id = id.getText().toString();
+
+                // Submit to firebase!
+
+                try {
+                    generateKeyPair();
+                    getKeysAsString();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
     }
 

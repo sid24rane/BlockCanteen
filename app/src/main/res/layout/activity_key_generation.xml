@@ -14,7 +14,7 @@
                     android:layout_marginTop="50dp"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/wallet"
+                    android:src="@drawable/transaction2"
                     android:layout_gravity="center_horizontal"
                     />
         <TextView
@@ -54,67 +54,51 @@
                     android:textColor="#000000"
                     android:textStyle="italic"
                     android:layout_marginBottom="5dp"
-                    android:text="Event Name :"/>
-
-                <Spinner
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:id="@+id/eventName"
-                    android:layout_margin="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-
-                <TextView
-                    android:textColor="#000000"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:textStyle="italic"
-                    android:text="College Type :"/>
-
-
-                <RadioGroup
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_width="match_parent"
-                    android:id="@+id/collegeSelect"
-                    android:layout_height="wrap_content">
-
-                    <RadioButton
-                        android:checked="true"
-                        android:id="@+id/vjti"
-                        android:layout_weight="0.5"
-                        android:layout_margin="5dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="VJTI" />
-
-                    <RadioButton
-                        android:id="@+id/others"
-                        android:layout_margin="5dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Others" />
-                </RadioGroup>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="#000000"
-                    android:textStyle="italic"
-                    android:layout_marginBottom="5dp"
-                    android:text="Otp :"/>
+                    android:text="Enrollment Id:"/>
 
                 <EditText
-                    android:id="@+id/otp"
-                    android:layout_width="match_parent"
+                    android:id="@+id/enroll_id"
+                    android:layout_margin="5dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:textStyle="italic"
+                    android:text="Firstname :"/>
+
+                <EditText
+                    android:id="@+id/firstname"
                     android:layout_margin="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:textStyle="italic"
+                    android:layout_marginBottom="5dp"
+                    android:text="Lastname :"/>
+
+                <EditText
+                    android:id="@+id/lastname"
+                    android:layout_margin="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     />
 
 
@@ -125,11 +109,11 @@
                     android:textColor="#000000"
                     android:textStyle="italic"
                     android:layout_marginBottom="5dp"
-                    android:text="College Code (Only for Others) :"/>
+                    android:text="Email Address :"/>
 
 
                 <EditText
-                    android:id="@+id/collegeCode"
+                    android:id="@+id/email_id"
                     android:layout_margin="5dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"

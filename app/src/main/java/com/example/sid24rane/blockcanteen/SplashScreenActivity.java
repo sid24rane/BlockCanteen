@@ -14,6 +14,8 @@ import okhttp3.OkHttpClient;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
+    private final String PREFS_NAME = "KeyFile";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +52,9 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private boolean checkKeyPair() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(SplashScreenActivity.this);
-        String publicKey = preferences.getString("publicKey",null);
-        String privateKey = preferences.getString("privateKey",null);
-        if (publicKey == null || privateKey == null){
+        SharedPreferences preferences =  getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String keyPair = preferences.getString("keyPair",null);
+        if (keyPair == null){
             return false;
         }else{
             return true;
