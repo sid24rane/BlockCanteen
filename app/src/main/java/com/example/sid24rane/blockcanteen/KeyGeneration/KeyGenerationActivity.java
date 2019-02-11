@@ -1,7 +1,6 @@
 package com.example.sid24rane.blockcanteen.KeyGeneration;
 
 import android.annotation.TargetApi;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,11 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.sid24rane.blockcanteen.R;
+import com.example.sid24rane.blockcanteen.data.KeyInSharedPreferences;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -42,8 +41,12 @@ import java.util.Map;
 
 public class KeyGenerationActivity extends AppCompatActivity {
 
-    private final String PREFS_NAME = "KeyFile";
-    private final String CLASS_NAME = getClass().getSimpleName();
+    //TODO 1 : Generate Unique ID for each user ==> firebase
+    //TODO 2 : Change encoding method
+    //TODO 3 : Seperate the signing methods into other file
+    //TODO 4 : Handle Network requests
+
+    private final String TAG = getClass().getSimpleName();
     private static String publicKey;
     private static String privateKey;
     private static KeyPair mKeyPair;
@@ -80,7 +83,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
                 try {
                     generateKeyPair();
-                    getKeysAsString();
+                    KeyInSharedPreferences.getPublicKeyAsString(KeyGenerationActivity.this);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -131,6 +134,8 @@ public class KeyGenerationActivity extends AppCompatActivity {
         return pubKey;
     }
 
+
+
     public static BigInteger extractR(byte[] signature) throws Exception {
         int startR = (signature[1] & 0x80) != 0 ? 3 : 2;
         int lengthR = signature[startR + 1];
@@ -171,6 +176,26 @@ public class KeyGenerationActivity extends AppCompatActivity {
         return realSign;
     }
 
+    public String signString(String stringToBeSigned) throws Exception {
+        Log.d(TAG, "signString invoked");
+        KeyPair keyPair = KeyInSharedPreferences.retrievingKeyPair(KeyGenerationActivity.this);
+        // Signing a String
+        Signature dsa = Signature.getInstance("SHA256withECDSA");
+        dsa.initSign(keyPair.getPrivate()); // Pass the private Key that we need.
+
+        // The string that needs to be signed.
+        byte[] strByte = stringToBeSigned.getBytes("UTF-8");
+        dsa.update(strByte);
+
+        // Actual Signing of the String 'stringToBeSigned' with PrivateKey 'priv'.
+        byte[] sign = dsa.sign();
+        String signature = getSignatureString(sign);
+
+        //TODO : make a network request to send [signature, stringToBeSigned, publicKey]
+        return signature;
+    }
+
+
 
     public void sendRegistrationDetails(UserModel user){
         // Create a new user with a first and last name
@@ -188,19 +213,19 @@ public class KeyGenerationActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(CLASS_NAME, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(CLASS_NAME, "Error adding document", e);
+                        Log.w(TAG, "Error adding document", e);
                     }
                 });
     }
 
     public void generateKeyPair() throws Exception {
-        Log.d(CLASS_NAME, "generateKeyPair invoked");
+        Log.d(TAG, "generateKeyPair invoked");
         // Generate a Key Pair
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
         ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256k1");
@@ -209,7 +234,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
         mKeyPair = keyGen.generateKeyPair();
 
         // Store this keyPair in Shared Preferences
-        storingKeyPair(mKeyPair);
+        KeyInSharedPreferences.storingKeyPair(mKeyPair, KeyGenerationActivity.this);
 
         // Restoring Pub/Priv Keys from String
         PrivateKey restoredPriv = getPrivateKeyFromString(privateKey);
@@ -217,58 +242,39 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
     }
 
-    private void storingKeyPair(KeyPair pair){
-        Log.d(CLASS_NAME, "StoringKeyPair invoked ");
-        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-        Gson gson = new Gson();
-        String jsonPair = gson.toJson(pair);
-        editor.putString("keyPair", jsonPair);
-        editor.commit();
-    }
 
-    @TargetApi(Build.VERSION_CODES.O)
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void getKeysAsString(){
-        PublicKey mPublicKey = mKeyPair.getPublic();
-        PrivateKey mPrivateKey = mKeyPair.getPrivate();
+//    @TargetApi(Build.VERSION_CODES.O)
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    private void getKeysAsString(){
+//        PublicKey mPublicKey = mKeyPair.getPublic();
+//        PrivateKey mPrivateKey = mKeyPair.getPrivate();
+//
+//        // Storing the Pub/Priv Key as String
+//        publicKey = new String(Base64.getEncoder().encode(mPublicKey.getEncoded()));
+//        privateKey = new String(Base64.getEncoder().encode(mPrivateKey.getEncoded()));
+//        Log.d("Public key: ", publicKey);
+//        Log.d("Private key: ", privateKey);
+//
+//    }
 
-        // Storing the Pub/Priv Key as String
-        publicKey = new String(Base64.getEncoder().encode(mPublicKey.getEncoded()));
-        privateKey = new String(Base64.getEncoder().encode(mPrivateKey.getEncoded()));
-        Log.d("Public key: ", publicKey);
-        Log.d("Private key: ", privateKey);
+//    private void storingKeyPair(KeyPair pair){
+//        Log.d(TAG, "StoringKeyPair invoked ");
+//        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+//        Gson gson = new Gson();
+//        String jsonPair = gson.toJson(pair);
+//        editor.putString("keyPair", jsonPair);
+//        editor.commit();
+//    }
 
-    }
-
-
-    public String signString(String stringToBeSigned) throws Exception {
-        Log.d(CLASS_NAME, "signString invoked");
-        KeyPair keyPair = retrievingKeyPair();
-        // Signing a String
-        Signature dsa = Signature.getInstance("SHA256withECDSA");
-        dsa.initSign(keyPair.getPrivate()); // Pass the private Key that we need.
-
-        // The string that needs to be signed.
-        byte[] strByte = stringToBeSigned.getBytes("UTF-8");
-        dsa.update(strByte);
-
-        // Actual Signing of the String 'stringToBeSigned' with PrivateKey 'priv'.
-        byte[] sign = dsa.sign();
-        String signature = getSignatureString(sign);
-
-        //TODO : make a network request to send [signature, stringToBeSigned, publicKey]
-        return signature;
-    }
-
-    private KeyPair retrievingKeyPair(){
-        Log.d(CLASS_NAME, "retrievingKeyPair invoked");
-        Gson gson = new Gson();
-        SharedPreferences  mPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String jsonPair = mPrefs.getString("keyPair", "");
-        KeyPair keyPair = gson.fromJson(jsonPair, KeyPair.class);
-        Log.d("Retrieved KeyPair", keyPair.getPublic().toString()
-                 + " " +  keyPair.getPrivate().toString());
-        return keyPair;
-    }
+//    private KeyPair retrievingKeyPair(){
+//        Log.d(TAG, "retrievingKeyPair invoked");
+//        Gson gson = new Gson();
+//        SharedPreferences  mPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+//        String jsonPair = mPrefs.getString("keyPair", "");
+//        KeyPair keyPair = gson.fromJson(jsonPair, KeyPair.class);
+//        Log.d("Retrieved KeyPair", keyPair.getPublic().toString()
+//                 + " " +  keyPair.getPrivate().toString());
+//        return keyPair;
+//    }
 
 }
