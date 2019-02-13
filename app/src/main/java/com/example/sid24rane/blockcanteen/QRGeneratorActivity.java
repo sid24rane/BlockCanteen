@@ -9,6 +9,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.example.sid24rane.blockcanteen.data.KeyInSharedPreferences;
 import com.google.gson.Gson;
 import com.example.sid24rane.blockcanteen.KeyGeneration.KeyGenerationActivity;
 import com.google.zxing.BarcodeFormat;
@@ -36,34 +37,24 @@ public class QRGeneratorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_qrgenerator);
 
         qrcode = (ImageView) findViewById(R.id.qrcode);
-        generateQRCode();
+        try {
+            generateQRCode();
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    private void generateQRCode() {
+    private void generateQRCode() throws WriterException {
 
-        Gson gson = new Gson();
-        SharedPreferences preferences =  getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String jsonPair = preferences.getString("keyPair",null);
-        KeyPair keyPair = gson.fromJson(jsonPair, KeyPair.class);
-        PublicKey Key = keyPair.getPublic();
-        String publicKey = new String(android.util.Base64.encode(Key.getEncoded(), Base64.DEFAULT));
+        //String publicKey = new String(android.util.Base64.encode(Key.getEncoded(), Base64.DEFAULT));
+        String publicKey = "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEMKkj/B4LqqUWT6FEbZRoSLvGbfC93yD7Zit+GWmaY/UXUiL0LOwIPljBZ/16sFMwxgCO+nlYGFqcTmftaHKmgA==";
 
-        Log.d("PUBLIC KEY",publicKey);
+        //String publicKey = KeyInSharedPreferences.retrievingPublicKey(QRGeneratorActivity.this);
+        Log.d("PUBLIC KEY", publicKey);
+        Bitmap bitmap = encodeAsBitmap(publicKey);
+        qrcode.setImageBitmap(bitmap);
 
-        if (keyPair == null){
-            Intent intent = new Intent(QRGeneratorActivity.this,KeyGenerationActivity.class);
-            startActivity(intent);
-            finish();
-            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-        }else{
-            try {
-                Bitmap bitmap = encodeAsBitmap(publicKey);
-                qrcode.setImageBitmap(bitmap);
-            } catch (WriterException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     Bitmap encodeAsBitmap(String str) throws WriterException {

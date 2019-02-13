@@ -4,7 +4,7 @@ public class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
     private static String extension = "http://";
-    private static String ip_address = "192.168.0.101";
+    private static String ip_address = "192.168.43.81";
     private static String port = "9000";
 
     private static final String CHECK_BALANCE_URL =

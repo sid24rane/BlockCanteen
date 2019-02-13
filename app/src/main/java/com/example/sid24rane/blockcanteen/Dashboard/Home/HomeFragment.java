@@ -18,7 +18,6 @@ import com.androidnetworking.interfaces.StringRequestListener;
 import com.example.sid24rane.blockcanteen.QRGeneratorActivity;
 import com.example.sid24rane.blockcanteen.QRScannerActivity;
 import com.example.sid24rane.blockcanteen.R;
-import com.example.sid24rane.blockcanteen.data.KeyInSharedPreferences;
 import com.example.sid24rane.blockcanteen.utilities.NetworkUtils;
 
 import okhttp3.OkHttpClient;
@@ -26,7 +25,6 @@ import okhttp3.OkHttpClient;
 
 public class HomeFragment extends Fragment {
 
-    //TODO make UI a bit "Chikna"
     private Button send;
     private Button receive;
     private TextView mBalanceTextView;
@@ -70,16 +68,20 @@ public class HomeFragment extends Fragment {
 
 
     private void getUserBalance() {
-        //TODO : remove this, once init done
-        OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
-                .build();
-        AndroidNetworking.initialize(getContext(),okHttpClient);
 
+        networkInit();
         showBalanceView();
+
         // TODO : Fetch public key from SharedPref
         //String pub_key = KeyInSharedPreferences.getPublicKeyAsString(getContext());
         String pub_key = "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAExcIsvLH3vegArqtP7wEdyly11xAcrpV4IBIUCVM+HXoPMMpNFX8hYDjOPL4IUT4swqDkrhj1gS+XWukiGpttzQ==";
         new FetchBalanceTask().execute(pub_key);
+    }
+
+    private void networkInit(){
+        OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
+                .build();
+        AndroidNetworking.initialize(getContext(),okHttpClient);
     }
 
     private void showBalanceView() {
