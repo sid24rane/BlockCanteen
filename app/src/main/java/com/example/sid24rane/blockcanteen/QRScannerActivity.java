@@ -149,6 +149,4 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
     }
 
 
-
-
 }
