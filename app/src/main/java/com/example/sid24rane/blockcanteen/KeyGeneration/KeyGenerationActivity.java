@@ -1,6 +1,7 @@
 package com.example.sid24rane.blockcanteen.KeyGeneration;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
+import com.example.sid24rane.blockcanteen.QRScannerActivity;
 import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.data.KeyInSharedPreferences;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -26,6 +29,7 @@ import java.io.IOException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.security.spec.ECGenParameterSpec;
 import java.util.HashMap;
 import java.util.List;
@@ -86,7 +90,11 @@ public class KeyGenerationActivity extends AppCompatActivity {
                 try {
                     generateKeyPair();
                     KeyInSharedPreferences.retrievingPublicKey(KeyGenerationActivity.this);
-                    KeyInSharedPreferences.retrievingPrivateKey(KeyGenerationActivity.this);
+                    //KeyInSharedPreferences.retrievingPrivateKey(KeyGenerationActivity.this);
+
+                    Intent intent = new Intent(KeyGenerationActivity.this,DashboardActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -141,16 +149,19 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
     public void generateKeyPair() throws Exception {
         Log.d(TAG, "generateKeyPair invoked");
-        // Generate a Key Pair
+
+        Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
+
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
-        ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256r1");
+        ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256k1");
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
         keyGen.initialize(ecSpec, random);
         mKeyPair = keyGen.generateKeyPair();
 
         //String publicKey = new String(android.util.Base64.encode(Key.getEncoded(), Base64.DEFAULT));
-
         KeyInSharedPreferences.storingKeyPair(mKeyPair, KeyGenerationActivity.this);
+
+
     }
 
     private static String getKey(String filename) throws IOException {

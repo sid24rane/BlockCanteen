@@ -21,7 +21,6 @@ public class TransactionUtils {
     public static void makeTransaction(String amount, String sender_pub, String receiver_pub, final Context context){
         Log.d(TAG, "maketransaction() invoked");
 
-        //TODO : check the request input params
         AndroidNetworking.post(NetworkUtils.getMakeTransactionUrl())
                 .addUrlEncodeFormBodyParameter("bounty",amount)
                 .addUrlEncodeFormBodyParameter("receiver_public_key", sender_pub)
@@ -32,14 +31,14 @@ public class TransactionUtils {
                 .getAsString(new StringRequestListener() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("makeTransaction res:", response.toString());
+                        Log.d("makeTransaction res: ", response.toString());
                         try {
                             JSONObject responseJson = new JSONObject(response.toString());
+
                             String send_this = responseJson.getString("send_this");
                             String sign_this = responseJson.getString("sign_this");
-                            //sendTransaction();
-                            Log.d(TAG, send_this);
-                            Log.d(TAG, sign_this);
+                            Log.d(TAG, "send_this : "+  send_this);
+                            Log.d(TAG, "sign_this : " + sign_this);
 
                             String signedString = signString(sign_this, context);
 
@@ -61,8 +60,8 @@ public class TransactionUtils {
 
     public static void sendTransaction(String transaction, String signature){
 
-        Log.d(TAG, transaction);
-        Log.d(TAG, signature);
+        Log.d(TAG, "Transaction : " + transaction);
+        Log.d(TAG, "Signature : " + signature);
 
         AndroidNetworking.post(NetworkUtils.getSendTransactionUrl())
                 .addUrlEncodeFormBodyParameter("transaction", transaction)

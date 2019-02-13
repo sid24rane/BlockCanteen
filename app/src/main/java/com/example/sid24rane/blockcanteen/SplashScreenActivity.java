@@ -54,8 +54,9 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private boolean checkKeyPair() {
         SharedPreferences preferences =  getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String keyPair = preferences.getString("keyPair",null);
-        if (keyPair == null){
+        String public_key = preferences.getString("publicKey",null);
+        String private_key = preferences.getString("privateKey",null);
+        if (public_key == null || private_key == null){
             return false;
         }else{
             return true;

@@ -18,6 +18,7 @@ import com.androidnetworking.interfaces.StringRequestListener;
 import com.example.sid24rane.blockcanteen.QRGeneratorActivity;
 import com.example.sid24rane.blockcanteen.QRScannerActivity;
 import com.example.sid24rane.blockcanteen.R;
+import com.example.sid24rane.blockcanteen.data.KeyInSharedPreferences;
 import com.example.sid24rane.blockcanteen.utilities.NetworkUtils;
 
 import okhttp3.OkHttpClient;
@@ -71,11 +72,8 @@ public class HomeFragment extends Fragment {
 
         networkInit();
         showBalanceView();
-
-        // TODO : Fetch public key from SharedPref
-        //String pub_key = KeyInSharedPreferences.getPublicKeyAsString(getContext());
-        String pub_key = "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAExcIsvLH3vegArqtP7wEdyly11xAcrpV4IBIUCVM+HXoPMMpNFX8hYDjOPL4IUT4swqDkrhj1gS+XWukiGpttzQ==";
-        new FetchBalanceTask().execute(pub_key);
+        String publicKey = KeyInSharedPreferences.retrievingPublicKey(getContext());
+        new FetchBalanceTask().execute(publicKey);
     }
 
     private void networkInit(){

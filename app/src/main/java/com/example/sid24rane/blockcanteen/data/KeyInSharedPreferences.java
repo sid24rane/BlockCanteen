@@ -42,9 +42,7 @@ public class KeyInSharedPreferences {
         Log.d(TAG, "retrievingPublicKey() invoked");
         SharedPreferences mPrefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String publicKey = mPrefs.getString("publicKey", "");
-
-
-        Log.d("Retrieved Public Key ", publicKey);
+        Log.d("Retrieved PublicKey ", publicKey);
 
         return publicKey;
     }
@@ -52,9 +50,7 @@ public class KeyInSharedPreferences {
     public static String retrievingPrivateKey(Context context){
         Log.d(TAG, "retrievingPrivateKey() invoked");
         SharedPreferences mPrefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
         String privateKey = mPrefs.getString("privateKey", "");
-
         Log.d("Retrieved PrivateKey ", privateKey);
 
         return privateKey;

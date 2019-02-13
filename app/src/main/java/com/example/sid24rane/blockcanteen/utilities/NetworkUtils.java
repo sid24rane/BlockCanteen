@@ -16,6 +16,9 @@ public class NetworkUtils {
     private static final String SEND_TRANSACTION_URL =
             getAddress() + "/sendTransaction";
 
+    private static final String TRANSACTION_HISTORY =
+            getAddress() + "/transactionHistory";
+
     public static String getCheckBalanceUrl() {
         return CHECK_BALANCE_URL;
     }
@@ -26,6 +29,10 @@ public class NetworkUtils {
 
     public static String getSendTransactionUrl() {
         return SEND_TRANSACTION_URL;
+    }
+
+    public static String getTransactionHistoryUrl() {
+        return TRANSACTION_HISTORY;
     }
 
     private static String getAddress(){
