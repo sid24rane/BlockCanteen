@@ -23,20 +23,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.GeneralSecurityException;
-import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.SecureRandom;
-import java.security.Signature;
 import java.security.spec.ECGenParameterSpec;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +36,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
     //TODO 1 : Generate Unique ID for each user ==> firebase
     //TODO 2 : Change encoding method
-    //TODO 3 : Seperate the signing methods into other file
     //TODO 4 : Handle Network requests
 
     private final String TAG = getClass().getSimpleName();
@@ -89,14 +78,15 @@ public class KeyGenerationActivity extends AppCompatActivity {
                 String fname = firstname.getText().toString();
                 String lname = lastname.getText().toString();
                 String email_address = email.getText().toString();
-                String enrollment_id = id.getText().toString();
+                //String enrollment_id = id.getText().toString();
                 String year_of_admission = entry.getText().toString();
 
                 // Submit to firebase!
 
                 try {
                     generateKeyPair();
-                    KeyInSharedPreferences.getPublicKeyAsString(KeyGenerationActivity.this);
+                    KeyInSharedPreferences.retrievingPublicKey(KeyGenerationActivity.this);
+                    KeyInSharedPreferences.retrievingPrivateKey(KeyGenerationActivity.this);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -121,110 +111,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
         usertypedataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userType.setAdapter(dataAdapter);
     }
-
-    private static String getKey(String filename) throws IOException {
-        // Read key from file
-        String strKeyPEM = "";
-        BufferedReader br = new BufferedReader(new FileReader(filename));
-        String line;
-        while ((line = br.readLine()) != null) {
-            strKeyPEM += line + "\n";
-        }
-        br.close();
-        return strKeyPEM;
-    }
-
-    private  PrivateKey getPrivateKeyFromString(String key) throws IOException, GeneralSecurityException {
-        String privateKeyPEM = key;
-        privateKeyPEM = privateKeyPEM.replace("-----BEGIN PRIVATE KEY-----\n", "");
-        privateKeyPEM = privateKeyPEM.replace("-----END PRIVATE KEY-----", "");
-        privateKeyPEM = privateKeyPEM.replace("\n", "");
-        byte[] encoded = new byte[0];
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            encoded = Base64.getDecoder().decode(privateKeyPEM);
-        }
-        KeyFactory kf = KeyFactory.getInstance("EC");
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);
-        PrivateKey privKey = (PrivateKey) kf.generatePrivate(keySpec);
-        return privKey;
-    }
-
-    private PublicKey getPublicKeyFromString(String key) throws IOException, GeneralSecurityException {
-        String publicKeyPEM = key;
-        publicKeyPEM = publicKeyPEM.replace("-----BEGIN PUBLIC KEY-----\n", "");
-        publicKeyPEM = publicKeyPEM.replace("-----END PUBLIC KEY-----", "");
-        publicKeyPEM = publicKeyPEM.replace("\n", "");
-        byte[] encoded = new byte[0];
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            encoded = Base64.getDecoder().decode(publicKeyPEM);
-        }
-        KeyFactory kf = KeyFactory.getInstance("EC");
-        PublicKey pubKey = (PublicKey) kf.generatePublic(new X509EncodedKeySpec(encoded));
-        return pubKey;
-    }
-
-
-
-    public static BigInteger extractR(byte[] signature) throws Exception {
-        int startR = (signature[1] & 0x80) != 0 ? 3 : 2;
-        int lengthR = signature[startR + 1];
-        return new BigInteger(Arrays.copyOfRange(signature, startR + 2, startR + 2 + lengthR));
-    }
-
-    public static BigInteger extractS(byte[] signature) throws Exception {
-        int startR = (signature[1] & 0x80) != 0 ? 3 : 2;
-        int lengthR = signature[startR + 1];
-        int startS = startR + 2 + lengthR;
-        int lengthS = signature[startS + 1];
-        return new BigInteger(Arrays.copyOfRange(signature, startS + 2, startS + 2 + lengthS));
-    }
-
-    public static byte[] derSign(BigInteger r, BigInteger s) throws Exception {
-        byte[] rb = r.toByteArray();
-        byte[] sb = s.toByteArray();
-        int off = (2 + 2) + rb.length;
-        int tot = off + (2 - 2) + sb.length;
-        byte[] der = new byte[tot + 2];
-        der[0] = 0x30;
-        der[1] = (byte) (tot & 0xff);
-        der[2 + 0] = 0x02;
-        der[2 + 1] = (byte) (rb.length & 0xff);
-        System.arraycopy(rb, 0, der, 2 + 2, rb.length);
-        der[off + 0] = 0x02;
-        der[off + 1] = (byte) (sb.length & 0xff);
-        System.arraycopy(sb, 0, der, off + 2, sb.length);
-        return der;
-    }
-
-    public static String getSignatureString(byte[] sign) throws Exception {
-        // System.out.println("Signature: " + new BigInteger(1, sign).toString(16));
-
-        BigInteger r = extractR(sign);
-        BigInteger s = extractS(sign);
-        String realSign = "[" + r.toString() + ", " + s.toString() + "]";
-        return realSign;
-    }
-
-    public String signString(String stringToBeSigned) throws Exception {
-        Log.d(TAG, "signString invoked");
-        KeyPair keyPair = KeyInSharedPreferences.retrievingKeyPair(KeyGenerationActivity.this);
-        // Signing a String
-        Signature dsa = Signature.getInstance("SHA256withECDSA");
-        dsa.initSign(keyPair.getPrivate()); // Pass the private Key that we need.
-
-        // The string that needs to be signed.
-        byte[] strByte = stringToBeSigned.getBytes("UTF-8");
-        dsa.update(strByte);
-
-        // Actual Signing of the String 'stringToBeSigned' with PrivateKey 'priv'.
-        byte[] sign = dsa.sign();
-        String signature = getSignatureString(sign);
-
-        //TODO : make a network request to send [signature, stringToBeSigned, publicKey]
-        return signature;
-    }
-
-
 
     public void sendRegistrationDetails(UserModel user){
         // Create a new user with a first and last name
@@ -257,53 +143,27 @@ public class KeyGenerationActivity extends AppCompatActivity {
         Log.d(TAG, "generateKeyPair invoked");
         // Generate a Key Pair
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
-        ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256k1");
+        ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256r1");
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
         keyGen.initialize(ecSpec, random);
         mKeyPair = keyGen.generateKeyPair();
 
-        // Store this keyPair in Shared Preferences
+        //String publicKey = new String(android.util.Base64.encode(Key.getEncoded(), Base64.DEFAULT));
+
         KeyInSharedPreferences.storingKeyPair(mKeyPair, KeyGenerationActivity.this);
-
-        // Restoring Pub/Priv Keys from String
-        PrivateKey restoredPriv = getPrivateKeyFromString(privateKey);
-        PublicKey restoredPub = getPublicKeyFromString(publicKey);
-
     }
 
+    private static String getKey(String filename) throws IOException {
+        // Read key from file
+        String strKeyPEM = "";
+        BufferedReader br = new BufferedReader(new FileReader(filename));
+        String line;
+        while ((line = br.readLine()) != null) {
+            strKeyPEM += line + "\n";
+        }
+        br.close();
+        return strKeyPEM;
+    }
 
-//    @TargetApi(Build.VERSION_CODES.O)
-//    @RequiresApi(api = Build.VERSION_CODES.O)
-//    private void getKeysAsString(){
-//        PublicKey mPublicKey = mKeyPair.getPublic();
-//        PrivateKey mPrivateKey = mKeyPair.getPrivate();
-//
-//        // Storing the Pub/Priv Key as String
-//        publicKey = new String(Base64.getEncoder().encode(mPublicKey.getEncoded()));
-//        privateKey = new String(Base64.getEncoder().encode(mPrivateKey.getEncoded()));
-//        Log.d("Public key: ", publicKey);
-//        Log.d("Private key: ", privateKey);
-//
-//    }
-
-//    private void storingKeyPair(KeyPair pair){
-//        Log.d(TAG, "StoringKeyPair invoked ");
-//        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-//        Gson gson = new Gson();
-//        String jsonPair = gson.toJson(pair);
-//        editor.putString("keyPair", jsonPair);
-//        editor.commit();
-//    }
-
-//    private KeyPair retrievingKeyPair(){
-//        Log.d(TAG, "retrievingKeyPair invoked");
-//        Gson gson = new Gson();
-//        SharedPreferences  mPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-//        String jsonPair = mPrefs.getString("keyPair", "");
-//        KeyPair keyPair = gson.fromJson(jsonPair, KeyPair.class);
-//        Log.d("Retrieved KeyPair", keyPair.getPublic().toString()
-//                 + " " +  keyPair.getPrivate().toString());
-//        return keyPair;
-//    }
 
 }

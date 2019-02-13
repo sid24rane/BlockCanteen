@@ -1,5 +1,6 @@
 package com.example.sid24rane.blockcanteen;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.sid24rane.blockcanteen.utilities.TransactionUtils;
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -124,9 +126,13 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
 
     @Override
     public void handleResult(Result result) {
-        final String myResult = result.getText();
+        final String receiver_pub_key = result.getText();
         Log.d("QRCodeScanner", result.getText());
         Log.d("QRCodeScanner", result.getBarcodeFormat().toString());
+
+        String sender_pub_key = "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAExcIsvLH3vegArqtP7wEdyly11xAcrpV4IBIUCVM+HXoPMMpNFX8hYDjOPL4IUT4swqDkrhj1gS+XWukiGpttzQ==";
+
+        TransactionUtils.makeTransaction("10", sender_pub_key, receiver_pub_key, QRScannerActivity.this);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Scan Result");
@@ -139,7 +145,7 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
         builder.setNeutralButton("Visit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(myResult));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(receiver_pub_key));
                 startActivity(browserIntent);
             }
         });

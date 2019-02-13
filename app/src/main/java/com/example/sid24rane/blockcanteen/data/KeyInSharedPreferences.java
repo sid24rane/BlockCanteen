@@ -6,10 +6,18 @@ import android.os.Build;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.PrivilegedAction;
 import java.security.PublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -22,27 +30,41 @@ public class KeyInSharedPreferences {
     public static void storingKeyPair(KeyPair pair, Context context){
         Log.d(TAG, "storingKeyPair() invoked");
         android.content.SharedPreferences.Editor editor = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-        Gson gson = new Gson();
-        String jsonPair = gson.toJson(pair);
-        editor.putString("keyPair", jsonPair);
+        String pubKey = getPublicKeyAsString(pair, context);
+        String privateKey = getPrivateKeyAsString(pair, context);
+
+        editor.putString("publicKey", pubKey);
+        editor.putString("privateKey", privateKey);
         editor.commit();
     }
 
-    public static KeyPair retrievingKeyPair(Context context){
-        Log.d(TAG, "retrievingKeyPair() invoked");
-        Gson gson = new Gson();
+    public static String retrievingPublicKey(Context context){
+        Log.d(TAG, "retrievingPublicKey() invoked");
         SharedPreferences mPrefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String jsonPair = mPrefs.getString("keyPair", "");
-        KeyPair keyPair = gson.fromJson(jsonPair, KeyPair.class);
-        Log.d("Retrieved KeyPair", keyPair.getPublic().toString()
-                + " " +  keyPair.getPrivate().toString());
-        return keyPair;
+        String publicKey = mPrefs.getString("publicKey", "");
+
+
+        Log.d("Retrieved Public Key ", publicKey);
+
+        return publicKey;
     }
 
-    public static String getPublicKeyAsString(Context context){
+    public static String retrievingPrivateKey(Context context){
+        Log.d(TAG, "retrievingPrivateKey() invoked");
+        SharedPreferences mPrefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        String privateKey = mPrefs.getString("privateKey", "");
+
+        Log.d("Retrieved PrivateKey ", privateKey);
+
+        return privateKey;
+    }
+
+    private static String getPublicKeyAsString(KeyPair keyPair, Context context){
         Log.d(TAG, "getPublicKeyAsString() invoked");
-        KeyPair mKeyPair = retrievingKeyPair(context);
-        PublicKey mPublicKey = mKeyPair.getPublic();
+        //KeyPair mKeyPair = retrievingKeyPair(context);
+
+        PublicKey mPublicKey = keyPair.getPublic();
         String publicKey = null;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -53,9 +75,11 @@ public class KeyInSharedPreferences {
         return publicKey;
     }
 
-    private String getPrivateKeyAsString(Context context){
-        KeyPair mKeyPair = retrievingKeyPair(context);
-        PrivateKey mPrivateKey = mKeyPair.getPrivate();
+    private static String getPrivateKeyAsString(KeyPair keyPair, Context context){
+        //KeyPair mKeyPair = retrievingKeyPair(context);
+        //PrivateKey mPrivateKey = mKeyPair.getPrivate();
+
+        PrivateKey mPrivateKey = keyPair.getPrivate();
         String privateKey = null;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -64,6 +88,37 @@ public class KeyInSharedPreferences {
 
         Log.d(TAG,"Private Key : " +  privateKey);
         return privateKey;
+    }
+
+    public  static PrivateKey getPrivateKeyFromString(String key) throws IOException, GeneralSecurityException {
+        String privateKeyPEM = key;
+        privateKeyPEM = privateKeyPEM.replace("-----BEGIN PRIVATE KEY-----\n", "");
+        privateKeyPEM = privateKeyPEM.replace("-----END PRIVATE KEY-----", "");
+        privateKeyPEM = privateKeyPEM.replace("\n", "");
+        byte[] encoded = new byte[0];
+        //String publicKey = new String(android.util.Base64.encode(Key.getEncoded(), Base64.DEFAULT));
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            encoded = Base64.getDecoder().decode(privateKeyPEM);
+        }
+        KeyFactory kf = KeyFactory.getInstance("EC");
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);
+        PrivateKey privKey = (PrivateKey) kf.generatePrivate(keySpec);
+        return privKey;
+    }
+
+    private static PublicKey getPublicKeyFromString(String key) throws IOException, GeneralSecurityException {
+        String publicKeyPEM = key;
+        publicKeyPEM = publicKeyPEM.replace("-----BEGIN PUBLIC KEY-----\n", "");
+        publicKeyPEM = publicKeyPEM.replace("-----END PUBLIC KEY-----", "");
+        publicKeyPEM = publicKeyPEM.replace("\n", "");
+        byte[] encoded = new byte[0];
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            encoded = Base64.getDecoder().decode(publicKeyPEM);
+        }
+        KeyFactory kf = KeyFactory.getInstance("EC");
+        PublicKey pubKey = (PublicKey) kf.generatePublic(new X509EncodedKeySpec(encoded));
+        return pubKey;
     }
 
 }
