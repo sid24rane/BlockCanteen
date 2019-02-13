@@ -43,17 +43,38 @@
                     android:layout_gravity="center_horizontal"
                     />
 
+
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/text3"
-                    android:text="$ 140.00"
+                    android:id="@+id/balance"
                     android:textSize="80dp"
                     android:textStyle="bold"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="10dp"
                     />
+
+                <TextView
+                    android:id="@+id/error_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="16dp"
+                    android:textSize="24dp"
+                    android:visibility="invisible" />
+
+                <ProgressBar
+                    android:id="@+id/pb_loading_indicator"
+                    android:layout_height="42dp"
+                    android:layout_width="42dp"
+                    android:visibility="invisible" />
+            </FrameLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"

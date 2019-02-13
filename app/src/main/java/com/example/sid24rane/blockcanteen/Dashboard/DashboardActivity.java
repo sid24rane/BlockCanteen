@@ -23,6 +23,8 @@ import com.example.sid24rane.blockcanteen.R;
 
 public class DashboardActivity extends AppCompatActivity {
 
+    //TODO : remove canteen menu option
+
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private boolean doubleBackToExitPressedOnce = false;
