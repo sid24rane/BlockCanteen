@@ -9,8 +9,10 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.sid24rane.blockcanteen.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,6 +39,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -53,6 +56,9 @@ public class KeyGenerationActivity extends AppCompatActivity {
     private EditText email;
     private EditText id;
     private Button register;
+    private Spinner userType;
+    private Spinner department;
+    private EditText entry;
 
     @TargetApi(Build.VERSION_CODES.O)
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -66,6 +72,12 @@ public class KeyGenerationActivity extends AppCompatActivity {
         lastname = (EditText) findViewById(R.id.lastname);
         email = (EditText) findViewById(R.id.email_id);
         register = (Button) findViewById(R.id.submit);
+        userType = (Spinner) findViewById(R.id.userType);
+        department = (Spinner) findViewById(R.id.department);
+        entry = (EditText) findViewById(R.id.entry);
+
+        loadSpinnerData();
+
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +87,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
                 String lname = lastname.getText().toString();
                 String email_address = email.getText().toString();
                 String enrollment_id = id.getText().toString();
+                String year_of_admission = entry.getText().toString();
 
                 // Submit to firebase!
 
@@ -89,7 +102,23 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
 
     }
-    
+
+    private void loadSpinnerData() {
+
+
+        // departments
+        List<String> departmentNameData = new Data().departmentNameData();
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, departmentNameData);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        department.setAdapter(dataAdapter);
+
+        // usertype
+        List<String> usertypeData = new Data().usertypeData();
+        ArrayAdapter<String> usertypedataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, usertypeData);
+        usertypedataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        userType.setAdapter(dataAdapter);
+    }
+
     private static String getKey(String filename) throws IOException {
         // Read key from file
         String strKeyPEM = "";
