@@ -1,5 +1,7 @@
 package com.example.sid24rane.blockcanteen.utilities;
 
+import android.util.Log;
+
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -15,6 +17,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 public class EncryptUtils {
+    private final String TAG = getClass().getSimpleName();
 
     public  String getRomeo() {
         return romeo;
@@ -29,6 +32,7 @@ public class EncryptUtils {
     public  SecretKey generateKey(String mySecret)
             throws NoSuchAlgorithmException, InvalidKeySpecException
     {
+        Log.d(TAG, "generateKey() invoked");
         return new SecretKeySpec(mySecret.getBytes(), "AES");
     }
 
@@ -36,6 +40,7 @@ public class EncryptUtils {
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidParameterSpecException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException
     {
         /* Encrypt the message. */
+        Log.d(TAG, "encryptMsg() invoked");
         Cipher cipher = null;
         cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, secret);
@@ -46,6 +51,7 @@ public class EncryptUtils {
     public  String decryptMsg(byte[] cipherText, SecretKey secret)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidParameterSpecException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException
     {
+        Log.d(TAG, "decryptKey() invoked");
         /* Decrypt the message, given derived encContentValues and initialization vector. */
         Cipher cipher = null;
         cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");

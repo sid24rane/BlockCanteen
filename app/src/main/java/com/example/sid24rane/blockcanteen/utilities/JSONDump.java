@@ -10,20 +10,24 @@ import java.io.IOException;
 
 public class JSONDump {
 
-    static String fileName = "blockCanteen.json";
+    private static String fileName = "blockCanteen.json";
+    private static String TAG = "JSONDump";
+
 
     public static void saveData(Context context, String mJsonResponse) {
+        Log.d(TAG, "saveData() invoked");
         try {
             FileWriter file = new FileWriter(context.getFilesDir().getPath() + "/" + fileName);
             file.write(mJsonResponse);
             file.flush();
             file.close();
         } catch (IOException e) {
-            Log.e("TAG", "Error in Writing: " + e.getLocalizedMessage());
+            Log.e(TAG, "Error in Writing: " + e.getLocalizedMessage());
         }
     }
 
     public static String getData(Context context) {
+        Log.d(TAG, "getData() invoked");
         try {
             File f = new File(context.getFilesDir().getPath() + "/" + fileName);
             //check whether file exists
@@ -34,7 +38,7 @@ public class JSONDump {
             is.close();
             return new String(buffer);
         } catch (IOException e) {
-            Log.e("TAG", "Error in Reading: " + e.getLocalizedMessage());
+            Log.e(TAG, "Error in Reading: " + e.getLocalizedMessage());
             return null;
         }
     }

@@ -6,7 +6,7 @@ import android.util.Log;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
-import com.example.sid24rane.blockcanteen.data.KeyInSharedPreferences;
+import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -127,10 +127,10 @@ public class TransactionUtils {
     public static String signString(String stringToBeSigned, Context context) throws Exception {
         Log.d(TAG, "signString() invoked");
 
-        String privateKey = KeyInSharedPreferences.retrievingPrivateKey(context);
+        String privateKey = DataInSharedPreferences.retrievingPrivateKey(context);
 
         Signature dsa = Signature.getInstance("SHA256withECDSA");
-        dsa.initSign(KeyInSharedPreferences.getPrivateKeyFromString(privateKey)); // Pass the private Key that we need.
+        dsa.initSign(DataInSharedPreferences.getPrivateKeyFromString(privateKey)); // Pass the private Key that we need.
 
         // The string that needs to be signed.
         byte[] strByte = stringToBeSigned.getBytes("UTF-8");

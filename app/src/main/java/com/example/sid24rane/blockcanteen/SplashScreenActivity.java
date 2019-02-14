@@ -2,10 +2,10 @@ package com.example.sid24rane.blockcanteen;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
 import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
@@ -15,7 +15,8 @@ import okhttp3.OkHttpClient;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private final String PREFS_NAME = "KeyFile";
+    private final String PREFS_NAME = "DataFile";
+    private final String TAG = getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +54,12 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private boolean checkKeyPair() {
+        Log.d(TAG, "checkKeyPair() invoked");
         SharedPreferences preferences =  getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String public_key = preferences.getString("publicKey",null);
         String private_key = preferences.getString("privateKey",null);
         if (public_key == null || private_key == null){
+            Log.d(TAG, "either private or public key doesn't exist");
             return false;
         }else{
             return true;

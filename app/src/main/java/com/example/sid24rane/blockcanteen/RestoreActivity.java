@@ -7,12 +7,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.example.sid24rane.blockcanteen.utilities.EncryptUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -28,6 +30,7 @@ public class RestoreActivity extends AppCompatActivity {
     private Button uploadFile;
     private EditText secret;
     private Button restoreProfile;
+    private final String TAG = getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +41,10 @@ public class RestoreActivity extends AppCompatActivity {
         secret = (EditText) findViewById(R.id.secret);
         restoreProfile = (Button) findViewById(R.id.restoreProfile);
 
-
-
         uploadFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //TODO : take input file from user
             }
         });
 
@@ -58,10 +59,16 @@ public class RestoreActivity extends AppCompatActivity {
                 SecretKey secretKey = null;
                 try {
                     secretKey = e.generateKey(secretKeyFromUser);
-                    String decrypted = new String(e.encryptMsg(dataFromFile, secretKey));
-                    Log.d("decrypted ;", decrypted );
+                    String decrypted = new String(e.decryptMsg(dataFromFile.getBytes(), secretKey));
+                    Log.d(TAG,"Decrypted :"+ decrypted );
+
+                    //TODO : check Decrypted for JSON string
 
                     JSONObject json = new JSONObject(decrypted);
+                    Log.d(TAG, json.toString());
+
+                    //Storing the data in sharedPreferences
+                    DataInSharedPreferences.storingUserDetails(json, RestoreActivity.this);
 
                 } catch (NoSuchAlgorithmException e1) {
                     e1.printStackTrace();
@@ -80,6 +87,8 @@ public class RestoreActivity extends AppCompatActivity {
                 } catch (IllegalBlockSizeException e1) {
                     e1.printStackTrace();
                 } catch (JSONException e1) {
+                    e1.printStackTrace();
+                } catch (InvalidAlgorithmParameterException e1) {
                     e1.printStackTrace();
                 }
 

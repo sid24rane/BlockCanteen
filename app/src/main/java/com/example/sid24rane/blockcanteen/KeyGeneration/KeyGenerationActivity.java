@@ -1,11 +1,8 @@
 package com.example.sid24rane.blockcanteen.KeyGeneration;
 
-import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +15,7 @@ import android.widget.Toast;
 import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
 import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.RestoreActivity;
-import com.example.sid24rane.blockcanteen.data.KeyInSharedPreferences;
+import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.example.sid24rane.blockcanteen.utilities.EncryptUtils;
 import com.example.sid24rane.blockcanteen.utilities.JSONDump;
 
@@ -37,9 +34,7 @@ import java.security.Security;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -50,17 +45,13 @@ import javax.crypto.SecretKey;
 public class KeyGenerationActivity extends AppCompatActivity {
 
     //TODO 2 : Change encoding method
-    //TODO 4 : Handle Network requests
 
     private final String TAG = getClass().getSimpleName();
-    private static String publicKey;
-    private static String privateKey;
     private static KeyPair mKeyPair;
 
     private EditText firstname;
     private EditText lastname;
     private EditText email;
-    private EditText id;
     private Button register;
     private Spinner userType;
     private Spinner department;
@@ -69,8 +60,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Button restore;
 
-    @TargetApi(Build.VERSION_CODES.O)
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,7 +108,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
                         progressDialog.show();
 
                         generateKeyPair();
-                        //KeyInSharedPreferences.retrievingPublicKey(KeyGenerationActivity.this);
+                        //DataInSharedPreferences.retrievingPublicKey(KeyGenerationActivity.this);
 
                         JSONObject userJSON = new JSONObject();
                         userJSON.put("firstName", fname);
@@ -128,10 +117,12 @@ public class KeyGenerationActivity extends AppCompatActivity {
                         userJSON.put("userType", user_type);
                         userJSON.put("userDepartment", user_department);
                         userJSON.put("yearOfAdmission", year_of_admission);
-                        userJSON.put("publicKey", KeyInSharedPreferences.retrievingPrivateKey(KeyGenerationActivity.this));
-                        userJSON.put("privateKey", KeyInSharedPreferences.retrievingPublicKey(KeyGenerationActivity.this));
+                        userJSON.put("privateKey", DataInSharedPreferences.retrievingPrivateKey(KeyGenerationActivity.this));
+                        userJSON.put("publicKey", DataInSharedPreferences.retrievingPublicKey(KeyGenerationActivity.this));
 
-                        saveRegistrationDetails(userJSON, secretKey);
+                        //save data in both: SharedPref as well as JSONDump
+                        saveRegistrationDetailsAsJson(userJSON, secretKey);
+                        DataInSharedPreferences.storingUserDetails(userJSON, KeyGenerationActivity.this);
 
                         Intent intent = new Intent(KeyGenerationActivity.this,DashboardActivity.class);
                         startActivity(intent);
@@ -168,13 +159,12 @@ public class KeyGenerationActivity extends AppCompatActivity {
         userType.setAdapter(dataAdapter);
     }
 
-    public void saveRegistrationDetails(JSONObject userJSON, String secretKey){
-
+    private void saveRegistrationDetailsAsJson(JSONObject userJSON, String secretKey){
+        Log.d(TAG ,"saveRegistrationDetails() invoked");
           String userJSONString = userJSON.toString();
         try {
             SecretKey secret = new EncryptUtils().generateKey(secretKey);
             String encryptedJSON= new String(new EncryptUtils().encryptMsg(userJSONString, secret));
-
             Log.d("Encrypted : " , encryptedJSON);
 
             //dump JSON
@@ -201,7 +191,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
     }
 
-    public void generateKeyPair() throws Exception {
+    private void generateKeyPair() throws Exception {
         Log.d(TAG, "generateKeyPair invoked");
 
         Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
@@ -213,7 +203,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
         mKeyPair = keyGen.generateKeyPair();
 
         //String publicKey = new String(android.util.Base64.encode(Key.getEncoded(), Base64.DEFAULT));
-        KeyInSharedPreferences.storingKeyPair(mKeyPair, KeyGenerationActivity.this);
+        DataInSharedPreferences.storingKeyPair(mKeyPair, KeyGenerationActivity.this);
 
 
     }

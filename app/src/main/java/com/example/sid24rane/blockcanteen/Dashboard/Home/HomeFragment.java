@@ -18,7 +18,7 @@ import com.androidnetworking.interfaces.StringRequestListener;
 import com.example.sid24rane.blockcanteen.QRGeneratorActivity;
 import com.example.sid24rane.blockcanteen.QRScannerActivity;
 import com.example.sid24rane.blockcanteen.R;
-import com.example.sid24rane.blockcanteen.data.KeyInSharedPreferences;
+import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.example.sid24rane.blockcanteen.utilities.NetworkUtils;
 
 import okhttp3.OkHttpClient;
@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment {
 
         networkInit();
         showBalanceView();
-        String publicKey = KeyInSharedPreferences.retrievingPublicKey(getContext());
+        String publicKey = DataInSharedPreferences.retrievingPublicKey(getContext());
         new FetchBalanceTask().execute(publicKey
         );
     }
@@ -153,7 +153,6 @@ public class HomeFragment extends Fragment {
                 showBalanceView();
             }
         }
-
 
     }
 

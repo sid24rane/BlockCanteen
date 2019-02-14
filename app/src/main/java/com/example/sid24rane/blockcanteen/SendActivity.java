@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
-import com.example.sid24rane.blockcanteen.data.KeyInSharedPreferences;
+import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.example.sid24rane.blockcanteen.utilities.TransactionUtils;
 
 import nl.dionsegijn.konfetti.KonfettiView;
@@ -53,7 +53,7 @@ public class SendActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 //String sender_pub_key = "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAExcIsvLH3vegArqtP7wEdyly11xAcrpV4IBIUCVM+HXoPMMpNFX8hYDjOPL4IUT4swqDkrhj1gS+XWukiGpttzQ==";
-                String publicKey = KeyInSharedPreferences.retrievingPublicKey(SendActivity.this);
+                String publicKey = DataInSharedPreferences.retrievingPublicKey(SendActivity.this);
 
                 TransactionUtils.makeTransaction(amount.getText().toString(),publicKey,receiverPublicKey, SendActivity.this);
 

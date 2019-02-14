@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
+import com.example.sid24rane.blockcanteen.RestoreActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,10 +22,14 @@ import java.util.Base64;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class KeyInSharedPreferences {
+public class DataInSharedPreferences {
 
-    private static final String PREFS_NAME = "KeyFile";
-    private static final String TAG = "KeyInSharedPreferences";
+    private static final String PREFS_NAME = "DataFile";
+    private static final String TAG = "DataInSharedPreferences";
+
+    public static String getPrefsName() {
+        return PREFS_NAME;
+    }
 
     public static void storingKeyPair(KeyPair pair, Context context){
         Log.d(TAG, "storingKeyPair() invoked");
@@ -126,6 +132,11 @@ public class KeyInSharedPreferences {
             editor.putString("userType", String.valueOf(userJSON.get("userType")));
             editor.putString("userDepartment", String.valueOf(userJSON.get("userDepartment")));
             editor.putString("yearOfAdmission", String.valueOf(userJSON.get("yearOfAdmission")));
+
+            if(context instanceof RestoreActivity){
+                editor.putString("publicKey", String.valueOf(userJSON.get("publicKey")));
+                editor.putString("privateKey", String.valueOf(userJSON.get("privateKey")));
+            }
 
             editor.commit();
         } catch (JSONException e) {
