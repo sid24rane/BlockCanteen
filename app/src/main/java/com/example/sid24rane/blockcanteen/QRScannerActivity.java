@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.example.sid24rane.blockcanteen.utilities.TransactionUtils;
 import com.google.zxing.Result;
 
@@ -27,6 +28,7 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
     private static int camId = Camera.CameraInfo.CAMERA_FACING_BACK;
+    private final String TAG = getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,7 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
     @Override
     public void onResume() {
         super.onResume();
-
+        Log.d(TAG, "onResume() invoked");
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentapiVersion >= android.os.Build.VERSION_CODES.M) {
             if (checkPermission()) {
@@ -71,6 +73,7 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy() invoked");
         scannerView.stopCamera();
     }
 
@@ -126,13 +129,19 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
 
     @Override
     public void handleResult(Result result) {
+        Log.d(TAG, "handleResult() invoked");
         Log.d("QRCodeScanner", result.getText());
         Log.d("QRCodeScanner", result.getBarcodeFormat().toString());
 
-        Intent i = new Intent(QRScannerActivity.this,SendActivity.class);
-        i.putExtra("publicKey",result.getText());
-        startActivity(i);
-        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+        String receiver_pub_key = "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAExcIsvLH3vegArqtP7wEdyly11xAcrpV4IBIUCVM+HXoPMMpNFX8hYDjOPL4IUT4swqDkrhj1gS+XWukiGpttzQ==";
+        TransactionUtils.makeTransaction("0", DataInSharedPreferences.retrievingPublicKey(QRScannerActivity.this), receiver_pub_key, QRScannerActivity.this);
+
+        //TODO : remove the comments after testing
+//        Intent i = new Intent(QRScannerActivity.this, SendActivity.class);
+//        i.putExtra("publicKey",result.getText());
+//        startActivity(i);
+//        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+
 
     }
 

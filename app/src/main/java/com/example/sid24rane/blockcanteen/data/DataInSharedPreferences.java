@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -37,6 +38,10 @@ public class DataInSharedPreferences {
         String pubKey = getPublicKeyAsString(pair, context);
         String privateKey = getPrivateKeyAsString(pair, context);
 
+        //TODO : remove these pairs after testing
+        //String pubKey = "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEX8SWHr9f+UqdGPow8JgXbu785ivTodsfa64u9CO8qAqnwiVJegHi8smwY8Nv7h/zLiMjy370CgM4jS7WMeJwbg==";
+        //String privateKey = "MD4CAQAwEAYHKoZIzj0CAQYFK4EEAAoEJzAlAgEBBCAiOOtgpFImH/M1rfwOY8Wx83MiJcWkEx3iEx7i/Jl5NA==";
+
         editor.putString("publicKey", pubKey);
         editor.putString("privateKey", privateKey);
         editor.commit();
@@ -46,7 +51,7 @@ public class DataInSharedPreferences {
         Log.d(TAG, "retrievingPublicKey() invoked");
         SharedPreferences mPrefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String publicKey = mPrefs.getString("publicKey", "");
-        Log.d("Retrieved PublicKey ", publicKey);
+        Log.d("PublicKeyString ", publicKey);
 
         return publicKey;
     }
@@ -55,7 +60,7 @@ public class DataInSharedPreferences {
         Log.d(TAG, "retrievingPrivateKey() invoked");
         SharedPreferences mPrefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String privateKey = mPrefs.getString("privateKey", "");
-        Log.d("Retrieved PrivateKey ", privateKey);
+        Log.d("PrivateKeyString", privateKey);
 
         return privateKey;
     }
@@ -101,9 +106,9 @@ public class DataInSharedPreferences {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             encoded = Base64.getDecoder().decode(privateKeyPEM);
         }
+
         KeyFactory kf = KeyFactory.getInstance("EC");
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);
-        PrivateKey privKey = (PrivateKey) kf.generatePrivate(keySpec);
+        PrivateKey privKey = kf.generatePrivate(new PKCS8EncodedKeySpec(encoded));
         return privKey;
     }
 

@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigInteger;
+import java.security.PrivateKey;
 import java.security.Signature;
 import java.util.Arrays;
 
@@ -40,7 +41,7 @@ public class TransactionUtils {
                             Log.d(TAG, "send_this : "+  send_this);
                             Log.d(TAG, "sign_this : " + sign_this);
 
-                            String signedString = signString(sign_this, context);
+                            String signedString = signString("VJTI", context);
 
                             sendTransaction(send_this, signedString);
                         } catch (JSONException e) {
@@ -128,9 +129,11 @@ public class TransactionUtils {
         Log.d(TAG, "signString() invoked");
 
         String privateKey = DataInSharedPreferences.retrievingPrivateKey(context);
+        PrivateKey pk = DataInSharedPreferences.getPrivateKeyFromString(privateKey);
 
+        Log.d(TAG, "PrivateKey: \n" + pk.toString());
         Signature dsa = Signature.getInstance("SHA256withECDSA");
-        dsa.initSign(DataInSharedPreferences.getPrivateKeyFromString(privateKey)); // Pass the private Key that we need.
+        dsa.initSign(pk); // Pass the private Key that we need.
 
         // The string that needs to be signed.
         byte[] strByte = stringToBeSigned.getBytes("UTF-8");
