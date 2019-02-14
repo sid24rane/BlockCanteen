@@ -16,4 +16,10 @@ public class TransactionModel {
     public String getUnixTimeStamp() {
         return unixTimeStamp;
     }
+
+    public TransactionModel(String amount, String receiver_key, String unixTimeStamp) {
+        this.amount = amount;
+        this.receiver_key = receiver_key;
+        this.unixTimeStamp = unixTimeStamp;
+    }
 }

@@ -16,7 +16,12 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.example.sid24rane.blockcanteen.Dashboard.CanteenMenu.RecyclerItemClickListener;
 import com.example.sid24rane.blockcanteen.R;
+import com.example.sid24rane.blockcanteen.data.KeyInSharedPreferences;
 import com.example.sid24rane.blockcanteen.utilities.NetworkUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -59,8 +64,7 @@ public class AllTransactionsFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        // TODO : retrieve publicKey from SharedPref
-        String publicKey = "";
+        String publicKey = KeyInSharedPreferences.retrievingPublicKey(getContext());
 
         // call to network
         AndroidNetworking.post(NetworkUtils.getTransactionHistoryUrl())
@@ -72,7 +76,20 @@ public class AllTransactionsFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, "sndTxn onResponse= " + response.toString());
-                        //TODO : update UI
+                        try {
+                            JSONArray jsonArray = new JSONArray(response.toString());
+                            for (int i=0;i<jsonArray.length();i++){
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String amt = jsonObject.getString("amount");
+                                String address = jsonObject.getString("address");
+                                String timestamp = String.valueOf(jsonObject.get("timestamp"));
+                                TransactionModel transactionModel = new TransactionModel(amt,address,timestamp);
+                                transactionModelArrayList.add(transactionModel);
+                                transactionsListAdapter.notifyDataSetChanged();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override

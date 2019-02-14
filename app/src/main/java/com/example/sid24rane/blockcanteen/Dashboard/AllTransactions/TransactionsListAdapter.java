@@ -29,7 +29,9 @@ public class TransactionsListAdapter extends RecyclerView.Adapter<TransactionsLi
     @Override
     public void onBindViewHolder(@NonNull TransactionsListAdapter.ViewHolder holder, int position) {
         TransactionModel transaction = transactionModelArrayList.get(position);
-       // holder.id.setText(String.valueOf(transaction.getId()));
+        holder.address.setText(String.valueOf(transaction.getReceiverKey()));
+        holder.amount.setText(String.valueOf(transaction.getAmount()));
+        holder.timestamp.setText(String.valueOf(transaction.getUnixTimeStamp()));
 
     }
 
@@ -40,13 +42,15 @@ public class TransactionsListAdapter extends RecyclerView.Adapter<TransactionsLi
 
     public class ViewHolder extends  RecyclerView.ViewHolder{
 
-        public TextView name;
-        public TextView price;
-        public TextView id;
+        public TextView address;
+        public TextView amount;
+        public TextView timestamp;
 
         public ViewHolder(View itemView) {
             super(itemView);
-         //   this.name = (TextView) view.findViewById(R.id.name);
+            this.address = (TextView) itemView.findViewById(R.id.address);
+            this.amount = (TextView) itemView.findViewById(R.id.amount);
+            this.timestamp = (TextView) itemView.findViewById(R.id.timestamp);
         }
     }
 }
