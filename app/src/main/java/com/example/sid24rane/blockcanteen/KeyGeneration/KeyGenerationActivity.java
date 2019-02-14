@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
-import com.example.sid24rane.blockcanteen.QRScannerActivity;
 import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.data.KeyInSharedPreferences;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -67,10 +66,10 @@ public class KeyGenerationActivity extends AppCompatActivity {
         firstname = (EditText) findViewById(R.id.firstname);
         lastname = (EditText) findViewById(R.id.lastname);
         email = (EditText) findViewById(R.id.email_id);
-        register = (Button) findViewById(R.id.submit);
         userType = (Spinner) findViewById(R.id.userType);
         department = (Spinner) findViewById(R.id.department);
         entry = (EditText) findViewById(R.id.entry);
+        register = (Button) findViewById(R.id.submit);
 
         loadSpinnerData();
 
@@ -82,7 +81,8 @@ public class KeyGenerationActivity extends AppCompatActivity {
                 String fname = firstname.getText().toString();
                 String lname = lastname.getText().toString();
                 String email_address = email.getText().toString();
-                //String enrollment_id = id.getText().toString();
+                String usertype = userType.getSelectedItem().toString();
+                String user_department = department.getSelectedItem().toString();
                 String year_of_admission = entry.getText().toString();
 
                 // Submit to firebase!
@@ -90,8 +90,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
                 try {
                     generateKeyPair();
                     KeyInSharedPreferences.retrievingPublicKey(KeyGenerationActivity.this);
-                    //KeyInSharedPreferences.retrievingPrivateKey(KeyGenerationActivity.this);
-
                     Intent intent = new Intent(KeyGenerationActivity.this,DashboardActivity.class);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
