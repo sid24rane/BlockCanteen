@@ -5,9 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.Key;

@@ -19,8 +19,6 @@ import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.data.KeyInSharedPreferences;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -37,7 +35,6 @@ import java.util.Map;
 
 public class KeyGenerationActivity extends AppCompatActivity {
 
-    //TODO 1 : Generate Unique ID for each user ==> firebase
     //TODO 2 : Change encoding method
     //TODO 4 : Handle Network requests
 
@@ -118,9 +115,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
         userType.setAdapter(dataAdapter);
     }
 
-    public void sendRegistrationDetails(UserModel user){
-        // Create a new user with a first and last name
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public void saveRegistrationDetails(UserModel user){
 
         Map<String, Object> object = new HashMap<>();
         object.put("firstName", user.getFirstName());
@@ -129,20 +124,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
         object.put("id", user.getId());
         object.put("publicKey", user.getPublicKey());
 
-        db.collection("users")
-                .add(object)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+
     }
 
     public void generateKeyPair() throws Exception {
