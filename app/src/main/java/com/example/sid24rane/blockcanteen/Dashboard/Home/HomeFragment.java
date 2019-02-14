@@ -73,7 +73,8 @@ public class HomeFragment extends Fragment {
         networkInit();
         showBalanceView();
         String publicKey = KeyInSharedPreferences.retrievingPublicKey(getContext());
-        new FetchBalanceTask().execute(publicKey);
+        new FetchBalanceTask().execute(publicKey
+        );
     }
 
     private void networkInit(){

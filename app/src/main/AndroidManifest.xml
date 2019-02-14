@@ -9,44 +9,38 @@
         android:allowBackup="true"
         android:fullBackupContent="false"
         android:hardwareAccelerated="true"
-        android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Dashboard.DashboardActivity"
-            android:screenOrientation="portrait">
-
-
-
-        </activity>
-        <activity android:name=".QRScannerActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".SendActivity"
-            android:screenOrientation="portrait"/>
-
         <activity
-            android:hardwareAccelerated="false"
+            android:name=".Dashboard.DashboardActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".QRScannerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SendActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".SplashScreenActivity"
+            android:hardwareAccelerated="false"
             android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <activity android:name=".KeyGeneration.KeyGenerationActivity"
-            android:screenOrientation="portrait">
-
-
-        </activity>
-        <activity android:name=".QRGeneratorActivity"
-            android:screenOrientation="portrait"
-            ></activity>
+        <activity
+            android:name=".KeyGeneration.KeyGenerationActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".QRGeneratorActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".RestoreActivity"></activity>
     </application>
 
 </manifest>

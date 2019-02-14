@@ -5,13 +5,14 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.PrivateKey;
-import java.security.PrivilegedAction;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -114,4 +115,22 @@ public class KeyInSharedPreferences {
         return pubKey;
     }
 
+    public static void storingUserDetails(JSONObject userJSON, Context context){
+        Log.d(TAG, "storingUserDetails() invoked");
+        android.content.SharedPreferences.Editor editor = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+
+        try {
+            editor.putString("firstName", String.valueOf(userJSON.get("firstName")));
+            editor.putString("lastName", String.valueOf(userJSON.get("lastName")));
+            editor.putString("emailAddress", String.valueOf(userJSON.get("emailAddress")));
+            editor.putString("userType", String.valueOf(userJSON.get("userType")));
+            editor.putString("userDepartment", String.valueOf(userJSON.get("userDepartment")));
+            editor.putString("yearOfAdmission", String.valueOf(userJSON.get("yearOfAdmission")));
+
+            editor.commit();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

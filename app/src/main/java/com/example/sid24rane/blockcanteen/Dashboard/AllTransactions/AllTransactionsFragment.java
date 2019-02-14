@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
-import com.example.sid24rane.blockcanteen.Dashboard.CanteenMenu.RecyclerItemClickListener;
 import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.utilities.NetworkUtils;
 
