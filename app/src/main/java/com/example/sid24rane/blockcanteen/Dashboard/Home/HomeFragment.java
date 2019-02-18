@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,8 @@ public class HomeFragment extends Fragment {
     private ProgressBar mLoadingIndicator;
     private TextView mErrorMessageDisplay;
     private final String TAG = getClass().getSimpleName();
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private boolean isRefresh = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,6 +48,7 @@ public class HomeFragment extends Fragment {
         mBalanceTextView = (TextView)  view.findViewById(R.id.balance);
         mLoadingIndicator = (ProgressBar) view.findViewById(R.id.pb_loading_indicator);
         mErrorMessageDisplay = (TextView) view.findViewById(R.id.error_message);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
 
         getUserBalance();
 
@@ -66,6 +70,22 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                isRefresh = true;
+                getUserBalance();
+            }
+        });
+
+        // Scheme colors for animation
+        swipeRefreshLayout.setColorSchemeColors(
+                getResources().getColor(android.R.color.holo_blue_bright),
+                getResources().getColor(android.R.color.holo_green_light),
+                getResources().getColor(android.R.color.holo_orange_light),
+                getResources().getColor(android.R.color.holo_red_light)
+        );
+
         return view;
     }
 
@@ -75,8 +95,7 @@ public class HomeFragment extends Fragment {
         networkInit();
         showBalanceView();
         String publicKey = DataInSharedPreferences.retrievingPublicKey(getContext());
-        new FetchBalanceTask().execute(publicKey
-        );
+        new FetchBalanceTask().execute(publicKey);
     }
 
     private void networkInit(){
@@ -130,6 +149,7 @@ public class HomeFragment extends Fragment {
                                 showBalanceView();
                                 mBalanceTextView.setText(response);
                                 result[0] = response;
+                                if (isRefresh) swipeRefreshLayout.setRefreshing(false);
                             }
 
                             @Override

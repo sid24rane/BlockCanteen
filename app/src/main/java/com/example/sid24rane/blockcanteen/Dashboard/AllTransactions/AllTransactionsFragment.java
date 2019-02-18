@@ -3,6 +3,7 @@ package com.example.sid24rane.blockcanteen.Dashboard.AllTransactions;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +32,7 @@ public class AllTransactionsFragment extends Fragment {
     private ArrayList<TransactionModel> transactionModelArrayList;
     private TransactionsListAdapter transactionsListAdapter;
     private final String TAG = getClass().getSimpleName();
+    private boolean isRefresh = false;
 
     public AllTransactionsFragment(){
 
@@ -43,6 +45,7 @@ public class AllTransactionsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_all_transations, container, false);
         setHasOptionsMenu(true);
 
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
         recyclerView = (RecyclerView) view.findViewById(R.id.transactionlist);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -54,11 +57,29 @@ public class AllTransactionsFragment extends Fragment {
 
         load();
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                isRefresh = true;
+                load();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        // Scheme colors for animation
+        swipeRefreshLayout.setColorSchemeColors(
+                getResources().getColor(android.R.color.holo_blue_bright),
+                getResources().getColor(android.R.color.holo_green_light),
+                getResources().getColor(android.R.color.holo_orange_light),
+                getResources().getColor(android.R.color.holo_red_light)
+        );
+
         return view;
 
     }
 
     private void load() {
+
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Loading transactions please wait..");
         progressDialog.setCancelable(false);
@@ -82,7 +103,7 @@ public class AllTransactionsFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, "sndTxn onResponse= " + response.toString());
-                        //TODO : update UI
+                        if (isRefresh) transactionModelArrayList.clear();
                         try {
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i=0;i<jsonArray.length();i++){
