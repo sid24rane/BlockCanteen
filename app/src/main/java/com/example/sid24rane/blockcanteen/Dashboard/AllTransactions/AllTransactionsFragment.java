@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
@@ -33,6 +34,7 @@ public class AllTransactionsFragment extends Fragment {
     private TransactionsListAdapter transactionsListAdapter;
     private final String TAG = getClass().getSimpleName();
     private boolean isRefresh = false;
+    private LinearLayout linearLayout;
 
     public AllTransactionsFragment(){
 
@@ -44,6 +46,8 @@ public class AllTransactionsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_all_transations, container, false);
         setHasOptionsMenu(true);
+
+        linearLayout = (LinearLayout) view.findViewById(R.id.empty_view);
 
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
         recyclerView = (RecyclerView) view.findViewById(R.id.transactionlist);
@@ -87,7 +91,7 @@ public class AllTransactionsFragment extends Fragment {
 
         String publicKey = DataInSharedPreferences.retrievingPublicKey(getContext());
 
-        JSONObject json = new JSONObject();
+        final JSONObject json = new JSONObject();
         try {
             json.put("public_key", publicKey);
         } catch (JSONException e) {
@@ -106,16 +110,25 @@ public class AllTransactionsFragment extends Fragment {
                         if (isRefresh) transactionModelArrayList.clear();
                         try {
                             JSONArray jsonArray = new JSONArray(response);
-                            for (int i=0;i<jsonArray.length();i++){
-                                String str = jsonArray.getString(i);
-                                JSONObject jsonObject = new JSONObject(str);
-                                String amt = jsonObject.getString("amount");
-                                String address = jsonObject.getString("address");
-                                String timestamp = String.valueOf(jsonObject.get("timestamp"));
-                                TransactionModel transactionModel = new TransactionModel(amt, address, timestamp);
-                                transactionModelArrayList.add(transactionModel);
-                                transactionsListAdapter.notifyDataSetChanged();
+                            if (jsonArray.length() == 0){
+                                progressDialog.dismiss();
+                                linearLayout.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                            }else{
+                                linearLayout.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+                                for (int i=0;i<jsonArray.length();i++){
+                                    String str = jsonArray.getString(i);
+                                    JSONObject jsonObject = new JSONObject(str);
+                                    String amt = jsonObject.getString("amount");
+                                    String address = jsonObject.getString("address");
+                                    String timestamp = String.valueOf(jsonObject.get("timestamp"));
+                                    TransactionModel transactionModel = new TransactionModel(amt, address, timestamp);
+                                    transactionModelArrayList.add(transactionModel);
+                                    transactionsListAdapter.notifyDataSetChanged();
+                                }
                             }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

@@ -15,7 +15,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-public class QRGeneratorActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
+public class QRGeneratorActivity extends AppCompatActivity{
 
     private final String PREFS_NAME = "KeyFile";
 
@@ -31,7 +31,6 @@ public class QRGeneratorActivity extends AppCompatActivity implements Connectivi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrgenerator);
 
-        checkConnection();
 
 
         qrcode = (ImageView) findViewById(R.id.qrcode);
@@ -43,11 +42,7 @@ public class QRGeneratorActivity extends AppCompatActivity implements Connectivi
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        App.getInstance().setConnectivityListener(QRGeneratorActivity.this);
-    }
+
 
     private void generateQRCode() throws WriterException {
 
@@ -83,18 +78,4 @@ public class QRGeneratorActivity extends AppCompatActivity implements Connectivi
         return bitmap;
     }
 
-    @Override
-    public void onNetworkConnectionChanged(boolean isConnected) {
-        showToast(isConnected);
-    }
-
-    private void checkConnection() {
-        boolean isConnected = ConnectivityReceiver.isConnected();
-        showToast(isConnected);
-    }
-
-    private void showToast(Boolean isConnected){
-        if(!isConnected)
-            Toast.makeText(QRGeneratorActivity.this, "Please connect to Internet", Toast.LENGTH_SHORT).show();
-    }
 }
