@@ -46,8 +46,6 @@ public class SendActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //String sender_pub_key = "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAExcIsvLH3vegArqtP7wEdyly11xAcrpV4IBIUCVM+HXoPMMpNFX8hYDjOPL4IUT4swqDkrhj1gS+XWukiGpttzQ==";
                 String publicKey = DataInSharedPreferences.retrievingPublicKey(SendActivity.this);
 
                 TransactionUtils.makeTransaction(amount.getText().toString(),publicKey,receiverPublicKey, SendActivity.this);
@@ -62,7 +60,7 @@ public class SendActivity extends AppCompatActivity {
     }
 
     private void fetchRecieverUserDetails(String receiverPublicKey) {
-        //TODO retreive user details from firebase
+        //TODO retreive user details from SharedPref
     }
 
 }

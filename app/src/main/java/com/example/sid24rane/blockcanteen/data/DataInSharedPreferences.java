@@ -6,14 +6,12 @@ import android.os.Build;
 import android.util.Log;
 
 import com.example.sid24rane.blockcanteen.RestoreActivity;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -39,13 +37,8 @@ public class DataInSharedPreferences {
         String pubKey = getPublicKeyAsString(pair, context);
         String privateKey = getPrivateKeyAsString(pair, context);
 
-        //Gson gson = new Gson();
-        //String pairString = gson.toJson(pair);
-
         editor.putString("publicKey", pubKey);
         editor.putString("privateKey", privateKey);
-        //editor.putString("keyPair", pairString);
-
         editor.commit();
     }
 
@@ -56,19 +49,6 @@ public class DataInSharedPreferences {
         Log.d("PublicKeyString ", publicKey);
 
         return publicKey;
-    }
-
-    public static KeyPair retrievingKeyPair(Context context){
-        Log.d(TAG, "retrievingKeyPair() invoked");
-        SharedPreferences mPrefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-
-         Gson gson = new Gson();
-         String keyPair = mPrefs.getString("keyPair", "");
-         KeyPair kp = gson.fromJson(keyPair, KeyPair.class);
-         Log.d("KeyPair ", kp.toString());
-
-        return kp;
     }
 
     public static String retrievingPrivateKey(Context context){

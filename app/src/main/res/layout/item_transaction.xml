@@ -25,7 +25,6 @@
             <TextView
                 android:id="@+id/address"
                 android:textSize="16dp"
-                android:visibility="gone"
                 android:textStyle="bold"
                 android:layout_alignParentTop="true"
                 android:layout_width="match_parent"

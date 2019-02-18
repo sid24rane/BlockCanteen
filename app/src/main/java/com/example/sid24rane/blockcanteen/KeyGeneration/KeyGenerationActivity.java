@@ -30,7 +30,6 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.Security;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
@@ -108,7 +107,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
                         progressDialog.show();
 
                         generateKeyPair();
-                        //DataInSharedPreferences.retrievingPublicKey(KeyGenerationActivity.this);
 
                         JSONObject userJSON = new JSONObject();
                         userJSON.put("firstName", fname);
@@ -120,7 +118,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
                         userJSON.put("privateKey", DataInSharedPreferences.retrievingPrivateKey(KeyGenerationActivity.this));
                         userJSON.put("publicKey", DataInSharedPreferences.retrievingPublicKey(KeyGenerationActivity.this));
 
-                        //save data in both: SharedPref as well as JSONDump
+                        //TODO : save data in both: SharedPref as well as JSONDump
                         saveRegistrationDetailsAsJson(userJSON, secretKey);
                         DataInSharedPreferences.storingUserDetails(userJSON, KeyGenerationActivity.this);
 
@@ -193,8 +191,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
     private void generateKeyPair() throws Exception {
         Log.d(TAG, "generateKeyPair invoked");
-
-        //Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
 
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
         ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256r1");
