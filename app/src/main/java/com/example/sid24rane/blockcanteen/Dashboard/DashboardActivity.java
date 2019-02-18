@@ -1,19 +1,14 @@
 package com.example.sid24rane.blockcanteen.Dashboard;
 
 
-import android.app.SearchManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.sid24rane.blockcanteen.Dashboard.AllTransactions.AllTransactionsFragment;
@@ -69,7 +64,7 @@ public class DashboardActivity extends AppCompatActivity {
 
 
 
-    @Override
+ /*   @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return false;
     }
@@ -86,7 +81,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
-
+*/
 
     @Override
     public void onBackPressed() {
