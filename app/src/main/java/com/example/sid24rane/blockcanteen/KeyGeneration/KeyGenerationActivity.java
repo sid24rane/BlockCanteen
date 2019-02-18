@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,9 +22,6 @@ import com.example.sid24rane.blockcanteen.utilities.JSONDump;
 
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
@@ -68,11 +66,12 @@ public class KeyGenerationActivity extends AppCompatActivity {
         firstname = (EditText) findViewById(R.id.firstname);
         lastname = (EditText) findViewById(R.id.lastname);
         email = (EditText) findViewById(R.id.email_id);
+        entry = (EditText) findViewById(R.id.entry);
+        secret = (EditText) findViewById(R.id.secret);
+
         userType = (Spinner) findViewById(R.id.userType);
         department = (Spinner) findViewById(R.id.department);
-        entry = (EditText) findViewById(R.id.entry);
         register = (Button) findViewById(R.id.submit);
-        secret = (EditText) findViewById(R.id.secret);
         restore = (Button) findViewById(R.id.restore);
 
         loadSpinnerData();
@@ -91,6 +90,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
                 String fname = firstname.getText().toString();
                 String lname = lastname.getText().toString();
                 String email_address = email.getText().toString();
@@ -99,7 +99,13 @@ public class KeyGenerationActivity extends AppCompatActivity {
                 String year_of_admission = entry.getText().toString();
                 String secretKey = secret.getText().toString();
 
-                if(secretKey.length() == 16 && !secretKey.isEmpty()){
+
+                if(secretKey.length() == 16 && !secretKey.isEmpty() &&
+                        !TextUtils.isEmpty(fname) &&
+                        !TextUtils.isEmpty(lname) &&
+                        !TextUtils.isEmpty(email_address) &&
+                        !TextUtils.isEmpty(year_of_admission)){
+
                     try {
                         progressDialog = new ProgressDialog(KeyGenerationActivity.this);
                         progressDialog.setMessage("Creating profile please wait..");
@@ -204,17 +210,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
     }
 
-    private static String getKey(String filename) throws IOException {
-        // Read key from file
-        String strKeyPEM = "";
-        BufferedReader br = new BufferedReader(new FileReader(filename));
-        String line;
-        while ((line = br.readLine()) != null) {
-            strKeyPEM += line + "\n";
-        }
-        br.close();
-        return strKeyPEM;
-    }
 
 
 }
