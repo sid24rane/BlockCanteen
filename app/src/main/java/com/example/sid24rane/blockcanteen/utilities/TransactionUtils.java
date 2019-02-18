@@ -134,8 +134,6 @@ public class TransactionUtils {
     }
 
     public static String getSignatureString(byte[] sign) throws Exception {
-        // System.out.println("Signature: " + new BigInteger(1, sign).toString(16));
-
         BigInteger r = extractR(sign);
         BigInteger s = extractS(sign);
         String realSign = "[" + r.toString() + ", " + s.toString() + "]";
@@ -147,14 +145,11 @@ public class TransactionUtils {
 
         String privateKey = DataInSharedPreferences.retrievingPrivateKey(context);
 
-        //KeyPair kp = DataInSharedPreferences.retrievingKeyPair(context);
-        //Log.d("KeyPair TransactionUti", kp.toString());
-        //PrivateKey pk = kp.getPrivate();
         PrivateKey pk = DataInSharedPreferences.getPrivateKeyFromString(privateKey);
 
         Log.d(TAG, "PrivateKey: \n" + pk.toString());
         Signature dsa = Signature.getInstance("SHA256withECDSA");
-        dsa.initSign(pk); // Pass the private Key that we need.
+        dsa.initSign(pk);
 
         // The string that needs to be signed.
         byte[] strByte = stringToBeSigned.getBytes("UTF-8");

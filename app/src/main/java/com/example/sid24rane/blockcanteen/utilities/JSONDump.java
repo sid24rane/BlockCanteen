@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -17,6 +18,7 @@ public class JSONDump {
     public static void saveData(Context context, String mJsonResponse) {
         Log.d(TAG, "saveData() invoked");
         try {
+            Log.d(TAG, "dir : " + context.getFilesDir().getPath() + "/" + fileName);
             FileWriter file = new FileWriter(context.getFilesDir().getPath() + "/" + fileName);
             file.write(mJsonResponse);
             file.flush();

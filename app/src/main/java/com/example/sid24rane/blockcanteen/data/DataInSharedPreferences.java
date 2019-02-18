@@ -63,12 +63,8 @@ public class DataInSharedPreferences {
     private static String getPublicKeyAsString(KeyPair keyPair){
         Log.d(TAG, "getPublicKeyAsString() invoked");
         PublicKey mPublicKey = keyPair.getPublic();
-        String publicKey = null;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            publicKey = new String(Base64.getEncoder().encode(mPublicKey.getEncoded()));
-        }
-
+        String publicKey = new String(android.util.Base64.encode(mPublicKey.getEncoded(), android.util.Base64.DEFAULT));
         Log.d(TAG,"PublicKeyString: " +  publicKey);
         return publicKey;
     }
@@ -76,11 +72,7 @@ public class DataInSharedPreferences {
     private static String getPrivateKeyAsString(KeyPair keyPair){
         PrivateKey mPrivateKey = keyPair.getPrivate();
         String privateKey = null;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            privateKey = new String(Base64.getEncoder().encode(mPrivateKey.getEncoded()));
-        }
-
+        privateKey = new String(android.util.Base64.encode(mPrivateKey.getEncoded(), android.util.Base64.DEFAULT));
         Log.d(TAG,"PrivateKeyString: " +  privateKey);
         return privateKey;
     }
@@ -91,12 +83,7 @@ public class DataInSharedPreferences {
         privateKeyPEM = privateKeyPEM.replace("-----END PRIVATE KEY-----", "");
         privateKeyPEM = privateKeyPEM.replace("\n", "");
         byte[] encoded = new byte[0];
-        //String publicKey = new String(android.util.Base64.encode(Key.getEncoded(), Base64.DEFAULT));
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            encoded = Base64.getDecoder().decode(privateKeyPEM);
-        }
-
+        encoded = android.util.Base64.decode(privateKeyPEM, android.util.Base64.DEFAULT);
         KeyFactory kf = KeyFactory.getInstance("EC");
         PrivateKey privKey = kf.generatePrivate(new PKCS8EncodedKeySpec(encoded));
         return privKey;

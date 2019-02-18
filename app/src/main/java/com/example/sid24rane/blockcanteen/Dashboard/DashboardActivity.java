@@ -50,6 +50,8 @@ public class DashboardActivity extends AppCompatActivity implements Connectivity
     private void showToast(Boolean isConnected){
         if(!isConnected)
             Toast.makeText(DashboardActivity.this, "Please connect to Internet", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(DashboardActivity.this, "Connected!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
