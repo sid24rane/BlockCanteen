@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
 import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
@@ -48,6 +49,11 @@ public class RestoreActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //TODO : take input file from user
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                startActivityForResult(intent, 7);
+
             }
         });
 
@@ -103,5 +109,23 @@ public class RestoreActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode){
+
+            case 7:
+
+                if(resultCode==RESULT_OK){
+
+                    String PathHolder = data.getData().getPath();
+
+                    Toast.makeText(RestoreActivity.this, PathHolder , Toast.LENGTH_LONG).show();
+
+                }
+                break;
+
+        }
     }
 }

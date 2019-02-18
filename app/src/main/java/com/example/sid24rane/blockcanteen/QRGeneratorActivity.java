@@ -45,9 +45,6 @@ public class QRGeneratorActivity extends AppCompatActivity{
 
 
     private void generateQRCode() throws WriterException {
-
-        //String publicKey = new String(android.util.Base64.encode(Key.getEncoded(), Base64.DEFAULT));
-
         String publicKey = DataInSharedPreferences.retrievingPublicKey(QRGeneratorActivity.this);
         Log.d("PUBLIC KEY", publicKey);
         Bitmap bitmap = encodeAsBitmap(publicKey);
@@ -77,5 +74,4 @@ public class QRGeneratorActivity extends AppCompatActivity{
         bitmap.setPixels(pixels, 0, w, 0, 0, w, h);
         return bitmap;
     }
-
 }

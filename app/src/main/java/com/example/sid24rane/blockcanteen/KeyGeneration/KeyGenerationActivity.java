@@ -41,8 +41,6 @@ import javax.crypto.SecretKey;
 
 public class KeyGenerationActivity extends AppCompatActivity {
 
-    //TODO : Change encoding method
-
     private final String TAG = getClass().getSimpleName();
     private static KeyPair mKeyPair;
 
