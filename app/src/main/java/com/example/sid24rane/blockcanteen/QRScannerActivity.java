@@ -133,10 +133,6 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
         Log.d("QRCodeScanner", result.getText());
         Log.d("QRCodeScanner", result.getBarcodeFormat().toString());
 
-        //String receiver_pub_key = "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAExcIsvLH3vegArqtP7wEdyly11xAcrpV4IBIUCVM+HXoPMMpNFX8hYDjOPL4IUT4swqDkrhj1gS+XWukiGpttzQ==";
-       // TransactionUtils.makeTransaction("0", DataInSharedPreferences.retrievingPublicKey(QRScannerActivity.this), receiver_pub_key, QRScannerActivity.this);
-
-        //TODO : remove the comments after testing
         Intent i = new Intent(QRScannerActivity.this, SendActivity.class);
         i.putExtra("publicKey", result.getText());
         startActivity(i);
