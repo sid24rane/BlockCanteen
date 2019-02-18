@@ -144,4 +144,20 @@ public class DataInSharedPreferences {
         }
 
     }
+
+    public static JSONObject getUserDetails(Context context) throws JSONException {
+        Log.d(TAG, "getUserDetails() invoked");
+        SharedPreferences mPrefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        JSONObject json = new JSONObject();
+        json.put("firstName", mPrefs.getString("firstName", ""));
+        json.put("lastName", mPrefs.getString("lastName", ""));
+        json.put("emailAddress", mPrefs.getString("emailAddress", ""));
+        json.put("userType", mPrefs.getString("userType", ""));
+        json.put("userDepartment", mPrefs.getString("userDepartment", ""));
+        json.put("yearOfAdmission", mPrefs.getString("yearOfAdmission", ""));
+        json.put("publicKey", mPrefs.getString("publicKey", ""));
+
+        return json;
+    }
 }

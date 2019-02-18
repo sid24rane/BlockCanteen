@@ -9,16 +9,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/name"
-            android:textStyle="bold"
-            android:text="Hello, Siddhesh"
-            android:layout_margin="10dp"
-            android:textSize="22sp"
-            />
-
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,7 +25,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/progressDictionary"
+                    android:id="@+id/name"
                     android:layout_marginLeft="10dp"
                     android:textSize="15sp"
                     android:layout_marginTop="15dp"
@@ -44,7 +34,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/progressComprehension"
+                    android:id="@+id/emailAddress"
                     android:textSize="15sp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
@@ -54,7 +44,7 @@
                     android:textSize="15sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/progressJumbled"
+                    android:id="@+id/userType"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     />
@@ -63,7 +53,7 @@
                     android:textSize="15sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/progressMeaning"
+                    android:id="@+id/userDepartment"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     />
@@ -72,14 +62,34 @@
                     android:textSize="15sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/progressEcho"
+                    android:id="@+id/yearOfAdmission"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     />
+
+                <TextView
+                    android:textSize="15sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/publicKey"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    />
+
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
+        <Button
+            android:id="@+id/downloadProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Download Profile"
+            android:layout_weight="0.5"
+            android:background="@layout/button_border_corner_circle_"
+            android:textColor="#fff"
+            android:textSize="16dp"/>
 
     </LinearLayout>
 </ScrollView>
