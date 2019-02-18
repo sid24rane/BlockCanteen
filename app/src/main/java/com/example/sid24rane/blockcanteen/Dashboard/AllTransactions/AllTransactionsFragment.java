@@ -12,12 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
+import com.example.sid24rane.blockcanteen.App;
+import com.example.sid24rane.blockcanteen.Dashboard.Home.HomeFragment;
 import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
+import com.example.sid24rane.blockcanteen.utilities.ConnectivityReceiver;
 import com.example.sid24rane.blockcanteen.utilities.NetworkUtils;
 
 import org.json.JSONArray;
@@ -80,6 +84,26 @@ public class AllTransactionsFragment extends Fragment {
 
         return view;
 
+    }
+
+    private boolean checkConnection() {
+        return ConnectivityReceiver.isConnected();
+    }
+
+    private void showToast(Boolean isConnected){
+        if(!isConnected)
+            Toast.makeText(getContext(), "Please connect to Internet", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        App.getInstance().setConnectivityListener(AllTransactionsFragment.this);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        showToast(isConnected);
     }
 
     private void load() {
