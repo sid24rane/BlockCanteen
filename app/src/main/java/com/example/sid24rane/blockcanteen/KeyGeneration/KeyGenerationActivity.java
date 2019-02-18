@@ -41,7 +41,7 @@ import javax.crypto.SecretKey;
 
 public class KeyGenerationActivity extends AppCompatActivity {
 
-    //TODO 2 : Change encoding method
+    //TODO : Change encoding method
 
     private final String TAG = getClass().getSimpleName();
     private static KeyPair mKeyPair;
@@ -138,7 +138,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
                     }
 
                 }else{
-                    Toast.makeText(KeyGenerationActivity.this, "Secret key has to be 16 characters in length", Toast.LENGTH_LONG).show();
+                    Toast.makeText(KeyGenerationActivity.this, "Please fill in all the fields!", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -148,7 +148,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
     }
 
     private void loadSpinnerData() {
-
 
         // departments
         List<String> departmentNameData = new Data().departmentNameData();
@@ -203,13 +202,9 @@ public class KeyGenerationActivity extends AppCompatActivity {
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
         keyGen.initialize(ecSpec, random);
         mKeyPair = keyGen.generateKeyPair();
-
         //String publicKey = new String(android.util.Base64.encode(Key.getEncoded(), Base64.DEFAULT));
         DataInSharedPreferences.storingKeyPair(mKeyPair, KeyGenerationActivity.this);
 
-
     }
-
-
 
 }
