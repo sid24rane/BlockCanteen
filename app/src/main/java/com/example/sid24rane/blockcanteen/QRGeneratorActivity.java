@@ -5,14 +5,17 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
 import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
+import com.example.sid24rane.blockcanteen.utilities.ConnectivityReceiver;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-public class QRGeneratorActivity extends AppCompatActivity {
+public class QRGeneratorActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     private final String PREFS_NAME = "KeyFile";
 
@@ -28,6 +31,9 @@ public class QRGeneratorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrgenerator);
 
+        checkConnection();
+
+
         qrcode = (ImageView) findViewById(R.id.qrcode);
         try {
             generateQRCode();
@@ -35,6 +41,12 @@ public class QRGeneratorActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        App.getInstance().setConnectivityListener(QRGeneratorActivity.this);
     }
 
     private void generateQRCode() throws WriterException {
@@ -69,5 +81,20 @@ public class QRGeneratorActivity extends AppCompatActivity {
         Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, w, 0, 0, w, h);
         return bitmap;
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        showToast(isConnected);
+    }
+
+    private void checkConnection() {
+        boolean isConnected = ConnectivityReceiver.isConnected();
+        showToast(isConnected);
+    }
+
+    private void showToast(Boolean isConnected){
+        if(!isConnected)
+            Toast.makeText(QRGeneratorActivity.this, "Please connect to Internet", Toast.LENGTH_SHORT).show();
     }
 }
