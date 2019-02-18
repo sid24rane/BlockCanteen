@@ -1,10 +1,13 @@
 package com.example.sid24rane.blockcanteen;
 
+import android.app.Application;
+
 import com.example.sid24rane.blockcanteen.utilities.ConnectivityReceiver;
 
-public class Application extends android.app.Application {
 
-    private static Application mInstance;
+public class App extends Application {
+
+    private static App mInstance;
 
     @Override
     public void onCreate() {
@@ -13,7 +16,7 @@ public class Application extends android.app.Application {
         mInstance = this;
     }
 
-    public static synchronized Application getInstance() {
+    public static synchronized App getInstance() {
         return mInstance;
     }
 

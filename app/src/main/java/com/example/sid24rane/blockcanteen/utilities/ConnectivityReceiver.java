@@ -7,7 +7,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
-import com.example.sid24rane.blockcanteen.Application;
+import com.example.sid24rane.blockcanteen.App;
+
 
 public class ConnectivityReceiver
         extends BroadcastReceiver {
@@ -20,12 +21,12 @@ public class ConnectivityReceiver
 
     @Override
     public void onReceive(Context context, Intent arg1) {
+
         Toast.makeText(context, "onReceive call", Toast.LENGTH_SHORT).show();
-        ConnectivityManager cm = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null
-                && activeNetwork.isConnectedOrConnecting();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         if (connectivityReceiverListener != null) {
             connectivityReceiverListener.onNetworkConnectionChanged(isConnected);
@@ -33,12 +34,9 @@ public class ConnectivityReceiver
     }
 
     public static boolean isConnected() {
-        ConnectivityManager
-                cm = (ConnectivityManager) Application.getInstance().getApplicationContext()
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) App.getInstance().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null
-                && activeNetwork.isConnectedOrConnecting();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
 

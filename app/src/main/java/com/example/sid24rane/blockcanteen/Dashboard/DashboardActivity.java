@@ -11,15 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.sid24rane.blockcanteen.Application;
+import com.example.sid24rane.blockcanteen.App;
 import com.example.sid24rane.blockcanteen.Dashboard.AllTransactions.AllTransactionsFragment;
 import com.example.sid24rane.blockcanteen.Dashboard.Home.HomeFragment;
 import com.example.sid24rane.blockcanteen.Dashboard.Profile.ProfileFragment;
 import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.utilities.ConnectivityReceiver;
 
-public class DashboardActivity extends AppCompatActivity
-        implements ConnectivityReceiver.ConnectivityReceiverListener{
+public class DashboardActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener{
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -56,7 +55,7 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        Application.getInstance().setConnectivityListener(DashboardActivity.this);
+        App.getInstance().setConnectivityListener(DashboardActivity.this);
     }
 
     @Override
