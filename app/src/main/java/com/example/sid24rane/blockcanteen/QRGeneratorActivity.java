@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -39,9 +40,8 @@ public class QRGeneratorActivity extends AppCompatActivity {
     private void generateQRCode() throws WriterException {
 
         //String publicKey = new String(android.util.Base64.encode(Key.getEncoded(), Base64.DEFAULT));
-        String publicKey = "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEMKkj/B4LqqUWT6FEbZRoSLvGbfC93yD7Zit+GWmaY/UXUiL0LOwIPljBZ/16sFMwxgCO+nlYGFqcTmftaHKmgA==";
 
-        //String publicKey = DataInSharedPreferences.retrievingPublicKey(QRGeneratorActivity.this);
+        String publicKey = DataInSharedPreferences.retrievingPublicKey(QRGeneratorActivity.this);
         Log.d("PUBLIC KEY", publicKey);
         Bitmap bitmap = encodeAsBitmap(publicKey);
         qrcode.setImageBitmap(bitmap);

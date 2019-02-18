@@ -15,7 +15,12 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.example.sid24rane.blockcanteen.R;
+import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.example.sid24rane.blockcanteen.utilities.NetworkUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -43,7 +48,8 @@ public class AllTransactionsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        TransactionsListAdapter transactionsListAdapter = new TransactionsListAdapter(transactionModelArrayList);
+        transactionModelArrayList = new ArrayList<>();
+        transactionsListAdapter = new TransactionsListAdapter(transactionModelArrayList);
         recyclerView.setAdapter(transactionsListAdapter);
 
         load();
@@ -58,13 +64,18 @@ public class AllTransactionsFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        // TODO : retrieve publicKey from SharedPref
-        String publicKey = "";
+        String publicKey = DataInSharedPreferences.retrievingPublicKey(getContext());
 
+        JSONObject json = new JSONObject();
+        try {
+            json.put("public_key", publicKey);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         // call to network
         AndroidNetworking.post(NetworkUtils.getTransactionHistoryUrl())
-                .addUrlEncodeFormBodyParameter("public_key", publicKey)
-                .setContentType("application/x-www-form-urlencoded")
+                .addJSONObjectBody(json)
+                .setContentType("application/json")
                 .setTag("TransactionHistory")
                 .build()
                 .getAsString(new StringRequestListener() {
@@ -72,6 +83,21 @@ public class AllTransactionsFragment extends Fragment {
                     public void onResponse(String response) {
                         Log.d(TAG, "sndTxn onResponse= " + response.toString());
                         //TODO : update UI
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            for (int i=0;i<jsonArray.length();i++){
+                                String str = jsonArray.getString(i);
+                                JSONObject jsonObject = new JSONObject(str);
+                                String amt = jsonObject.getString("amount");
+                                String address = jsonObject.getString("address");
+                                String timestamp = String.valueOf(jsonObject.get("timestamp"));
+                                TransactionModel transactionModel = new TransactionModel(amt, address, timestamp);
+                                transactionModelArrayList.add(transactionModel);
+                                transactionsListAdapter.notifyDataSetChanged();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override

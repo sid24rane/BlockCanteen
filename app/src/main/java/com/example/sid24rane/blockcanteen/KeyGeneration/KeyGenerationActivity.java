@@ -194,10 +194,10 @@ public class KeyGenerationActivity extends AppCompatActivity {
     private void generateKeyPair() throws Exception {
         Log.d(TAG, "generateKeyPair invoked");
 
-        Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
+        //Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
 
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
-        ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256k1");
+        ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256r1");
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
         keyGen.initialize(ecSpec, random);
         mKeyPair = keyGen.generateKeyPair();

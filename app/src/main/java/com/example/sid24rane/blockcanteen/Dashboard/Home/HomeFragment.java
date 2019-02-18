@@ -21,6 +21,8 @@ import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.example.sid24rane.blockcanteen.utilities.NetworkUtils;
 
+import org.json.JSONObject;
+
 import okhttp3.OkHttpClient;
 
 
@@ -114,9 +116,11 @@ public class HomeFragment extends Fragment {
                 final String[] result = new String[1];
                 String pub_key = params[0];
 
+                JSONObject json = new JSONObject();
+                json.put("public_key",pub_key);
                 AndroidNetworking.post(NetworkUtils.getCheckBalanceUrl())
-                        .addUrlEncodeFormBodyParameter("public_key",pub_key)
-                        .setContentType("application/x-www-form-urlencoded")
+                        .addJSONObjectBody(json)
+                        .setContentType("application/json")
                         .setTag("test")
                         .build()
                         .getAsString(new StringRequestListener() {

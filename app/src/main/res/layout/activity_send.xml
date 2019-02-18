@@ -12,12 +12,6 @@
         android:layout_gravity="center_vertical"
         android:orientation="vertical">
 
-
-        <nl.dionsegijn.konfetti.KonfettiView
-            android:id="@+id/viewKonfetti"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

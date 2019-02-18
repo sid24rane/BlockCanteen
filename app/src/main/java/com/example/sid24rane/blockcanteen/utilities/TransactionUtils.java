@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.Signature;
 import java.util.Arrays;
@@ -22,11 +23,19 @@ public class TransactionUtils {
     public static void makeTransaction(String amount, String sender_pub, String receiver_pub, final Context context){
         Log.d(TAG, "maketransaction() invoked");
 
+        JSONObject json = new JSONObject();
+
+        try {
+            json.put("bounty",amount);
+            json.put("receiver_public_key", receiver_pub);
+            json.put("sender_public_key",sender_pub);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         AndroidNetworking.post(NetworkUtils.getMakeTransactionUrl())
-                .addUrlEncodeFormBodyParameter("bounty",amount)
-                .addUrlEncodeFormBodyParameter("receiver_public_key", sender_pub)
-                .addUrlEncodeFormBodyParameter("sender_public_key",receiver_pub)
-                .setContentType("application/x-www-form-urlencoded")
+                .addJSONObjectBody(json)
+                .setContentType("application/json")
                 .setTag("makeTransaction")
                 .build()
                 .getAsString(new StringRequestListener() {
@@ -41,7 +50,7 @@ public class TransactionUtils {
                             Log.d(TAG, "send_this : "+  send_this);
                             Log.d(TAG, "sign_this : " + sign_this);
 
-                            String signedString = signString("VJTI", context);
+                            String signedString = signString(sign_this, context);
 
                             sendTransaction(send_this, signedString);
                         } catch (JSONException e) {
@@ -64,10 +73,18 @@ public class TransactionUtils {
         Log.d(TAG, "Transaction : " + transaction);
         Log.d(TAG, "Signature : " + signature);
 
+        JSONObject json = new JSONObject();
+
+        try {
+            json.put("transaction", transaction);
+            json.put("signature", signature);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         AndroidNetworking.post(NetworkUtils.getSendTransactionUrl())
-                .addUrlEncodeFormBodyParameter("transaction", transaction)
-                .addUrlEncodeFormBodyParameter("signature", signature)
-                .setContentType("application/x-www-form-urlencoded")
+                .addJSONObjectBody(json)
+                .setContentType("application/json")
                 .setTag("sendTransaction")
                 .build()
                 .getAsString(new StringRequestListener() {
@@ -129,6 +146,10 @@ public class TransactionUtils {
         Log.d(TAG, "signString() invoked");
 
         String privateKey = DataInSharedPreferences.retrievingPrivateKey(context);
+
+        //KeyPair kp = DataInSharedPreferences.retrievingKeyPair(context);
+        //Log.d("KeyPair TransactionUti", kp.toString());
+        //PrivateKey pk = kp.getPrivate();
         PrivateKey pk = DataInSharedPreferences.getPrivateKeyFromString(privateKey);
 
         Log.d(TAG, "PrivateKey: \n" + pk.toString());
