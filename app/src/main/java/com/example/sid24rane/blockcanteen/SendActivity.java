@@ -25,12 +25,9 @@ public class SendActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send);
-
         init();
         fetchRecieverUserDetails(receiverPublicKey);
-
     }
-
 
     private void init() {
 
@@ -48,7 +45,7 @@ public class SendActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String publicKey = DataInSharedPreferences.retrievingPublicKey(SendActivity.this);
 
-                TransactionUtils.makeTransaction(amount.getText().toString(),publicKey,receiverPublicKey, SendActivity.this);
+                TransactionUtils.makeTransaction(amount.getText().toString(), publicKey, receiverPublicKey, SendActivity.this);
 
                 Toast.makeText(SendActivity.this, "Transaction successful", Toast.LENGTH_SHORT).show();
 
@@ -60,7 +57,7 @@ public class SendActivity extends AppCompatActivity {
     }
 
     private void fetchRecieverUserDetails(String receiverPublicKey) {
-        //TODO retreive user details from SharedPref
+        //TODO retreive user details from Firebase
     }
 
 }

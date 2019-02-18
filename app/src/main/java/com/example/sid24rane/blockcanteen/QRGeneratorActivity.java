@@ -5,44 +5,42 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
 import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
-import com.example.sid24rane.blockcanteen.utilities.ConnectivityReceiver;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 public class QRGeneratorActivity extends AppCompatActivity{
-
-    private final String PREFS_NAME = "KeyFile";
-
     // qr code generation
     public final static int WHITE = 0xFFFFFFFF;
     public final static int BLACK = 0xFF000000;
     public final static int WIDTH = 400;
     public final static int HEIGHT = 400;
     private ImageView qrcode;
+    private TextView publicKey;
+    private TextView infotext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrgenerator);
 
-
-
         qrcode = (ImageView) findViewById(R.id.qrcode);
+        publicKey = (TextView) findViewById(R.id.publicKey);
+        infotext = (TextView) findViewById(R.id.infoText);
+
         try {
             generateQRCode();
+            publicKey.setText(DataInSharedPreferences.retrievingPublicKey(QRGeneratorActivity.this));
+            infotext.setText("InfoText");
         } catch (WriterException e) {
             e.printStackTrace();
         }
 
     }
-
-
 
     private void generateQRCode() throws WriterException {
         String publicKey = DataInSharedPreferences.retrievingPublicKey(QRGeneratorActivity.this);

@@ -63,7 +63,6 @@ public class DataInSharedPreferences {
     private static String getPublicKeyAsString(KeyPair keyPair){
         Log.d(TAG, "getPublicKeyAsString() invoked");
         PublicKey mPublicKey = keyPair.getPublic();
-
         String publicKey = new String(android.util.Base64.encode(mPublicKey.getEncoded(), android.util.Base64.DEFAULT));
         Log.d(TAG,"PublicKeyString: " +  publicKey);
         return publicKey;

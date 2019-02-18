@@ -101,7 +101,6 @@ public class TransactionUtils {
                 });
     }
 
-
     public static BigInteger extractR(byte[] signature) throws Exception {
         int startR = (signature[1] & 0x80) != 0 ? 3 : 2;
         int lengthR = signature[startR + 1];
@@ -142,19 +141,15 @@ public class TransactionUtils {
 
     public static String signString(String stringToBeSigned, Context context) throws Exception {
         Log.d(TAG, "signString() invoked");
-
         String privateKey = DataInSharedPreferences.retrievingPrivateKey(context);
-
         PrivateKey pk = DataInSharedPreferences.getPrivateKeyFromString(privateKey);
 
         Log.d(TAG, "PrivateKey: \n" + pk.toString());
         Signature dsa = Signature.getInstance("SHA256withECDSA");
         dsa.initSign(pk);
-
         // The string that needs to be signed.
         byte[] strByte = stringToBeSigned.getBytes("UTF-8");
         dsa.update(strByte);
-
         // Actual Signing of the String 'stringToBeSigned' with PrivateKey 'priv'.
         byte[] sign = dsa.sign();
         String signature = getSignatureString(sign);
