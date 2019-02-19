@@ -107,7 +107,7 @@ public class HomeFragment extends Fragment
 
     private void showToast(Boolean isConnected){
         if(!isConnected)
-            Toast.makeText(getContext(), "Please connect to Internet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Please connect to Internet", Toast.LENGTH_LONG).show();
     }
 
     @Override

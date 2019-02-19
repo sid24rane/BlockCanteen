@@ -31,7 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class AllTransactionsFragment extends Fragment {
+public class AllTransactionsFragment extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     private RecyclerView recyclerView;
     private ArrayList<TransactionModel> transactionModelArrayList;
@@ -63,6 +63,7 @@ public class AllTransactionsFragment extends Fragment {
         transactionsListAdapter = new TransactionsListAdapter(transactionModelArrayList);
         recyclerView.setAdapter(transactionsListAdapter);
 
+        checkConnection();
         load();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -92,7 +93,7 @@ public class AllTransactionsFragment extends Fragment {
 
     private void showToast(Boolean isConnected){
         if(!isConnected)
-            Toast.makeText(getContext(), "Please connect to Internet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Please connect to Internet", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -121,7 +122,7 @@ public class AllTransactionsFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        // call to network
+
         AndroidNetworking.post(NetworkUtils.getTransactionHistoryUrl())
                 .addJSONObjectBody(json)
                 .setContentType("application/json")

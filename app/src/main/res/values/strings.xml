@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BlockCanteen</string>
+    <string name="app_name">VJTI Blockchain</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Canteen Menu</string>
     <string name="error_message">An error has occured..please refresh</string>

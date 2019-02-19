@@ -38,7 +38,7 @@
                 <ImageView
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    android:src="@drawable/coins128"
+                    android:src="@drawable/logo_coin"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="20dp"
                     />

@@ -11,21 +11,21 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerInParent="true">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="BlockCanteen"
-            android:textAlignment="center"
-            android:textSize="40sp"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="20dp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-condensed"/>
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="BlockCanteen"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textSize="40sp"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:layout_marginBottom="20dp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:fontFamily="sans-serif-condensed"/>-->
          <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:src="@drawable/food3"/>-->
+                    android:src="@drawable/logo_app"/>-->
     </LinearLayout>
 
 </RelativeLayout>
