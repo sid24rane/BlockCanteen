@@ -37,7 +37,6 @@ public class DataInSharedPreferences {
         String pubKey = getPublicKeyAsString(pair);
         String privateKey = getPrivateKeyAsString(pair);
 
-
         editor.putString("publicKey", pubKey.replaceAll("\\s+", ""));
         editor.putString("privateKey", privateKey.replaceAll("\\s+", ""));
         editor.commit();

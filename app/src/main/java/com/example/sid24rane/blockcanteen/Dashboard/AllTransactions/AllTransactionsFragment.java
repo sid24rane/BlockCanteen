@@ -28,7 +28,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class AllTransactionsFragment extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
@@ -147,8 +152,14 @@ public class AllTransactionsFragment extends Fragment implements ConnectivityRec
                                     JSONObject jsonObject = new JSONObject(str);
                                     String amt = jsonObject.getString("amount");
                                     String address = jsonObject.getString("address");
-                                    String timestamp = String.valueOf(jsonObject.get("timestamp"));
-                                    TransactionModel transactionModel = new TransactionModel(amt, address, timestamp);
+                                    long unixSeconds = (long) jsonObject.get("timestamp");
+
+                                    Date date = new java.util.Date(unixSeconds*1000L);
+                                    SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+                                    sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT-5:30"));
+                                    String formattedDate = sdf.format(date);
+
+                                    TransactionModel transactionModel = new TransactionModel(amt, address, formattedDate);
                                     transactionModelArrayList.add(transactionModel);
                                     transactionsListAdapter.notifyDataSetChanged();
                                 }
