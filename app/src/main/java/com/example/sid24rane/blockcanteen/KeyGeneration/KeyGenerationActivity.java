@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -35,6 +37,7 @@ import java.security.spec.ECGenParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -60,7 +63,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_key_generation);
 
         fullName = (EditText) findViewById(R.id.fullName);
@@ -83,33 +86,37 @@ public class KeyGenerationActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 String fname = fullName.getText().toString();
-                String email_address = email.getText().toString();
+                String email_address = email.getText().toString().trim();
 
                 if(!TextUtils.isEmpty(fname) &&
                         !TextUtils.isEmpty(email_address)){
 
-                    try {
+                    if(isValidEmailId(email_address)){
+                        try {
 
-                        progressDialog = new ProgressDialog(KeyGenerationActivity.this);
-                        progressDialog.setMessage("Creating profile please wait..");
-                        progressDialog.setCancelable(false);
-                        progressDialog.show();
+                            progressDialog = new ProgressDialog(KeyGenerationActivity.this);
+                            progressDialog.setMessage("Creating profile please wait..");
+                            progressDialog.setCancelable(false);
+                            progressDialog.show();
 
-                        JSONObject userJSON = new JSONObject();
-                        userJSON.put("fullName", fname);
-                        userJSON.put("emailAddress", email_address);
+                            JSONObject userJSON = new JSONObject();
+                            userJSON.put("fullName", fname);
+                            userJSON.put("emailAddress", email_address);
 
 
-                        generateKeyPairAndStoreData(userJSON);
-                        progressDialog.dismiss();
-                        Intent intent = new Intent(KeyGenerationActivity.this,RegisterPINActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                        finish();
+                            generateKeyPairAndStoreData(userJSON);
+                            progressDialog.dismiss();
+                            Intent intent = new Intent(KeyGenerationActivity.this,RegisterPINActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                            finish();
 
-                    } catch (Exception e) {
-                        progressDialog.dismiss();
-                        e.printStackTrace();
+                        } catch (Exception e) {
+                            progressDialog.dismiss();
+                            e.printStackTrace();
+                        }
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Invalid Email Address.", Toast.LENGTH_SHORT).show();
                     }
 
                 }else{
@@ -122,6 +129,16 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
     }
 
+
+    private boolean isValidEmailId(String email){
+
+        return Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$").matcher(email).matches();
+    }
 
     private void generateKeyPairAndStoreData(JSONObject userJSON) throws Exception {
         Log.d(TAG, "generateKeyPair invoked");

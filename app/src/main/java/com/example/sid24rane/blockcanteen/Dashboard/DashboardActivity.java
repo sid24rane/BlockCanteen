@@ -30,6 +30,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
 
         setContentView(R.layout.activity_main);
         checkConnection();
@@ -53,8 +54,6 @@ public class DashboardActivity extends AppCompatActivity {
     private void showToast(Boolean isConnected){
         if(!isConnected)
             Toast.makeText(DashboardActivity.this, "Please connect to Internet", Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(DashboardActivity.this, "Connected!", Toast.LENGTH_SHORT).show();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -67,10 +66,10 @@ public class DashboardActivity extends AppCompatActivity {
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.container,new HomeFragment()).commit();
                     return true;
-                case R.id.navigation_dashboard:
-                    fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.container,new ProfileFragment()).commit();
-                    return true;
+//                case R.id.navigation_dashboard:
+//                    fragmentTransaction = fragmentManager.beginTransaction();
+//                    fragmentTransaction.replace(R.id.container,new ProfileFragment()).commit();
+//                    return true;
                 case R.id.navigation_notifications:
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.container,new AllTransactionsFragment()).commit();

@@ -21,7 +21,7 @@ public class TransactionResultActivity extends AppCompatActivity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_transaction_result);
 
         backTodashboard = (Button) findViewById(R.id.backToDashboard);
