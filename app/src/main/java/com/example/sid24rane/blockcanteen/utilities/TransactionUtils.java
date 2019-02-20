@@ -60,8 +60,8 @@ public class TransactionUtils {
 
     public String signString(String stringToBeSigned, Context context) throws Exception {
         Log.d(TAG, "signString() invoked");
-        String privateKey = DataInSharedPreferences.retrievingPrivateKey(context);
-        PrivateKey pk = DataInSharedPreferences.getPrivateKeyFromString(privateKey);
+        String privateKey = new DataInSharedPreferences().retrievingPrivateKey();
+        PrivateKey pk = new DataInSharedPreferences().getPrivateKeyFromString(privateKey);
 
         Log.d(TAG, "PrivateKey: \n" + pk.toString());
         Signature dsa = Signature.getInstance("SHA256withECDSA");

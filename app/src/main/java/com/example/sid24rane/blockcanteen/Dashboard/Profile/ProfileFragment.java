@@ -15,15 +15,14 @@ import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.adorsys.android.securestoragelibrary.SecurePreferences;
+
 
 public class ProfileFragment extends Fragment {
 
     private final String TAG = getClass().getSimpleName();
     private TextView name;
     private TextView emailAddress;
-    private TextView userType;
-    private TextView userDepartment;
-    private TextView yearOfAdmission;
     private TextView publicKey;
     private Button downloadProfile;
 
@@ -35,9 +34,6 @@ public class ProfileFragment extends Fragment {
 
         name =(TextView) view.findViewById(R.id.name);
         emailAddress =(TextView) view.findViewById(R.id.emailAddress);
-        userType =(TextView) view.findViewById(R.id.userType);
-        userDepartment =(TextView) view.findViewById(R.id.userDepartment);
-        yearOfAdmission =(TextView) view.findViewById(R.id.yearOfAdmission);
         publicKey =(TextView) view.findViewById(R.id.publicKey);
         downloadProfile = (Button) view.findViewById(R.id.downloadProfile) ;
 
@@ -55,18 +51,9 @@ public class ProfileFragment extends Fragment {
 
     private void loadUserDetailsFromSharedPreferences(){
         Log.d(TAG,"loadUserDetailsFromSharedPreferences()" );
-        try {
-            JSONObject json = DataInSharedPreferences.getUserDetails(getContext());
-            name.setText(json.getString("firstName") + " " + json.getString("lastName"));
-            emailAddress.setText(json.getString("emailAddress"));
-            userType.setText(json.getString("userType"));
-            userDepartment.setText(json.getString("userDepartment"));
-            yearOfAdmission.setText(json.getString("yearOfAdmission"));
-            publicKey.setText(json.getString("publicKey"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        name.setText(SecurePreferences.getStringValue("fullName", ""));
+        emailAddress.setText(SecurePreferences.getStringValue("emailAddress", ""));
+        publicKey.setText(SecurePreferences.getStringValue("publicKey", ""));
     }
 
 }

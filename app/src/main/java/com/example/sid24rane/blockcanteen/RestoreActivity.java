@@ -77,8 +77,8 @@ public class RestoreActivity extends AppCompatActivity {
                     JSONObject json = new JSONObject(decrypted);
                     Log.d(TAG, json.toString());
 
-                    //Storing the data in sharedPreferences
-                    DataInSharedPreferences.storingUserDetails(json, RestoreActivity.this);
+                    //TODO Storing the data in sharedPreferences
+                    //new DataInSharedPreferences().storingUserDetails(json, RestoreActivity.this);
 
                     Intent intent = new Intent(RestoreActivity.this, DashboardActivity.class);
                     startActivity(intent);

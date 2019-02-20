@@ -105,7 +105,7 @@ public class AllTransactionsFragment extends Fragment{
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        String publicKey = DataInSharedPreferences.retrievingPublicKey(getContext());
+        String publicKey = new DataInSharedPreferences().retrievingPublicKey();
         new FetchAllTransactionsTask().execute(publicKey);
 
         progressDialog.dismiss();

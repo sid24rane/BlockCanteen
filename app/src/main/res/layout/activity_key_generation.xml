@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:focusableInTouchMode="true"
         android:orientation="vertical">
+
                 <ImageView
                     android:layout_marginTop="50dp"
                     android:layout_width="80dp"
@@ -17,6 +18,7 @@
                     android:src="@drawable/transaction2"
                     android:layout_gravity="center_horizontal"
                     />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -66,10 +68,10 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
                     android:textStyle="italic"
-                    android:text="Firstname :"/>
+                    android:text="Full Name :"/>
 
                 <EditText
-                    android:id="@+id/firstname"
+                    android:id="@+id/fullName"
                     android:layout_margin="5dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
