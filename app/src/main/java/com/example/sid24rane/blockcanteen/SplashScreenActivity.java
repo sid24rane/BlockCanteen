@@ -1,11 +1,12 @@
 package com.example.sid24rane.blockcanteen;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.androidnetworking.AndroidNetworking;
 import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
@@ -16,12 +17,15 @@ import okhttp3.OkHttpClient;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private final String PREFS_NAME = "DataFile";
     private final String TAG = getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_splash_screen);
 
         new Handler().postDelayed(new Runnable() {
