@@ -34,7 +34,6 @@ public class QRGeneratorActivity extends AppCompatActivity{
 
         try {
             generateQRCode();
-            publicKey.setText(DataInSharedPreferences.retrievingPublicKey(QRGeneratorActivity.this));
             infotext.setText("InfoText");
         } catch (WriterException e) {
             e.printStackTrace();
@@ -43,10 +42,11 @@ public class QRGeneratorActivity extends AppCompatActivity{
     }
 
     private void generateQRCode() throws WriterException {
-        String publicKey = DataInSharedPreferences.retrievingPublicKey(QRGeneratorActivity.this);
-        Log.d("PUBLIC KEY", publicKey);
-        Bitmap bitmap = encodeAsBitmap(publicKey);
+        String pubKey = new DataInSharedPreferences().retrievingPublicKey();
+        Log.d("PUBLIC KEY", pubKey);
+        Bitmap bitmap = encodeAsBitmap(pubKey);
         qrcode.setImageBitmap(bitmap);
+        publicKey.setText(pubKey);
 
     }
 

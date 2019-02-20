@@ -20,6 +20,8 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
+import de.adorsys.android.securestoragelibrary.SecurePreferences;
+
 import static android.content.Context.MODE_PRIVATE;
 
 public class DataInSharedPreferences {
@@ -31,30 +33,27 @@ public class DataInSharedPreferences {
         return PREFS_NAME;
     }
 
-    public static void storingKeyPair(KeyPair pair, Context context){
+    public static void storingData(KeyPair pair, JSONObject details) throws JSONException {
         Log.d(TAG, "storingKeyPair() invoked");
-        android.content.SharedPreferences.Editor editor = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
         String pubKey = getPublicKeyAsString(pair);
         String privateKey = getPrivateKeyAsString(pair);
-
-        editor.putString("publicKey", pubKey.replaceAll("\\s+", ""));
-        editor.putString("privateKey", privateKey.replaceAll("\\s+", ""));
-        editor.commit();
+        SecurePreferences.setValue("fullName", String.valueOf(details.get("fullName")));
+        SecurePreferences.setValue("emailAddress", String.valueOf(details.get("emailAddress")));
+        SecurePreferences.setValue("publicKey", pubKey);
+        SecurePreferences.setValue("privateKey", privateKey);
+        Log.d("publicKey", SecurePreferences.getStringValue("publicKey", ""));
     }
 
-    public static String retrievingPublicKey(Context context){
+    public static String retrievingPublicKey(){
         Log.d(TAG, "retrievingPublicKey() invoked");
-        SharedPreferences mPrefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String publicKey = mPrefs.getString("publicKey", "");
+        String publicKey = SecurePreferences.getStringValue("publicKey", "");
         Log.d("PublicKeyString ", publicKey);
-
         return publicKey;
     }
 
-    public static String retrievingPrivateKey(Context context){
+    public static String retrievingPrivateKey(){
         Log.d(TAG, "retrievingPrivateKey() invoked");
-        SharedPreferences mPrefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String privateKey = mPrefs.getString("privateKey", "");
+        String privateKey = SecurePreferences.getStringValue("privateKey", "");
         Log.d("PrivateKeyString", privateKey);
 
         return privateKey;
@@ -64,6 +63,7 @@ public class DataInSharedPreferences {
         Log.d(TAG, "getPublicKeyAsString() invoked");
         PublicKey mPublicKey = keyPair.getPublic();
         String publicKey = new String(android.util.Base64.encode(mPublicKey.getEncoded(), android.util.Base64.DEFAULT));
+        publicKey = publicKey.replaceAll("\\s+", "");
         Log.d(TAG,"PublicKeyString: " +  publicKey);
         return publicKey;
     }
@@ -72,11 +72,12 @@ public class DataInSharedPreferences {
         PrivateKey mPrivateKey = keyPair.getPrivate();
         String privateKey = null;
         privateKey = new String(android.util.Base64.encode(mPrivateKey.getEncoded(), android.util.Base64.DEFAULT));
+        privateKey = privateKey.replaceAll("\\s+", "");
         Log.d(TAG,"PrivateKeyString: " +  privateKey);
         return privateKey;
     }
 
-    public  static PrivateKey getPrivateKeyFromString(String key) throws GeneralSecurityException {
+    public static PrivateKey getPrivateKeyFromString(String key) throws GeneralSecurityException {
         String privateKeyPEM = key;
         privateKeyPEM = privateKeyPEM.replace("-----BEGIN PRIVATE KEY-----\n", "");
         privateKeyPEM = privateKeyPEM.replace("-----END PRIVATE KEY-----", "");
@@ -88,43 +89,4 @@ public class DataInSharedPreferences {
         return privKey;
     }
 
-    public static void storingUserDetails(JSONObject userJSON, Context context){
-        android.content.SharedPreferences.Editor editor = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-
-        try {
-            editor.putString("firstName", String.valueOf(userJSON.get("firstName")));
-            editor.putString("lastName", String.valueOf(userJSON.get("lastName")));
-            editor.putString("emailAddress", String.valueOf(userJSON.get("emailAddress")));
-            editor.putString("userType", String.valueOf(userJSON.get("userType")));
-            editor.putString("userDepartment", String.valueOf(userJSON.get("userDepartment")));
-            editor.putString("yearOfAdmission", String.valueOf(userJSON.get("yearOfAdmission")));
-
-            if(context instanceof RestoreActivity){
-                editor.putString("publicKey", String.valueOf(userJSON.get("publicKey")));
-                editor.putString("privateKey", String.valueOf(userJSON.get("privateKey")));
-            }
-
-            editor.commit();
-            Log.d(TAG, "storingUserDetails() done");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public static JSONObject getUserDetails(Context context) throws JSONException {
-        SharedPreferences mPrefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-        JSONObject json = new JSONObject();
-        json.put("firstName", mPrefs.getString("firstName", ""));
-        json.put("lastName", mPrefs.getString("lastName", ""));
-        json.put("emailAddress", mPrefs.getString("emailAddress", ""));
-        json.put("userType", mPrefs.getString("userType", ""));
-        json.put("userDepartment", mPrefs.getString("userDepartment", ""));
-        json.put("yearOfAdmission", mPrefs.getString("yearOfAdmission", ""));
-        json.put("publicKey", mPrefs.getString("publicKey", ""));
-
-        Log.d(TAG, "getUserDetails() " + json.toString());
-        return json;
-    }
 }

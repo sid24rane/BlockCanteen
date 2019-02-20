@@ -38,22 +38,18 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
+import de.adorsys.android.securestoragelibrary.SecurePreferences;
+
 
 public class KeyGenerationActivity extends AppCompatActivity {
 
     private final String TAG = getClass().getSimpleName();
-    private static KeyPair mKeyPair;
-
-    private EditText firstname;
-    private EditText lastname;
+    private KeyPair mKeyPair;
+    private EditText fullName;
     private EditText email;
     private Button register;
-    private Spinner userType;
-    private Spinner department;
-    private EditText entry;
-    private EditText secret;
-    private ProgressDialog progressDialog;
     private Button restore;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +57,9 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_key_generation);
 
-        firstname = (EditText) findViewById(R.id.firstname);
-        lastname = (EditText) findViewById(R.id.lastname);
+        fullName = (EditText) findViewById(R.id.fullName);
         email = (EditText) findViewById(R.id.email_id);
-        entry = (EditText) findViewById(R.id.entry);
-        secret = (EditText) findViewById(R.id.secret);
 
-        userType = (Spinner) findViewById(R.id.userType);
-        department = (Spinner) findViewById(R.id.department);
         register = (Button) findViewById(R.id.submit);
         restore = (Button) findViewById(R.id.restore);
 
@@ -85,21 +76,11 @@ public class KeyGenerationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
-                String fname = firstname.getText().toString();
-                String lname = lastname.getText().toString();
+                String fname = fullName.getText().toString();
                 String email_address = email.getText().toString();
-                String user_type = userType.getSelectedItem().toString();
-                String user_department = department.getSelectedItem().toString();
-                String year_of_admission = entry.getText().toString();
-                String secretKey = secret.getText().toString();
 
-
-                if(secretKey.length() == 16 && !secretKey.isEmpty() &&
-                        !TextUtils.isEmpty(fname) &&
-                        !TextUtils.isEmpty(lname) &&
-                        !TextUtils.isEmpty(email_address) &&
-                        !TextUtils.isEmpty(year_of_admission)){
+                if(!TextUtils.isEmpty(fname) &&
+                        !TextUtils.isEmpty(email_address)){
 
                     try {
                         progressDialog = new ProgressDialog(KeyGenerationActivity.this);
@@ -107,21 +88,10 @@ public class KeyGenerationActivity extends AppCompatActivity {
                         progressDialog.setCancelable(false);
                         progressDialog.show();
 
-                        generateKeyPair();
-
                         JSONObject userJSON = new JSONObject();
-                        userJSON.put("firstName", fname);
-                        userJSON.put("lastName", lname);
+                        userJSON.put("fullName", fname);
                         userJSON.put("emailAddress", email_address);
-                        userJSON.put("userType", user_type);
-                        userJSON.put("userDepartment", user_department);
-                        userJSON.put("yearOfAdmission", year_of_admission);
-                        userJSON.put("privateKey", DataInSharedPreferences.retrievingPrivateKey(KeyGenerationActivity.this));
-                        userJSON.put("publicKey", DataInSharedPreferences.retrievingPublicKey(KeyGenerationActivity.this));
-
-                        //TODO : save data in both: SharedPref as well as JSONDump
-                        saveRegistrationDetailsAsJson(userJSON, secretKey);
-                        DataInSharedPreferences.storingUserDetails(userJSON, KeyGenerationActivity.this);
+                        generateKeyPairAndStoreData(userJSON);
 
                         Intent intent = new Intent(KeyGenerationActivity.this,DashboardActivity.class);
                         startActivity(intent);
@@ -174,16 +144,14 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
     }
 
-    private void generateKeyPair() throws Exception {
+    private void generateKeyPairAndStoreData(JSONObject userJSON) throws Exception {
         Log.d(TAG, "generateKeyPair invoked");
-
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
         ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256r1");
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
         keyGen.initialize(ecSpec, random);
         mKeyPair = keyGen.generateKeyPair();
-        //String publicKey = new String(android.util.Base64.encode(Key.getEncoded(), Base64.DEFAULT));
-        DataInSharedPreferences.storingKeyPair(mKeyPair, KeyGenerationActivity.this);
+        DataInSharedPreferences.storingData(mKeyPair, userJSON);
 
     }
 
