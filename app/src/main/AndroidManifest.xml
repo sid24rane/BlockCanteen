@@ -51,6 +51,12 @@
         <activity android:name=".TransactionResultActivity" android:screenOrientation="portrait"/>
         <activity android:name=".OnboardingActivity" android:screenOrientation="portrait">
         </activity>
+        <receiver android:name=".utilities.NetworkReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

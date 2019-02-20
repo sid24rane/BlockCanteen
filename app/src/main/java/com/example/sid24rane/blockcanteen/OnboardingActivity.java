@@ -2,8 +2,8 @@ package com.example.sid24rane.blockcanteen;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -11,14 +11,16 @@ import android.widget.Toast;
 import com.example.sid24rane.blockcanteen.KeyGeneration.KeyGenerationActivity;
 import com.ramotion.paperonboarding.PaperOnboardingEngine;
 import com.ramotion.paperonboarding.PaperOnboardingPage;
-import com.ramotion.paperonboarding.listeners.PaperOnboardingOnChangeListener;
 import com.ramotion.paperonboarding.listeners.PaperOnboardingOnRightOutListener;
 
 import java.util.ArrayList;
 
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
+import de.greenrobot.event.EventBus;
 
 public class OnboardingActivity extends AppCompatActivity {
+
+    private EventBus eventBus = EventBus.getDefault();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,8 @@ public class OnboardingActivity extends AppCompatActivity {
             }
         });
 
+        eventBus.register(this);
+
     }
 
     // Just example data for Onboarding
@@ -60,5 +64,14 @@ public class OnboardingActivity extends AppCompatActivity {
         elements.add(scr2);
         elements.add(scr3);
         return elements;
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        eventBus.unregister(this);
+    }
+
+    public void onEvent(String event) {
+        Toast.makeText(OnboardingActivity.this, event, Toast.LENGTH_LONG).show();
     }
 }
