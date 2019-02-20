@@ -2,6 +2,7 @@ package com.example.sid24rane.blockcanteen;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,25 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
-import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.example.sid24rane.blockcanteen.utilities.EncryptUtils;
 import com.example.sid24rane.blockcanteen.utilities.JSONDump;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.InvalidParameterSpecException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 
 public class RestoreActivity extends AppCompatActivity {
 
@@ -37,7 +21,7 @@ public class RestoreActivity extends AppCompatActivity {
     private EditText secret;
     private Button restoreProfile;
     private final String TAG = getClass().getSimpleName();
-
+    private String path;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +38,8 @@ public class RestoreActivity extends AppCompatActivity {
         uploadFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                openFile("*/*");
                 //TODO : take input file from user
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
-                startActivityForResult(intent, 7);
-
             }
         });
 
@@ -70,47 +50,20 @@ public class RestoreActivity extends AppCompatActivity {
                 EncryptUtils e = new EncryptUtils();
 
                 // Decrypt json with the secret
-                String dataFromDump = JSONDump.getData(RestoreActivity.this);
+                String dataFromDump = JSONDump.getDataFromPath(path);
+                Log.d(TAG,"Decrypted :" + dataFromDump );
+
                 String secretKeyFromUser= secret.getText().toString();
-                SecretKey secretKey = null;
-                try {
-                    secretKey = e.generateKey(secretKeyFromUser);
-                    String decrypted = new String(e.decryptMsg(dataFromDump.getBytes(), secretKey));
-                    Log.d(TAG,"Decrypted :" + decrypted );
+                
+//                JSONObject json = new JSONObject(decrypted);
+//                Log.d(TAG, json.toString());
 
-                    //TODO : check Decrypted for JSON string regex
+                //TODO Storing the data in sharedPreferences
+                //new DataInSharedPreferences().storingUserDetails(json, RestoreActivity.this);
 
-                    JSONObject json = new JSONObject(decrypted);
-                    Log.d(TAG, json.toString());
-
-                    //TODO Storing the data in sharedPreferences
-                    //new DataInSharedPreferences().storingUserDetails(json, RestoreActivity.this);
-
-                    Intent intent = new Intent(RestoreActivity.this, DashboardActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-
-                } catch (NoSuchAlgorithmException e1) {
-                    e1.printStackTrace();
-                } catch (InvalidKeySpecException e1) {
-                    e1.printStackTrace();
-                } catch (InvalidKeyException e1) {
-                    e1.printStackTrace();
-                } catch (NoSuchPaddingException e1) {
-                    e1.printStackTrace();
-                } catch (BadPaddingException e1) {
-                    e1.printStackTrace();
-                } catch (UnsupportedEncodingException e1) {
-                    e1.printStackTrace();
-                } catch (InvalidParameterSpecException e1) {
-                    e1.printStackTrace();
-                } catch (IllegalBlockSizeException e1) {
-                    e1.printStackTrace();
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
-                } catch (InvalidAlgorithmParameterException e1) {
-                    e1.printStackTrace();
-                }
+//                Intent intent = new Intent(RestoreActivity.this, DashboardActivity.class);
+//                startActivity(intent);
+//                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
 
             }
         });
@@ -124,14 +77,46 @@ public class RestoreActivity extends AppCompatActivity {
             case 7:
 
                 if(resultCode==RESULT_OK){
-
-                    String PathHolder = data.getData().getPath();
-
-                    Toast.makeText(RestoreActivity.this, PathHolder , Toast.LENGTH_LONG).show();
-
+                    String tempPath = data.getData().getPath();
+                    String idArr[] = tempPath.split(":");
+                    if(idArr.length == 2)
+                    {
+                        String type = idArr[0];
+                        String realDocId = idArr[1];
+                        path = Environment.getExternalStorageDirectory() + "/" + realDocId;
+                    }
+                    Toast.makeText(RestoreActivity.this, path , Toast.LENGTH_LONG).show();
                 }
                 break;
 
+        }
+    }
+
+    private void openFile(String mimeType) {
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType(mimeType);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        // special intent for Samsung file manager
+        Intent sIntent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
+        // if you want any file type, you can skip next line
+        sIntent.putExtra("CONTENT_TYPE", mimeType);
+        sIntent.addCategory(Intent.CATEGORY_DEFAULT);
+
+        Intent chooserIntent;
+        if (getPackageManager().resolveActivity(sIntent, 0) != null){
+            // it is device with Samsung file manager
+            chooserIntent = Intent.createChooser(sIntent, "Open file");
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { intent});
+        } else {
+            chooserIntent = Intent.createChooser(intent, "Open file");
+        }
+
+        try {
+            startActivityForResult(chooserIntent, 7);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(getApplicationContext(), "No suitable File Manager was found.", Toast.LENGTH_SHORT).show();
         }
     }
 }

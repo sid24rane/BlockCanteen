@@ -20,26 +20,15 @@ import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.RegisterPINActivity;
 import com.example.sid24rane.blockcanteen.RestoreActivity;
 import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
-import com.example.sid24rane.blockcanteen.utilities.EncryptUtils;
 import com.example.sid24rane.blockcanteen.utilities.JSONDump;
 
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.ECGenParameterSpec;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.InvalidParameterSpecException;
 import java.util.regex.Pattern;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 
 
 public class KeyGenerationActivity extends AppCompatActivity {
@@ -73,7 +62,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
         restore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(KeyGenerationActivity.this,RestoreActivity.class);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
@@ -102,6 +90,8 @@ public class KeyGenerationActivity extends AppCompatActivity {
                             userJSON.put("fullName", fname);
                             userJSON.put("emailAddress", email_address);
 
+                            //TODO remove this
+                            saveRegistrationDetailsAsJson(userJSON, "sidsidyashsidsid");
 
                             generateKeyPairAndStoreData(userJSON);
                             progressDialog.dismiss();
@@ -162,32 +152,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
     private void saveRegistrationDetailsAsJson(JSONObject userJSON, String secretKey){
         Log.d(TAG ,"saveRegistrationDetails() invoked");
         String userJSONString = userJSON.toString();
-        try {
-            SecretKey secret = new EncryptUtils().generateKey(secretKey);
-            String encryptedJSON= new String(new EncryptUtils().encryptMsg(userJSONString, secret));
-            Log.d("Encrypted : " , encryptedJSON);
-
-            //dump JSON
-            JSONDump.saveData(KeyGenerationActivity.this, encryptedJSON);
-            progressDialog.dismiss();
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (InvalidParameterSpecException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        }
+        JSONDump.saveData(KeyGenerationActivity.this, userJSONString);
 
     }
 }
