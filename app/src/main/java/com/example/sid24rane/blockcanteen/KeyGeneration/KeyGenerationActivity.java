@@ -72,9 +72,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
         register = (Button) findViewById(R.id.submit);
         restore = (Button) findViewById(R.id.restore);
 
-        loadSpinnerData();
-
-
         restore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,21 +140,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
         });
 
 
-    }
-
-    private void loadSpinnerData() {
-
-        // departments
-        List<String> departmentNameData = new Data().departmentNameData();
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, departmentNameData);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        department.setAdapter(dataAdapter);
-
-        // usertype
-        List<String> usertypeData = new Data().usertypeData();
-        ArrayAdapter<String> usertypedataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, usertypeData);
-        usertypedataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        userType.setAdapter(dataAdapter);
     }
 
     private void saveRegistrationDetailsAsJson(JSONObject userJSON, String secretKey){

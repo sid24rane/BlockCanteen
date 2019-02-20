@@ -11,14 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.sid24rane.blockcanteen.App;
 import com.example.sid24rane.blockcanteen.Dashboard.AllTransactions.AllTransactionsFragment;
 import com.example.sid24rane.blockcanteen.Dashboard.Home.HomeFragment;
 import com.example.sid24rane.blockcanteen.Dashboard.Profile.ProfileFragment;
 import com.example.sid24rane.blockcanteen.R;
-import com.example.sid24rane.blockcanteen.utilities.ConnectivityReceiver;
 
-public class DashboardActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener{
+public class DashboardActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -41,7 +39,8 @@ public class DashboardActivity extends AppCompatActivity implements Connectivity
     }
 
     private void checkConnection() {
-        boolean isConnected = ConnectivityReceiver.isConnected();
+        //TODO :library
+        boolean isConnected = true;
         showToast(isConnected);
     }
     
@@ -50,17 +49,6 @@ public class DashboardActivity extends AppCompatActivity implements Connectivity
             Toast.makeText(DashboardActivity.this, "Please connect to Internet", Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(DashboardActivity.this, "Connected!", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        App.getInstance().setConnectivityListener(DashboardActivity.this);
-    }
-
-    @Override
-    public void onNetworkConnectionChanged(boolean isConnected) {
-        showToast(isConnected);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

@@ -18,96 +18,15 @@ import java.security.Signature;
 import java.util.Arrays;
 
 public class TransactionUtils {
-    public static String TAG = "TransactionUtils";
+    private String TAG = "TransactionUtils";
 
-    public static void makeTransaction(String amount, String sender_pub, String receiver_pub, final Context context){
-        Log.d(TAG, "maketransaction() invoked");
-
-        JSONObject json = new JSONObject();
-
-        try {
-            json.put("bounty",amount);
-            json.put("receiver_public_key", receiver_pub);
-            json.put("sender_public_key",sender_pub);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        AndroidNetworking.post(NetworkUtils.getMakeTransactionUrl())
-                .addJSONObjectBody(json)
-                .setContentType("application/json")
-                .setTag("makeTransaction")
-                .build()
-                .getAsString(new StringRequestListener() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("makeTransaction res: ", response.toString());
-                        try {
-                            JSONObject responseJson = new JSONObject(response.toString());
-
-                            String send_this = responseJson.getString("send_this");
-                            String sign_this = responseJson.getString("sign_this");
-                            Log.d(TAG, "send_this : "+  send_this);
-                            Log.d(TAG, "sign_this : " + sign_this);
-
-                            String signedString = signString(sign_this, context);
-
-                            sendTransaction(send_this, signedString);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        Log.d("makeTransaction err:", anError.toString());
-
-                    }
-                });
-    }
-
-    public static void sendTransaction(String transaction, String signature){
-
-        Log.d(TAG, "Transaction : " + transaction);
-        Log.d(TAG, "Signature : " + signature);
-
-        JSONObject json = new JSONObject();
-
-        try {
-            json.put("transaction", transaction);
-            json.put("signature", signature);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        AndroidNetworking.post(NetworkUtils.getSendTransactionUrl())
-                .addJSONObjectBody(json)
-                .setContentType("application/json")
-                .setTag("sendTransaction")
-                .build()
-                .getAsString(new StringRequestListener() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG, "sndTxn onResponse= " + response.toString());
-                        //TODO : update UI
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        Log.d(TAG, "sndTxn onError= " + anError.toString());
-                    }
-                });
-    }
-
-    public static BigInteger extractR(byte[] signature) throws Exception {
+    private BigInteger extractR(byte[] signature) throws Exception {
         int startR = (signature[1] & 0x80) != 0 ? 3 : 2;
         int lengthR = signature[startR + 1];
         return new BigInteger(Arrays.copyOfRange(signature, startR + 2, startR + 2 + lengthR));
     }
 
-    public static BigInteger extractS(byte[] signature) throws Exception {
+    private BigInteger extractS(byte[] signature) throws Exception {
         int startR = (signature[1] & 0x80) != 0 ? 3 : 2;
         int lengthR = signature[startR + 1];
         int startS = startR + 2 + lengthR;
@@ -115,7 +34,7 @@ public class TransactionUtils {
         return new BigInteger(Arrays.copyOfRange(signature, startS + 2, startS + 2 + lengthS));
     }
 
-    public static byte[] derSign(BigInteger r, BigInteger s) throws Exception {
+    private byte[] derSign(BigInteger r, BigInteger s) throws Exception {
         byte[] rb = r.toByteArray();
         byte[] sb = s.toByteArray();
         int off = (2 + 2) + rb.length;
@@ -132,14 +51,14 @@ public class TransactionUtils {
         return der;
     }
 
-    public static String getSignatureString(byte[] sign) throws Exception {
+    public String getSignatureString(byte[] sign) throws Exception {
         BigInteger r = extractR(sign);
         BigInteger s = extractS(sign);
         String realSign = "[" + r.toString() + ", " + s.toString() + "]";
         return realSign;
     }
 
-    public static String signString(String stringToBeSigned, Context context) throws Exception {
+    public String signString(String stringToBeSigned, Context context) throws Exception {
         Log.d(TAG, "signString() invoked");
         String privateKey = DataInSharedPreferences.retrievingPrivateKey(context);
         PrivateKey pk = DataInSharedPreferences.getPrivateKeyFromString(privateKey);
