@@ -6,4 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".TransactionResultActivity">
 
+    <Button
+        android:id="@+id/backToDashboard"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:text="Back To Home"
+        android:layout_marginBottom="10dp"
+        android:textColor="#fff"
+        android:textSize="16dp"
+        android:background="@layout/button_border_corner_circle_"/>
+
 </android.support.constraint.ConstraintLayout>

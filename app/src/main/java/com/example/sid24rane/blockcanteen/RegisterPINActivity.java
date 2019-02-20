@@ -8,6 +8,8 @@ import android.widget.Toast;
 import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
 import com.hanks.passcodeview.PasscodeView;
 
+import de.adorsys.android.securestoragelibrary.SecurePreferences;
+
 public class RegisterPINActivity extends AppCompatActivity {
 
     @Override
@@ -19,11 +21,13 @@ public class RegisterPINActivity extends AppCompatActivity {
         passcodeView.setListener(new PasscodeView.PasscodeViewListener() {
             @Override
             public void onFail() {
-                Toast.makeText(RegisterPINActivity.this, "less than 4 digits", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterPINActivity.this, "Incorrect Pin!", Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onSuccess(String number) {
-                Intent i = new Intent(RegisterPINActivity.this,DashboardActivity.class);
+                SecurePreferences.setValue("pin", number);
+                Intent i = new Intent(RegisterPINActivity.this, DashboardActivity.class);
                 startActivity(i);
                 finish();
             }

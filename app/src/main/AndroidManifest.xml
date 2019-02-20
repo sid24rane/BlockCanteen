@@ -24,7 +24,7 @@
             android:name=".QRScannerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SendActivity"
+            android:name=".AmountToBeSentActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SplashScreenActivity"

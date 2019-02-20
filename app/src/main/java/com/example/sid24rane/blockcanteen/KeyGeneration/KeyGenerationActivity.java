@@ -96,7 +96,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
 
                         generateKeyPairAndStoreData(userJSON);
-
+                        progressDialog.dismiss();
                         Intent intent = new Intent(KeyGenerationActivity.this,RegisterPINActivity.class);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
@@ -126,7 +126,6 @@ public class KeyGenerationActivity extends AppCompatActivity {
         keyGen.initialize(ecSpec, random);
         mKeyPair = keyGen.generateKeyPair();
         DataInSharedPreferences.storingData(mKeyPair, userJSON);
-
     }
 
     private void saveRegistrationDetailsAsJson(JSONObject userJSON, String secretKey){

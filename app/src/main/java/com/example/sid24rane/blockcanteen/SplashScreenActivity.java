@@ -30,16 +30,25 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                 networkInit();
 
-                if (checkKeyPair()){
-                    Intent intent = new Intent(SplashScreenActivity.this,DashboardActivity.class);
+                if (checkKeyPair() && checkPin()){
+                    Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
                     startActivity(intent);
                     finish();
                     overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                }else{
-                    Intent intent = new Intent(SplashScreenActivity.this,KeyGenerationActivity.class);
-                    startActivity(intent);
-                    finish();
-                    overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                }else if(!checkPin()){
+
+                    if(checkKeyPair()){
+                        Intent intent = new Intent(SplashScreenActivity.this, RegisterPINActivity.class);
+                        startActivity(intent);
+                        finish();
+                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                    }else{
+                        Intent intent = new Intent(SplashScreenActivity.this, KeyGenerationActivity.class);
+                        startActivity(intent);
+                        finish();
+                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                    }
+
                 }
 
             }
@@ -55,12 +64,21 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private boolean checkKeyPair() {
-        Log.d(TAG, "checkKeyPair() invoked");
-        if (!SecurePreferences.contains("publicKey") || !SecurePreferences.contains("privateKey")){
-            Log.d(TAG, "either private or public key doesn't exist");
-            return false;
-        }else{
+        Log.d(TAG, "checkCredentials() invoked");
+        if (SecurePreferences.contains("publicKey") && SecurePreferences.contains("privateKey") ){
+            Log.d(TAG, "either private or public key doesn't exist or pin doesnt exist");
             return true;
+        }else{
+            return false;
+        }
+    }
+
+    private boolean checkPin()
+    {
+        if(SecurePreferences.contains("pin")){
+            return true;
+        }else{
+            return false;
         }
     }
 }
