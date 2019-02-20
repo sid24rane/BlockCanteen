@@ -62,7 +62,7 @@ public class SendActivity extends AppCompatActivity {
     }
 
     private void newTransaction(){
-        String publicKey = new DataInSharedPreferences().retrievingPublicKey();
+        String publicKey = DataInSharedPreferences.retrievingPublicKey();
         makeTransaction(amount.getText().toString(), publicKey, receiverPublicKey);
     }
 

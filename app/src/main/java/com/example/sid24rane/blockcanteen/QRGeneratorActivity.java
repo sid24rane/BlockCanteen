@@ -42,7 +42,7 @@ public class QRGeneratorActivity extends AppCompatActivity{
     }
 
     private void generateQRCode() throws WriterException {
-        String pubKey = DataInSharedPreferences.retrievingPublicKey();
+        String pubKey = new DataInSharedPreferences().retrievingPublicKey();
         Log.d("PUBLIC KEY", pubKey);
         Bitmap bitmap = encodeAsBitmap(pubKey);
         qrcode.setImageBitmap(bitmap);

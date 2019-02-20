@@ -151,7 +151,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
         keyGen.initialize(ecSpec, random);
         mKeyPair = keyGen.generateKeyPair();
-        new DataInSharedPreferences().storingData(mKeyPair, userJSON);
+        DataInSharedPreferences.storingData(mKeyPair, userJSON);
 
     }
 

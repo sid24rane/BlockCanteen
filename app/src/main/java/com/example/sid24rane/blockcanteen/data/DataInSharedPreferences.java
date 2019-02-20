@@ -33,14 +33,15 @@ public class DataInSharedPreferences {
         return PREFS_NAME;
     }
 
-    public void storingData(KeyPair pair, JSONObject details) throws JSONException {
+    public static void storingData(KeyPair pair, JSONObject details) throws JSONException {
         Log.d(TAG, "storingKeyPair() invoked");
         String pubKey = getPublicKeyAsString(pair);
         String privateKey = getPrivateKeyAsString(pair);
         SecurePreferences.setValue("fullName", String.valueOf(details.get("fullName")));
         SecurePreferences.setValue("emailAddress", String.valueOf(details.get("emailAddress")));
-        SecurePreferences.setValue("publicKey", pubKey.replaceAll("\\s+", ""));
-        SecurePreferences.setValue("privateKey", privateKey.replaceAll("\\s+", ""));
+        SecurePreferences.setValue("publicKey", pubKey);
+        SecurePreferences.setValue("privateKey", privateKey);
+        Log.d("publicKey", SecurePreferences.getStringValue("publicKey", ""));
     }
 
     public static String retrievingPublicKey(){
@@ -58,23 +59,25 @@ public class DataInSharedPreferences {
         return privateKey;
     }
 
-    private String getPublicKeyAsString(KeyPair keyPair){
+    private static String getPublicKeyAsString(KeyPair keyPair){
         Log.d(TAG, "getPublicKeyAsString() invoked");
         PublicKey mPublicKey = keyPair.getPublic();
         String publicKey = new String(android.util.Base64.encode(mPublicKey.getEncoded(), android.util.Base64.DEFAULT));
+        publicKey = publicKey.replaceAll("\\s+", "");
         Log.d(TAG,"PublicKeyString: " +  publicKey);
         return publicKey;
     }
 
-    private String getPrivateKeyAsString(KeyPair keyPair){
+    private static String getPrivateKeyAsString(KeyPair keyPair){
         PrivateKey mPrivateKey = keyPair.getPrivate();
         String privateKey = null;
         privateKey = new String(android.util.Base64.encode(mPrivateKey.getEncoded(), android.util.Base64.DEFAULT));
+        privateKey = privateKey.replaceAll("\\s+", "");
         Log.d(TAG,"PrivateKeyString: " +  privateKey);
         return privateKey;
     }
 
-    public PrivateKey getPrivateKeyFromString(String key) throws GeneralSecurityException {
+    public static PrivateKey getPrivateKeyFromString(String key) throws GeneralSecurityException {
         String privateKeyPEM = key;
         privateKeyPEM = privateKeyPEM.replace("-----BEGIN PRIVATE KEY-----\n", "");
         privateKeyPEM = privateKeyPEM.replace("-----END PRIVATE KEY-----", "");

@@ -11,6 +11,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
 import com.example.sid24rane.blockcanteen.KeyGeneration.KeyGenerationActivity;
 
+import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import okhttp3.OkHttpClient;
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -55,10 +56,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private boolean checkKeyPair() {
         Log.d(TAG, "checkKeyPair() invoked");
-        SharedPreferences preferences =  getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String public_key = preferences.getString("publicKey",null);
-        String private_key = preferences.getString("privateKey",null);
-        if (public_key == null || private_key == null){
+        if (!SecurePreferences.contains("publicKey") || !SecurePreferences.contains("privateKey")){
             Log.d(TAG, "either private or public key doesn't exist");
             return false;
         }else{

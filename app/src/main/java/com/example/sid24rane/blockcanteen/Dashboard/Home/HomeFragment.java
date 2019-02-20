@@ -111,7 +111,7 @@ public class HomeFragment extends Fragment {
 
         networkInit();
         showBalanceView();
-        String publicKey = new DataInSharedPreferences().retrievingPublicKey();
+        String publicKey = DataInSharedPreferences.retrievingPublicKey();
         new FetchBalanceTask().execute(publicKey);
     }
 
