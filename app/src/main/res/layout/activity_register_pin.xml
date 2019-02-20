@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hanks.passcodeview.PasscodeView android:id="@+id/password"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:firstInputTip="Enter a passcode of 4 digits "
+    android:background="?attr/colorPrimary"
+    app:passcodeLength="4"
+    app:correctStateColor="#71bb4d"
+    app:wrongStateColor="#71bb4d"
+    app:normalStateColor="#ffffff"
+    app:numberTextColor="#222222"
+    xmlns:app="http://schemas.android.com/apk/res-auto" />

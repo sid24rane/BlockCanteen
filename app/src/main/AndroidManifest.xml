@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Dashboard.DashboardActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".QRScannerActivity"
             android:screenOrientation="portrait" />
@@ -28,8 +28,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SplashScreenActivity"
-            android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,13 +39,16 @@
         </activity>
         <activity
             android:name=".KeyGeneration.KeyGenerationActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".QRGeneratorActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".RestoreActivity"
-            android:screenOrientation="portrait"></activity>
-
+        <activity
+            android:name=".RestoreActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".RegisterPINActivity" />
+        <activity android:name=".CheckPINActivity" />
+        <activity android:name=".TransactionResultActivity"></activity>
     </application>
 
 </manifest>
