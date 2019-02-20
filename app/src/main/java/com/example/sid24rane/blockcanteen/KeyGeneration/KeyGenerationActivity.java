@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
 import com.example.sid24rane.blockcanteen.R;
+import com.example.sid24rane.blockcanteen.RegisterPINActivity;
 import com.example.sid24rane.blockcanteen.RestoreActivity;
 import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.example.sid24rane.blockcanteen.utilities.EncryptUtils;
@@ -83,6 +84,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
                         !TextUtils.isEmpty(email_address)){
 
                     try {
+
                         progressDialog = new ProgressDialog(KeyGenerationActivity.this);
                         progressDialog.setMessage("Creating profile please wait..");
                         progressDialog.setCancelable(false);
@@ -91,11 +93,14 @@ public class KeyGenerationActivity extends AppCompatActivity {
                         JSONObject userJSON = new JSONObject();
                         userJSON.put("fullName", fname);
                         userJSON.put("emailAddress", email_address);
+
+
                         generateKeyPairAndStoreData(userJSON);
 
-                        Intent intent = new Intent(KeyGenerationActivity.this,DashboardActivity.class);
+                        Intent intent = new Intent(KeyGenerationActivity.this,RegisterPINActivity.class);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                        finish();
 
                     } catch (Exception e) {
                         progressDialog.dismiss();
@@ -112,9 +117,21 @@ public class KeyGenerationActivity extends AppCompatActivity {
 
     }
 
+
+    private void generateKeyPairAndStoreData(JSONObject userJSON) throws Exception {
+        Log.d(TAG, "generateKeyPair invoked");
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
+        ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256r1");
+        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+        keyGen.initialize(ecSpec, random);
+        mKeyPair = keyGen.generateKeyPair();
+        DataInSharedPreferences.storingData(mKeyPair, userJSON);
+
+    }
+
     private void saveRegistrationDetailsAsJson(JSONObject userJSON, String secretKey){
         Log.d(TAG ,"saveRegistrationDetails() invoked");
-          String userJSONString = userJSON.toString();
+        String userJSONString = userJSON.toString();
         try {
             SecretKey secret = new EncryptUtils().generateKey(secretKey);
             String encryptedJSON= new String(new EncryptUtils().encryptMsg(userJSONString, secret));
@@ -143,16 +160,4 @@ public class KeyGenerationActivity extends AppCompatActivity {
         }
 
     }
-
-    private void generateKeyPairAndStoreData(JSONObject userJSON) throws Exception {
-        Log.d(TAG, "generateKeyPair invoked");
-        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
-        ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256r1");
-        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-        keyGen.initialize(ecSpec, random);
-        mKeyPair = keyGen.generateKeyPair();
-        DataInSharedPreferences.storingData(mKeyPair, userJSON);
-
-    }
-
 }
