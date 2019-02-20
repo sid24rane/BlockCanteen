@@ -34,25 +34,31 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                 networkInit();
 
-                if (checkKeyPair() && checkPin()){
-                    Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
+                if (!firstRun()){
+                    Intent intent = new Intent(SplashScreenActivity.this, OnboardingActivity.class);
                     startActivity(intent);
                     finish();
                     overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                }else if(!checkPin()){
+                }else{
+                    if (checkKeyPair() && checkPin()){
+                        Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
+                        startActivity(intent);
+                        finish();
+                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                    }else if(!checkPin()){
 
-                    if(checkKeyPair()){
-                        Intent intent = new Intent(SplashScreenActivity.this, RegisterPINActivity.class);
-                        startActivity(intent);
-                        finish();
-                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                    }else{
-                        Intent intent = new Intent(SplashScreenActivity.this, KeyGenerationActivity.class);
-                        startActivity(intent);
-                        finish();
-                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                        if(checkKeyPair()){
+                            Intent intent = new Intent(SplashScreenActivity.this, RegisterPINActivity.class);
+                            startActivity(intent);
+                            finish();
+                            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                        }else{
+                            Intent intent = new Intent(SplashScreenActivity.this, KeyGenerationActivity.class);
+                            startActivity(intent);
+                            finish();
+                            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                        }
                     }
-
                 }
 
             }
@@ -80,6 +86,14 @@ public class SplashScreenActivity extends AppCompatActivity {
     private boolean checkPin()
     {
         if(SecurePreferences.contains("pin")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    private boolean firstRun(){
+        if (SecurePreferences.contains("firstRun")){
             return true;
         }else{
             return false;

@@ -46,9 +46,11 @@
         <activity
             android:name=".RestoreActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".RegisterPINActivity" />
-        <activity android:name=".CheckPINActivity" />
-        <activity android:name=".TransactionResultActivity"></activity>
+        <activity android:name=".RegisterPINActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".CheckPINActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".TransactionResultActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".OnboardingActivity" android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>
