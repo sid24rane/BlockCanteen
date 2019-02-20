@@ -27,7 +27,6 @@ public class RegisterPINActivity extends AppCompatActivity {
         passcodeView.setListener(new PasscodeView.PasscodeViewListener() {
             @Override
             public void onFail() {
-                Toast.makeText(RegisterPINActivity.this, "Incorrect Pin!", Toast.LENGTH_SHORT).show();
             }
 
             @Override

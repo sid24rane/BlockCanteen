@@ -41,11 +41,7 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
 
         if(currentApiVersion >=  Build.VERSION_CODES.M)
         {
-            if(checkPermission())
-            {
-                Toast.makeText(getApplicationContext(), "Permission already granted!", Toast.LENGTH_LONG).show();
-            }
-            else
+            if(!checkPermission())
             {
                 requestPermission();
             }
@@ -95,9 +91,9 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
 
                     boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if (cameraAccepted){
-                        Toast.makeText(getApplicationContext(), "Permission Granted, Now you can access camera", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Permission Granted, Now you can scan QR Code using Camera", Toast.LENGTH_LONG).show();
                     }else {
-                        Toast.makeText(getApplicationContext(), "Permission Denied, You cannot access and camera", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Permission Denied, You cannot access Camera", Toast.LENGTH_LONG).show();
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (shouldShowRequestPermissionRationale(CAMERA)) {
                                 showMessageOKCancel("You need to allow access to both the permissions",

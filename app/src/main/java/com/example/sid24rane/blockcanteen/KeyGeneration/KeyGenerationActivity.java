@@ -2,7 +2,10 @@ package com.example.sid24rane.blockcanteen.KeyGeneration;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -15,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
@@ -56,6 +60,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
     private Button register;
     private Button restore;
     private ProgressDialog progressDialog;
+    private CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +70,8 @@ public class KeyGenerationActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_key_generation);
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
         fullName = (EditText) findViewById(R.id.fullName);
         email = (EditText) findViewById(R.id.email_id);
@@ -116,11 +123,21 @@ public class KeyGenerationActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }else{
-                        Toast.makeText(getApplicationContext(), "Invalid Email Address.", Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar = Snackbar
+                                .make(coordinatorLayout, "Invalid Email Address", Snackbar.LENGTH_LONG);
+                        View sbView = snackbar.getView();
+                        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                        textView.setTextColor(Color.RED);
+                        snackbar.show();
                     }
 
                 }else{
-                    Toast.makeText(KeyGenerationActivity.this, "Please fill in all the fields!", Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar
+                            .make(coordinatorLayout, "Please fill in all the fields!", Snackbar.LENGTH_LONG);
+                    View sbView = snackbar.getView();
+                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                    textView.setTextColor(Color.RED);
+                    snackbar.show();
                 }
 
             }

@@ -1,28 +1,18 @@
 package com.example.sid24rane.blockcanteen.data;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.util.Log;
-
-import com.example.sid24rane.blockcanteen.RestoreActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class DataInSharedPreferences {
 
