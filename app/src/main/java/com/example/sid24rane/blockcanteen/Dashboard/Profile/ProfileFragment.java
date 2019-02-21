@@ -67,7 +67,7 @@ public class ProfileFragment extends Fragment {
         userAvatar = (ImageView) view.findViewById(R.id.user_avatar);
         copyKey = (ImageView) view.findViewById(R.id.copy);
 
-        setUserAvatar();
+        //setUserAvatar();
         loadUserDetailsFromSharedPreferences();
 
         downloadProfile.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +81,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                     setClipboard(getContext(),publicKey.getText().toString());
+                Toast.makeText(getContext(), "Public Key Copied to Clipboard", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -211,7 +212,7 @@ public class ProfileFragment extends Fragment {
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }
-            String filename = "credentials.json";
+            String filename = "credentials.txt";
             File file = new File (myDir, filename);
             if (file.exists ())
                 file.delete ();

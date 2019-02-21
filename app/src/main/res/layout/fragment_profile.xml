@@ -48,8 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/name"
-                    android:textStyle="italic"
-                    android:text="Siddhesh Rane"
+                    android:textStyle="bold"
                     android:layout_marginLeft="10dp"
                     android:textSize="15sp"
                     android:layout_marginTop="15dp"
@@ -57,7 +56,6 @@
 
                 <TextView
                     android:textStyle="italic"
-                    android:text="siddheshrane24@gmail.com"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/emailAddress"
@@ -65,6 +63,29 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Your Public Key: "
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="0.9"/>
+
+                    <ImageView
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/copy"
+                        android:layout_weight="0.1"
+                        android:src="@drawable/ic_content_copy_green_a700_24dp"/>
+                </LinearLayout>
 
                 <TextView
                     android:textSize="15sp"
@@ -80,30 +101,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Copy Public Key => "
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"/>
-
-                    <ImageView
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/copy"
-
-                        android:src="@drawable/ic_content_copy_green_a700_24dp"/>
-                </LinearLayout>
-
-
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
@@ -137,7 +134,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="italic"
-                    android:text="Please enter a secret phrase to encrypt your profile data with."
+                    android:text="Please enter a secret phrase. Use this to restore your profile"
                     android:layout_marginLeft="10dp"
                     android:textSize="15sp"
                     android:layout_marginTop="10dp"
@@ -149,7 +146,7 @@
                     android:layout_margin="5dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:hint="Eg. srahe123!"
+                    android:hint="Eg. vjti123!"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />

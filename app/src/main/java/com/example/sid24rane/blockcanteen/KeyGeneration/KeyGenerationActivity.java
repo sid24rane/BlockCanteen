@@ -70,8 +70,8 @@ public class KeyGenerationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String fname = fullName.getText().toString();
-                String email_address = email.getText().toString().trim();
+                final String fname = fullName.getText().toString();
+                final String email_address = email.getText().toString().trim();
 
                 if(!TextUtils.isEmpty(fname) &&
                         !TextUtils.isEmpty(email_address)){
@@ -82,16 +82,28 @@ public class KeyGenerationActivity extends AppCompatActivity {
                             progressDialog = new ProgressDialog(KeyGenerationActivity.this);
                             progressDialog.setMessage("Creating profile please wait..");
                             progressDialog.setCancelable(false);
+                            progressDialog.getCurrentFocus();
                             progressDialog.show();
 
-                            generateKeyPairAndStoreData(fname,email_address);
+                            Thread mThread = new Thread() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        generateKeyPairAndStoreData(fname, email_address);
+                                        progressDialog.dismiss();
 
-                            progressDialog.dismiss();
+                                        Intent intent = new Intent(KeyGenerationActivity.this,RegisterPINActivity.class);
+                                        startActivity(intent);
+                                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                                        finish();
 
-                            Intent intent = new Intent(KeyGenerationActivity.this,RegisterPINActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                            finish();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            };
+                            mThread.start();
 
                         } catch (Exception e) {
                             progressDialog.dismiss();
