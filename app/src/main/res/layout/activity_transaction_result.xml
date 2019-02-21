@@ -1,20 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TransactionResultActivity">
+    android:background="@color/colorPrimary"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Button
-        android:id="@+id/backToDashboard"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp"
-        android:text="Back To Home"
-        android:layout_marginBottom="10dp"
-        android:textColor="#fff"
-        android:textSize="16dp"
-        android:background="@layout/button_border_corner_circle_"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardBackgroundColor="#fff"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:cardUseCompatPadding="true"
+                android:layout_gravity="center_vertical"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical">
+
+
+                    <ImageView
+                        android:layout_marginTop="50dp"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:id="@+id/res_image"
+                        android:src="@drawable/ic_check_circle_green_500_24dp"
+                        android:layout_gravity="center_horizontal"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_black"
+                        android:layout_marginTop="20dp"
+                        android:textSize="16dp"
+                        android:textAlignment="center"
+                        android:textStyle="italic|bold"
+                        android:id="@+id/result"
+                        android:text="The transaction was successful"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/backToDashboard"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="40dp"
+                        android:text="Done"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="#fff"
+                        android:textSize="16dp"
+                        android:background="@layout/button_border_corner_circle_"/>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>

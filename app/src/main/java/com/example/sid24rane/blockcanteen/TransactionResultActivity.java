@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
@@ -14,6 +16,8 @@ import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
 public class TransactionResultActivity extends AppCompatActivity {
 
     private Button backTodashboard;
+    private TextView result;
+    private ImageView result_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,14 +26,31 @@ public class TransactionResultActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
+
         setContentView(R.layout.activity_transaction_result);
 
+        init();
+
+    
+    }
+
+    private void init() {
+
         backTodashboard = (Button) findViewById(R.id.backToDashboard);
+        result = (TextView) findViewById(R.id.result);
+        result_image = (ImageView) findViewById(R.id.res_image);
 
         Intent i = getIntent();
         String res = i.getStringExtra("result");
         Toast.makeText(TransactionResultActivity.this, res, Toast.LENGTH_SHORT).show();
 
+        if (res.equals("")){
+            result.setText("The transaction was successful !");
+            result_image.setImageResource(R.drawable.ic_check_circle_green_500_24dp);
+        }else{
+            result.setText("Oops! The transaction has failed! Please try again later.");
+            result_image.setImageResource(R.drawable.ic_highlight_off_red_500_24dp);
+        }
         backTodashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,6 +61,5 @@ public class TransactionResultActivity extends AppCompatActivity {
             }
         });
 
-    
     }
 }
