@@ -1,5 +1,6 @@
 package com.example.sid24rane.blockcanteen.Dashboard.Profile;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -81,15 +82,17 @@ public class ProfileFragment extends Fragment {
         copyKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    copyKeyToClipboard();
+                    setClipboard(getContext(),publicKey.getText().toString());
             }
         });
 
         return view;
     }
 
-    private void copyKeyToClipboard() {
-
+    private void setClipboard(Context context, String text) {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("Public Key Copied", text);
+            clipboard.setPrimaryClip(clip);
     }
 
     private void setUserAvatar() {
