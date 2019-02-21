@@ -49,7 +49,7 @@ public class TransactionResultActivity extends AppCompatActivity {
         String amt = i.getStringExtra("amount");
         Toast.makeText(TransactionResultActivity.this, res, Toast.LENGTH_SHORT).show();
 
-        if (res.equals("")){
+        if (res.equals("true")){
             result.setText("The transaction was successful !");
             result_image.setImageResource(R.drawable.ic_check_circle_green_500_24dp);
             sub_result.setText("You have successfully sent");
@@ -64,6 +64,7 @@ public class TransactionResultActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TransactionResultActivity.this, DashboardActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                 finish();

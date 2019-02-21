@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:firstInputTip="Enter a passcode of 4 digits "
+    app:firstInputTip="Enter your transaction PIN "
     android:background="?attr/colorPrimary"
     app:passcodeLength="4"
     app:correctStateColor="#71bb4d"

@@ -51,7 +51,6 @@ public class AmountToBeSentActivity extends AppCompatActivity {
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                 }else{
-
                     Snackbar snackbar = Snackbar
                             .make(coordinatorLayout, " Cheeky! But amount must be greater than 0", Snackbar.LENGTH_LONG);
                     View sbView = snackbar.getView();

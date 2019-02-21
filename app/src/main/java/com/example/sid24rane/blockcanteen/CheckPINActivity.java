@@ -23,6 +23,8 @@ import de.adorsys.android.securestoragelibrary.SecurePreferences;
 public class CheckPINActivity extends AppCompatActivity {
 
     private final String TAG = getClass().getSimpleName();
+    private String amount;
+    private String receiverPublicKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +36,8 @@ public class CheckPINActivity extends AppCompatActivity {
         setContentView(R.layout.activity_check_pin);
 
         Intent i = getIntent();
-        final String receiverPublicKey = i.getStringExtra("receiverPublicKey");
-        final String amount = i.getStringExtra("amount");
+        receiverPublicKey = i.getStringExtra("receiverPublicKey");
+        amount = i.getStringExtra("amount");
 
         PasscodeView passcodeView = (PasscodeView) findViewById(R.id.password);
         String pin = SecurePreferences.getStringValue("pin", "");
@@ -44,14 +46,10 @@ public class CheckPINActivity extends AppCompatActivity {
         passcodeView.setListener(new PasscodeView.PasscodeViewListener() {
             @Override
             public void onFail() {
-
             }
             @Override
             public void onSuccess(String number) {
                 newTransaction(amount, receiverPublicKey);
-                Intent i = new Intent(CheckPINActivity.this, TransactionResultActivity.class);
-                startActivity(i);
-                finish();
             }
         });
     }
@@ -62,7 +60,7 @@ public class CheckPINActivity extends AppCompatActivity {
     }
 
 
-    private void makeTransaction(String amount, String sender_pub, String receiver_pub){
+    private void makeTransaction(final String amount, String sender_pub, String receiver_pub){
         Log.d(TAG, "maketransaction() invoked");
 
         JSONObject json = new JSONObject();
@@ -88,6 +86,8 @@ public class CheckPINActivity extends AppCompatActivity {
                         if(response.split(" ")[0].equals("False")){
                             Intent i = new Intent(CheckPINActivity.this, TransactionResultActivity.class);
                             i.putExtra("result", "false");
+                            i.putExtra("amount",amount);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                             startActivity(i);
                             finish();
@@ -104,6 +104,7 @@ public class CheckPINActivity extends AppCompatActivity {
                             String signedString = new TransactionUtils().signString(sign_this, CheckPINActivity.this);
 
                             sendTransaction(send_this, signedString);
+
                         } catch (Exception e) {
                             e.printStackTrace();
 
@@ -143,6 +144,8 @@ public class CheckPINActivity extends AppCompatActivity {
                         Log.d(TAG, "sndTxn onResponse= " + response.toString());
                         Intent i = new Intent(CheckPINActivity.this, TransactionResultActivity.class);
                         i.putExtra("result","true");
+                        i.putExtra("amount",amount);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                         startActivity(i);
                         finish();
