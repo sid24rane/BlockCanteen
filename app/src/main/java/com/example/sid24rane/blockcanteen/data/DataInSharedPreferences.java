@@ -2,9 +2,6 @@ package com.example.sid24rane.blockcanteen.data;
 
 import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -16,19 +13,15 @@ import de.adorsys.android.securestoragelibrary.SecurePreferences;
 
 public class DataInSharedPreferences {
 
-    private static final String PREFS_NAME = "DataFile";
     private static final String TAG = "DataInSharedPreferences";
 
-    public static String getPrefsName() {
-        return PREFS_NAME;
-    }
 
-    public static void storingData(KeyPair pair, JSONObject details) throws JSONException {
+    public static void storingData(KeyPair pair, String name, String email) {
         Log.d(TAG, "storingKeyPair() invoked");
         String pubKey = getPublicKeyAsString(pair);
         String privateKey = getPrivateKeyAsString(pair);
-        SecurePreferences.setValue("fullName", String.valueOf(details.get("fullName")));
-        SecurePreferences.setValue("emailAddress", String.valueOf(details.get("emailAddress")));
+        SecurePreferences.setValue("fullName", name);
+        SecurePreferences.setValue("emailAddress", email);
         SecurePreferences.setValue("publicKey", pubKey);
         SecurePreferences.setValue("privateKey", privateKey);
         Log.d("publicKey", SecurePreferences.getStringValue("publicKey", ""));
@@ -38,6 +31,7 @@ public class DataInSharedPreferences {
         Log.d(TAG, "retrievingPublicKey() invoked");
         String publicKey = SecurePreferences.getStringValue("publicKey", "");
         Log.d("PublicKeyString ", publicKey);
+
         return publicKey;
     }
 
@@ -72,7 +66,7 @@ public class DataInSharedPreferences {
         privateKeyPEM = privateKeyPEM.replace("-----BEGIN PRIVATE KEY-----\n", "");
         privateKeyPEM = privateKeyPEM.replace("-----END PRIVATE KEY-----", "");
         privateKeyPEM = privateKeyPEM.replace("\n", "");
-        byte[] encoded = new byte[0];
+        byte[] encoded;
         encoded = android.util.Base64.decode(privateKeyPEM, android.util.Base64.DEFAULT);
         KeyFactory kf = KeyFactory.getInstance("EC");
         PrivateKey privKey = kf.generatePrivate(new PKCS8EncodedKeySpec(encoded));

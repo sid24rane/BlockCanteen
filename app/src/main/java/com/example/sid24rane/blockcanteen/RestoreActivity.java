@@ -1,8 +1,13 @@
 package com.example.sid24rane.blockcanteen;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +20,9 @@ import android.widget.Toast;
 import com.example.sid24rane.blockcanteen.utilities.EncryptUtils;
 import com.example.sid24rane.blockcanteen.utilities.JSONDump;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 public class RestoreActivity extends AppCompatActivity {
 
     private Button uploadFile;
@@ -22,6 +30,8 @@ public class RestoreActivity extends AppCompatActivity {
     private Button restoreProfile;
     private final String TAG = getClass().getSimpleName();
     private String path;
+    private static final int REQUEST_STORAGE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +39,7 @@ public class RestoreActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
+
         setContentView(R.layout.activity_restore);
 
         uploadFile = (Button)  findViewById(R.id.uploadFile);
@@ -38,14 +49,21 @@ public class RestoreActivity extends AppCompatActivity {
         uploadFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFile("*/*");
-                //TODO : take input file from user
+                openFile("application/json");
             }
         });
 
         restoreProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.M)
+                {
+                    if(!checkPermission())
+                    {
+                        requestPermission();
+                    }
+                }
 
                 EncryptUtils e = new EncryptUtils();
 
@@ -68,6 +86,55 @@ public class RestoreActivity extends AppCompatActivity {
             }
         });
 
+    }
+    private boolean checkPermission()
+    {
+        return (ContextCompat.checkSelfPermission(RestoreActivity.this, WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private void requestPermission()
+    {
+        ActivityCompat.requestPermissions(RestoreActivity.this, new String[]{WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE);
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_STORAGE:
+                if (grantResults.length > 0) {
+
+                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (cameraAccepted){
+                        Toast.makeText(RestoreActivity.this, "Permission Granted, Now you can scan QR Code using Camera", Toast.LENGTH_LONG).show();
+                    }else {
+                        Toast.makeText(RestoreActivity.this, "Permission Denied, You cannot access Camera", Toast.LENGTH_LONG).show();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (shouldShowRequestPermissionRationale(CAMERA)) {
+                                showMessageOKCancel("You need to allow access to both the permissions",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                    requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE},
+                                                            REQUEST_STORAGE);
+                                                }
+                                            }
+                                        });
+                                return;
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new android.support.v7.app.AlertDialog.Builder(RestoreActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 
     @Override
@@ -112,7 +179,6 @@ public class RestoreActivity extends AppCompatActivity {
         } else {
             chooserIntent = Intent.createChooser(intent, "Open file");
         }
-
         try {
             startActivityForResult(chooserIntent, 7);
         } catch (android.content.ActivityNotFoundException ex) {

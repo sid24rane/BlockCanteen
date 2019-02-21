@@ -34,12 +34,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                 networkInit();
 
-                if (!firstRun()){
-                    Intent intent = new Intent(SplashScreenActivity.this, OnboardingActivity.class);
-                    startActivity(intent);
-                    finish();
-                    overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                }else{
                     if (checkKeyPair() && checkPin()){
                         Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
                         startActivity(intent);
@@ -60,8 +54,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                         }
                     }
                 }
-
-            }
 
             private void networkInit() {
                 OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
@@ -92,11 +84,4 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
-    private boolean firstRun(){
-        if (SecurePreferences.contains("firstRun")){
-            return true;
-        }else{
-            return false;
-        }
-    }
 }

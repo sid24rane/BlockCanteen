@@ -8,12 +8,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+
+import de.greenrobot.event.EventBus;
 
 public class QRGeneratorActivity extends AppCompatActivity{
     // qr code generation
@@ -25,6 +28,8 @@ public class QRGeneratorActivity extends AppCompatActivity{
     private TextView publicKey;
     private TextView infotext;
 
+    private EventBus eventBus = EventBus.getDefault();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +39,9 @@ public class QRGeneratorActivity extends AppCompatActivity{
         getSupportActionBar().hide();
 
         setContentView(R.layout.activity_qrgenerator);
+
+        eventBus.register(this);
+
 
         qrcode = (ImageView) findViewById(R.id.qrcode);
         publicKey = (TextView) findViewById(R.id.publicKey);
@@ -78,5 +86,15 @@ public class QRGeneratorActivity extends AppCompatActivity{
         Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, w, 0, 0, w, h);
         return bitmap;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        eventBus.unregister(this);
+    }
+
+    public void onEvent(String event) {
+        Toast.makeText(QRGeneratorActivity.this, event, Toast.LENGTH_LONG).show();
     }
 }

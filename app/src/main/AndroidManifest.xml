@@ -49,11 +49,12 @@
         <activity
             android:name=".RestoreActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".RegisterPINActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".CheckPINActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".TransactionResultActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".OnboardingActivity" android:screenOrientation="portrait">
-        </activity>
+        <activity android:name=".RegisterPINActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CheckPINActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".TransactionResultActivity"
+            android:screenOrientation="portrait"/>
         <receiver android:name=".utilities.NetworkReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />

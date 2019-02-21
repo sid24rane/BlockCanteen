@@ -86,15 +86,10 @@ public class KeyGenerationActivity extends AppCompatActivity {
                             progressDialog.setCancelable(false);
                             progressDialog.show();
 
-                            JSONObject userJSON = new JSONObject();
-                            userJSON.put("fullName", fname);
-                            userJSON.put("emailAddress", email_address);
+                            generateKeyPairAndStoreData(fname,email_address);
 
-                            //TODO remove this
-                            saveRegistrationDetailsAsJson(userJSON, "sidsidyashsidsid");
-
-                            generateKeyPairAndStoreData(userJSON);
                             progressDialog.dismiss();
+
                             Intent intent = new Intent(KeyGenerationActivity.this,RegisterPINActivity.class);
                             startActivity(intent);
                             overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
@@ -129,6 +124,16 @@ public class KeyGenerationActivity extends AppCompatActivity {
     }
 
 
+    private void generateKeyPairAndStoreData(String name,String email) throws Exception {
+        Log.d(TAG, "generateKeyPair invoked");
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
+        ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256r1");
+        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+        keyGen.initialize(ecSpec, random);
+        mKeyPair = keyGen.generateKeyPair();
+        DataInSharedPreferences.storingData(mKeyPair, name, email);
+    }
+
     private boolean isValidEmailId(String email){
 
         return Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
@@ -139,20 +144,4 @@ public class KeyGenerationActivity extends AppCompatActivity {
                 + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$").matcher(email).matches();
     }
 
-    private void generateKeyPairAndStoreData(JSONObject userJSON) throws Exception {
-        Log.d(TAG, "generateKeyPair invoked");
-        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
-        ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256r1");
-        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-        keyGen.initialize(ecSpec, random);
-        mKeyPair = keyGen.generateKeyPair();
-        DataInSharedPreferences.storingData(mKeyPair, userJSON);
-    }
-
-    private void saveRegistrationDetailsAsJson(JSONObject userJSON, String secretKey){
-        Log.d(TAG ,"saveRegistrationDetails() invoked");
-        String userJSONString = userJSON.toString();
-        JSONDump.saveData(KeyGenerationActivity.this, userJSONString);
-
-    }
 }
