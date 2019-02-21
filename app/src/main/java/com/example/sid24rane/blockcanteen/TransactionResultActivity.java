@@ -18,7 +18,8 @@ public class TransactionResultActivity extends AppCompatActivity {
     private Button backTodashboard;
     private TextView result;
     private ImageView result_image;
-
+    private TextView amount;
+    private TextView sub_R
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
