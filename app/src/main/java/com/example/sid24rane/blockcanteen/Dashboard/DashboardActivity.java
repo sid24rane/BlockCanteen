@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.sid24rane.blockcanteen.Dashboard.AllTransactions.AllTransactionsFragment;
 import com.example.sid24rane.blockcanteen.Dashboard.Home.HomeFragment;
+import com.example.sid24rane.blockcanteen.Dashboard.Profile.ProfileFragment;
 import com.example.sid24rane.blockcanteen.R;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -65,10 +66,10 @@ public class DashboardActivity extends AppCompatActivity {
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.container,new HomeFragment()).commit();
                     return true;
-//                case R.id.navigation_dashboard:
-//                    fragmentTransaction = fragmentManager.beginTransaction();
-//                    fragmentTransaction.replace(R.id.container,new ProfileFragment()).commit();
-//                    return true;
+                case R.id.navigation_dashboard:
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.container,new ProfileFragment()).commit();
+                    return true;
                 case R.id.navigation_notifications:
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.container,new AllTransactionsFragment()).commit();

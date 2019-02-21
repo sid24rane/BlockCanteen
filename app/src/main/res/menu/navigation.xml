@@ -11,9 +11,9 @@
         android:icon="@drawable/transaction2"
         android:title="@string/title_notifications" />
 
-    <!--<item-->
-    <!--android:id="@+id/navigation_dashboard"-->
-    <!--android:icon="@drawable/food1"-->
-    <!--android:title="Profile" />-->
+    <item
+    android:id="@+id/navigation_dashboard"
+    android:icon="@drawable/food1"
+    android:title="Profile" />
 
 </menu>

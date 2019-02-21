@@ -60,7 +60,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                         .build();
                 AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
             }
-        },3000);
+        },2000);
 
 
     }
