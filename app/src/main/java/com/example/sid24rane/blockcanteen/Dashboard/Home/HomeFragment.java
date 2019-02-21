@@ -3,9 +3,12 @@ package com.example.sid24rane.blockcanteen.Dashboard.Home;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -26,15 +29,18 @@ import com.example.sid24rane.blockcanteen.QRGeneratorActivity;
 import com.example.sid24rane.blockcanteen.QRScannerActivity;
 import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
-import com.example.sid24rane.blockcanteen.utilities.JSONDump;
+import com.example.sid24rane.blockcanteen.utilities.AES;
 import com.example.sid24rane.blockcanteen.utilities.NetworkUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import okhttp3.OkHttpClient;
+import java.io.File;
+import java.io.FileOutputStream;
+
+import de.adorsys.android.securestoragelibrary.SecurePreferences;
 
 import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 
@@ -64,24 +70,7 @@ public class HomeFragment extends Fragment {
         mLoadingIndicator = (ProgressBar) view.findViewById(R.id.pb_loading_indicator);
         mErrorMessageDisplay = (TextView) view.findViewById(R.id.error_message);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-
         download = (Button) view.findViewById(R.id.download);
-
-        download.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.M)
-                {
-                    if(!checkPermission())
-                    {
-                        requestPermission();
-                    }
-                }
-                String data = JSONDump.getData(getContext());
-                JSONDump.downloadProfile(data, getContext());
-            }
-        });
 
         getUserBalance();
 
@@ -125,7 +114,45 @@ public class HomeFragment extends Fragment {
                 getResources().getColor(android.R.color.holo_red_light)
         );
 
+
+        download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.M)
+                {
+                    if(!checkPermission())
+                    {
+                        requestPermission();
+                    }else{
+                        storeUserProfile();
+                    }
+                }
+            }
+        });
+
         return view;
+    }
+
+    private void storeUserProfile(){
+
+        String secretKey = "";
+
+        JSONObject user = new JSONObject();
+
+        try {
+
+            user.put("name",SecurePreferences.getStringValue("fullName",""));
+            user.put("email",SecurePreferences.getStringValue("emailAddress",""));
+            user.put("publicKey",SecurePreferences.getStringValue("publicKey",""));
+            user.put("privateKey",SecurePreferences.getStringValue("privateKey",""));
+            user.put("pin",SecurePreferences.getStringValue("pin",""));
+
+            downloadProfile(user.toString(),secretKey);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean checkPermission()
@@ -145,9 +172,10 @@ public class HomeFragment extends Fragment {
 
                     boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if (cameraAccepted){
-                        Toast.makeText(getContext(), "Permission Granted, Now you can scan QR Code using Camera", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Permission Granted, Storing your wallet!", Toast.LENGTH_LONG).show();
+                        storeUserProfile();
                     }else {
-                        Toast.makeText(getContext(), "Permission Denied, You cannot access Camera", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Permission Denied, We need storage permission to store your wallet securely!", Toast.LENGTH_LONG).show();
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (shouldShowRequestPermissionRationale(CAMERA)) {
                                 showMessageOKCancel("You need to allow access to both the permissions",
@@ -190,16 +218,9 @@ public class HomeFragment extends Fragment {
 
     private void getUserBalance() {
 
-        networkInit();
         showBalanceView();
         String publicKey = DataInSharedPreferences.retrievingPublicKey();
         new FetchBalanceTask().execute(publicKey);
-    }
-
-    private void networkInit(){
-        OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
-                .build();
-        AndroidNetworking.initialize(getContext(),okHttpClient);
     }
 
     private void showBalanceView() {
@@ -278,4 +299,60 @@ public class HomeFragment extends Fragment {
 
     }
 
+    public void downloadProfile(String data,String secret) {
+
+        Log.d("PRE-ENCRYPT",data);
+        String encrypted = AES.encrypt(data,secret) ;
+        Log.d("POST-ENCRYPT",encrypted);
+
+        if(checkExternalMedia()){
+            String root = Environment.getExternalStorageDirectory().toString();
+            File myDir = new File(root + "/VJTI-Wallet");
+            if (!myDir.exists()) {
+                myDir.mkdirs();
+            }
+            String filename = "credentials.json";
+            File file = new File (myDir, filename);
+            if (file.exists ())
+                file.delete ();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                out.write(encrypted.getBytes());
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            MediaScannerConnection.scanFile(getContext(), new String[] { file.toString() }, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+                        public void onScanCompleted(String path, Uri uri) {
+                            Log.d("ExternalStorage", "Scanned " + path + ":");
+                            Log.d("ExternalStorage", "-> uri=" + uri);
+                        }
+                    });
+
+        }else{
+            Toast.makeText(getContext(), "External Storage Not available!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean checkExternalMedia() {
+
+        boolean mExternalStorageAvailable = false;
+        boolean mExternalStorageWriteable = false;
+
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            mExternalStorageAvailable = mExternalStorageWriteable = true;
+        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            mExternalStorageAvailable = true;
+            mExternalStorageWriteable = false;
+        } else {
+            // Can't read or write
+            mExternalStorageAvailable = mExternalStorageWriteable = false;
+        }
+        return mExternalStorageWriteable;
+
+    }
 }

@@ -20,9 +20,6 @@ import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.RegisterPINActivity;
 import com.example.sid24rane.blockcanteen.RestoreActivity;
 import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
-import com.example.sid24rane.blockcanteen.utilities.JSONDump;
-
-import org.json.JSONObject;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;

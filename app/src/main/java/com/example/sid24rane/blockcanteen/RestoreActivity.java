@@ -17,8 +17,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.sid24rane.blockcanteen.utilities.EncryptUtils;
-import com.example.sid24rane.blockcanteen.utilities.JSONDump;
+import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
+import com.example.sid24rane.blockcanteen.utilities.AES;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import de.adorsys.android.securestoragelibrary.SecurePreferences;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -28,7 +37,7 @@ public class RestoreActivity extends AppCompatActivity {
     private Button uploadFile;
     private EditText secret;
     private Button restoreProfile;
-    private final String TAG = getClass().getSimpleName();
+    private String TAG = getClass().getSimpleName();
     private String path;
     private static final int REQUEST_STORAGE = 1;
 
@@ -62,31 +71,45 @@ public class RestoreActivity extends AppCompatActivity {
                     if(!checkPermission())
                     {
                         requestPermission();
+                    }else{
+                        restoreUserProfile();
                     }
                 }
-
-                EncryptUtils e = new EncryptUtils();
-
-                // Decrypt json with the secret
-                String dataFromDump = JSONDump.getDataFromPath(path);
-                Log.d(TAG,"Decrypted :" + dataFromDump );
-
-                String secretKeyFromUser= secret.getText().toString();
-                
-//                JSONObject json = new JSONObject(decrypted);
-//                Log.d(TAG, json.toString());
-
-                //TODO Storing the data in sharedPreferences
-                //new DataInSharedPreferences().storingUserDetails(json, RestoreActivity.this);
-
-//                Intent intent = new Intent(RestoreActivity.this, DashboardActivity.class);
-//                startActivity(intent);
-//                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
 
             }
         });
 
     }
+    private void restoreUserProfile(){
+
+        String secretKey = secret.getText().toString();
+
+        String userProfile = getDataFromPath(path,secretKey);
+
+        try {
+
+            JSONObject user = new JSONObject(userProfile);
+
+            SecurePreferences.setValue("fullName", user.getString("name"));
+            SecurePreferences.setValue("emailAddress",user.getString("email"));
+            SecurePreferences.setValue("publicKey", user.getString("publicKey"));
+            SecurePreferences.setValue("privateKey", user.getString("privateKey"));
+            SecurePreferences.setValue("pin",user.getString("pin"));
+
+            Toast.makeText(RestoreActivity.this, "Welcome back, Profile successfully restored!", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(RestoreActivity.this, DashboardActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+            finish();
+
+        } catch (JSONException e) {
+            Toast.makeText(RestoreActivity.this, "Invalid Secret key!", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+    }
+
     private boolean checkPermission()
     {
         return (ContextCompat.checkSelfPermission(RestoreActivity.this, WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
@@ -104,9 +127,10 @@ public class RestoreActivity extends AppCompatActivity {
 
                     boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if (cameraAccepted){
-                        Toast.makeText(RestoreActivity.this, "Permission Granted, Now you can scan QR Code using Camera", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RestoreActivity.this, "Permission Granted!", Toast.LENGTH_LONG).show();
+                        restoreUserProfile();
                     }else {
-                        Toast.makeText(RestoreActivity.this, "Permission Denied, You cannot access Camera", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RestoreActivity.this, "Permission Denied! We need storage permission to restore your wallet", Toast.LENGTH_LONG).show();
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (shouldShowRequestPermissionRationale(CAMERA)) {
                                 showMessageOKCancel("You need to allow access to both the permissions",
@@ -140,9 +164,7 @@ public class RestoreActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode){
-
             case 7:
-
                 if(resultCode==RESULT_OK){
                     String tempPath = data.getData().getPath();
                     String idArr[] = tempPath.split(":");
@@ -155,7 +177,6 @@ public class RestoreActivity extends AppCompatActivity {
                     Toast.makeText(RestoreActivity.this, path , Toast.LENGTH_LONG).show();
                 }
                 break;
-
         }
     }
 
@@ -167,7 +188,6 @@ public class RestoreActivity extends AppCompatActivity {
 
         // special intent for Samsung file manager
         Intent sIntent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
-        // if you want any file type, you can skip next line
         sIntent.putExtra("CONTENT_TYPE", mimeType);
         sIntent.addCategory(Intent.CATEGORY_DEFAULT);
 
@@ -183,6 +203,27 @@ public class RestoreActivity extends AppCompatActivity {
             startActivityForResult(chooserIntent, 7);
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(getApplicationContext(), "No suitable File Manager was found.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public String getDataFromPath(String path,String secret) {
+        Log.d(TAG, "getDataFromPath() invoked" + path);
+        try {
+            File f = new File(path);
+            //check whether file exists
+            FileInputStream is = new FileInputStream(f);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String data = new String(buffer);
+            Log.d("PRE-DECRYPT",data);
+            String decrypted = AES.decrypt(data,secret);
+            Log.d("POST-DECRYPT",data);
+            return decrypted;
+        } catch (IOException e) {
+            Log.e(TAG, "Error in Reading: " + e.getLocalizedMessage());
+            return null;
         }
     }
 }
