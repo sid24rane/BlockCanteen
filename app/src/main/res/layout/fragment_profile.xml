@@ -9,6 +9,27 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <ImageView
+            android:layout_marginTop="50dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/user_avatar"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="15dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="20sp"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:text="Your Profile"
+            android:layout_marginTop="15dp"
+            />
+
+
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,12 +48,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/name"
+                    android:textStyle="italic"
+                    android:text="Siddhesh Rane"
                     android:layout_marginLeft="10dp"
                     android:textSize="15sp"
                     android:layout_marginTop="15dp"
                     />
 
                 <TextView
+                    android:textStyle="italic"
+                    android:text="siddheshrane24@gmail.com"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/emailAddress"
@@ -46,13 +71,53 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/publicKey"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     />
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Copy Public Key => "
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"/>
+
+                    <ImageView
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/copy"
+
+                        android:src="@drawable/ic_content_copy_green_a700_24dp"/>
+                </LinearLayout>
+
+
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="20sp"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:text="Backup Profile ? "
+            android:layout_marginTop="15dp"
+            />
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -68,11 +133,22 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    android:text="Please enter a secret phrase to encrypt your profile data with."
+                    android:layout_marginLeft="10dp"
+                    android:textSize="15sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    />
+
                 <EditText
                     android:id="@+id/userSecret"
                     android:layout_margin="5dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
@@ -82,11 +158,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Backup"
+                    android:text="Download"
+                    android:textAllCaps="false"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_weight="0.5"
                     android:background="@layout/button_border_corner_circle_"
                     android:textColor="#fff"
-                    android:textSize="16dp"/>
+                    android:textSize="14dp"/>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>

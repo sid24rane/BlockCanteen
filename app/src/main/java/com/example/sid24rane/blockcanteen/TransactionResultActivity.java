@@ -19,7 +19,8 @@ public class TransactionResultActivity extends AppCompatActivity {
     private TextView result;
     private ImageView result_image;
     private TextView amount;
-    private TextView sub_R
+    private TextView sub_result;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,17 +41,24 @@ public class TransactionResultActivity extends AppCompatActivity {
         backTodashboard = (Button) findViewById(R.id.backToDashboard);
         result = (TextView) findViewById(R.id.result);
         result_image = (ImageView) findViewById(R.id.res_image);
+        amount = (TextView) findViewById(R.id.amount);
+        sub_result = (TextView) findViewById(R.id.sub_result);
 
         Intent i = getIntent();
         String res = i.getStringExtra("result");
+        String amt = i.getStringExtra("amount");
         Toast.makeText(TransactionResultActivity.this, res, Toast.LENGTH_SHORT).show();
 
         if (res.equals("")){
             result.setText("The transaction was successful !");
             result_image.setImageResource(R.drawable.ic_check_circle_green_500_24dp);
+            sub_result.setText("You have successfully sent");
+            amount.setText(amt + " VJC");
         }else{
             result.setText("Oops! The transaction has failed! Please try again later.");
             result_image.setImageResource(R.drawable.ic_highlight_off_red_500_24dp);
+            sub_result.setText("You have failed to send");
+            amount.setText(amt + " VJC");
         }
         backTodashboard.setOnClickListener(new View.OnClickListener() {
             @Override

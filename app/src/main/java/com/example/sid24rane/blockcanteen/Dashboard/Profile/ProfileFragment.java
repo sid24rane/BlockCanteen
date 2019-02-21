@@ -2,6 +2,7 @@ package com.example.sid24rane.blockcanteen.Dashboard.Profile;
 
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -17,9 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.example.sid24rane.blockcanteen.utilities.AES;
@@ -43,9 +47,10 @@ public class ProfileFragment extends Fragment {
     private TextView publicKey;
     private Button downloadProfile;
     private EditText userSecret;
-
+    private ImageView userAvatar;
     private final String TAG = getClass().getSimpleName();
     private static final int REQUEST_STORAGE = 1;
+    private ImageView copyKey;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,34 +61,62 @@ public class ProfileFragment extends Fragment {
         name =(TextView) view.findViewById(R.id.name);
         emailAddress =(TextView) view.findViewById(R.id.emailAddress);
         publicKey =(TextView) view.findViewById(R.id.publicKey);
+        publicKey.setSelected(true);
+
         downloadProfile = (Button) view.findViewById(R.id.downloadProfile) ;
         userSecret = (EditText) view.findViewById(R.id.userSecret);
+        userAvatar = (ImageView) view.findViewById(R.id.user_avatar);
+        copyKey = (ImageView) view.findViewById(R.id.copy);
 
+        setUserAvatar();
         loadUserDetailsFromSharedPreferences();
 
         downloadProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                downloadProfile();
+            }
+        });
 
-                Log.d(TAG, "downloadProfile");
-                String user_secret = userSecret.getText().toString();
-                if (!TextUtils.isEmpty(user_secret)){
-                    if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.M)
-                    {
-                        if(!checkPermission())
-                        {
-                            requestPermission();
-                        }else{
-                            storeUserProfile(user_secret);
-                        }
-                    }
-                }else{
-                    Toast.makeText(getContext(), "Please enter Secret phrase!", Toast.LENGTH_SHORT).show();
-                }
+        copyKey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    copyKeyToClipboard();
             }
         });
 
         return view;
+    }
+
+    private void copyKeyToClipboard() {
+
+    }
+
+    private void setUserAvatar() {
+        ColorGenerator generator = ColorGenerator.MATERIAL;
+        int color = generator.getColor(SecurePreferences.getStringSetValue("emailAddress",null));
+        String user_name = SecurePreferences.getStringValue("fullName",null);
+        TextDrawable drawable = TextDrawable.builder()
+                .buildRound(user_name.substring(0, 1).toUpperCase(), color);
+        userAvatar.setImageDrawable(drawable);
+    }
+
+    private void downloadProfile(){
+        Log.d(TAG, "downloadProfile");
+        String user_secret = userSecret.getText().toString();
+        if (!TextUtils.isEmpty(user_secret)){
+            if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.M)
+            {
+                if(!checkPermission())
+                {
+                    requestPermission();
+                }else{
+                    storeUserProfile(user_secret);
+                }
+            }
+        }else{
+            Toast.makeText(getContext(), "Please enter Secret phrase!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadUserDetailsFromSharedPreferences(){

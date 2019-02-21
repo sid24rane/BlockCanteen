@@ -19,7 +19,9 @@ allprojects {
     repositories {
         jcenter()
         google()
-        maven { url 'https://dl.bintray.com/hummatli/maven/' }
+        maven {
+            url 'http://dl.bintray.com/amulyakhare/maven'
+        }
     }
 }
 
