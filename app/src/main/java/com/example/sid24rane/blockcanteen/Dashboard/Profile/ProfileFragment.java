@@ -1,5 +1,6 @@
 package com.example.sid24rane.blockcanteen.Dashboard.Profile;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.example.sid24rane.blockcanteen.KeyGeneration.KeyGenerationActivity;
 import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.utilities.AES;
 
@@ -50,6 +52,7 @@ public class ProfileFragment extends Fragment {
     private final String TAG = getClass().getSimpleName();
     private static final int REQUEST_STORAGE = 1;
     private ImageView copyKey;
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,9 +70,6 @@ public class ProfileFragment extends Fragment {
         userAvatar = (ImageView) view.findViewById(R.id.user_avatar);
         copyKey = (ImageView) view.findViewById(R.id.copy);
 
-        setUserAvatar();
-        loadUserDetailsFromSharedPreferences();
-
         downloadProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,22 +85,48 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        loadProfile();
+
         return view;
     }
 
-    private void setClipboard(Context context, String text) {
-            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-            android.content.ClipData clip = android.content.ClipData.newPlainText("Public Key Copied", text);
-            clipboard.setPrimaryClip(clip);
+    private void loadProfile() {
+
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading profile please wait..");
+        progressDialog.setCancelable(false);
+        progressDialog.getCurrentFocus();
+        progressDialog.show();
+
+        //TODO Async
+        setUserAvatar();
+        loadUserDetailsFromSharedPreferences();
+
+
     }
+
 
     private void setUserAvatar() {
         ColorGenerator generator = ColorGenerator.MATERIAL;
-        int color = generator.getColor(SecurePreferences.getStringValue("emailAddress",null));
         String user_name = SecurePreferences.getStringValue("fullName",null);
+        int color = generator.getColor(user_name);
         TextDrawable drawable = TextDrawable.builder()
                 .buildRound(user_name.substring(0, 1).toUpperCase(), color);
         userAvatar.setImageDrawable(drawable);
+    }
+
+    private void loadUserDetailsFromSharedPreferences(){
+        Log.d(TAG,"loadUserDetailsFromSharedPreferences()" );
+        name.setText(SecurePreferences.getStringValue("fullName", ""));
+        emailAddress.setText(SecurePreferences.getStringValue("emailAddress", ""));
+        publicKey.setText(SecurePreferences.getStringValue("publicKey", ""));
+        progressDialog.dismiss();
+    }
+
+    private void setClipboard(Context context, String text) {
+        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        android.content.ClipData clip = android.content.ClipData.newPlainText("Public Key Copied", text);
+        clipboard.setPrimaryClip(clip);
     }
 
     private void downloadProfile(){
@@ -121,12 +147,6 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private void loadUserDetailsFromSharedPreferences(){
-        Log.d(TAG,"loadUserDetailsFromSharedPreferences()" );
-        name.setText(SecurePreferences.getStringValue("fullName", ""));
-        emailAddress.setText(SecurePreferences.getStringValue("emailAddress", ""));
-        publicKey.setText(SecurePreferences.getStringValue("publicKey", ""));
-    }
 
 
     private void storeUserProfile(String secretKey){

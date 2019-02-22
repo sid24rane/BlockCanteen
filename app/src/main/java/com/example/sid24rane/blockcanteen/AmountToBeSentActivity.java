@@ -1,8 +1,11 @@
 package com.example.sid24rane.blockcanteen;
 
+import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,12 +15,22 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
+import com.example.sid24rane.blockcanteen.utilities.ConnectionLiveData;
+import com.example.sid24rane.blockcanteen.utilities.ConnectionModel;
 
 public class AmountToBeSentActivity extends AppCompatActivity {
 
     private Button send;
     private String receiverPublicKey;
     private EditText amount;
+    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
+    public static final int MobileData = 2;
+    public static final int WifiData = 1;
+    private CoordinatorLayout coordinatorLayout;
+    private boolean first = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +40,19 @@ public class AmountToBeSentActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_send);
+
+        checkConnection();
         init();
+
     }
 
     private void init() {
 
+
         Intent i = getIntent();
         receiverPublicKey = i.getStringExtra("publicKey");
 
-        final CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
         send = (Button) findViewById(R.id.send);
         amount = (EditText) findViewById(R.id.amount);
@@ -63,5 +80,41 @@ public class AmountToBeSentActivity extends AppCompatActivity {
         });
     }
 
+    private void checkConnection(){
 
+        /* Live data object and setting an oberser on it */
+        ConnectionLiveData connectionLiveData = new ConnectionLiveData(getApplicationContext());
+        connectionLiveData.observe(this, new Observer<ConnectionModel>() {
+            @Override
+            public void onChanged(@Nullable ConnectionModel connection) {
+                /* every time connection state changes, we'll be notified and can perform action accordingly */
+                if (connection.getIsConnected()) {
+                    switch (connection.getType()) {
+                        case WifiData:
+                        case MobileData:
+                            if (!first){
+                                Snackbar snackbar = Snackbar
+                                        .make(coordinatorLayout, "Internet Connected!", Snackbar.LENGTH_LONG);
+                                snackbar.show();
+                            }
+                            break;
+                    }
+                } else {
+                    first = false;
+                    Snackbar snackbar = Snackbar
+                            .make(coordinatorLayout, "No internet connection!", Snackbar.LENGTH_LONG);
+                    snackbar.setActionTextColor(Color.RED);
+                    View sbView = snackbar.getView();
+                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                    textView.setTextColor(Color.YELLOW);
+                    snackbar.show();
+                }
+            }
+        });
+    }
+    /* required to make activity life cycle owner */
+    @Override
+    public LifecycleRegistry getLifecycle() {
+        return lifecycleRegistry;
+    }
 }
