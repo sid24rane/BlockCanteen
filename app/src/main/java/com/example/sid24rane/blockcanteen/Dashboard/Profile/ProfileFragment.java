@@ -241,6 +241,7 @@ public class ProfileFragment extends Fragment {
                 out.write(encrypted.getBytes());
                 out.flush();
                 out.close();
+                Toast.makeText(getContext(), "Profile successfully downloaded!", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
             }

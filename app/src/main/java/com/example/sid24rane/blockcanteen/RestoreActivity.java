@@ -93,29 +93,34 @@ public class RestoreActivity extends AppCompatActivity {
         String secretKey = secret.getText().toString();
 
         String userProfile = getDataFromPath(path, secretKey);
+        if (userProfile != null){
+            try {
 
-        try {
+                JSONObject user = new JSONObject(userProfile);
 
-            JSONObject user = new JSONObject(userProfile);
+                SecurePreferences.setValue("fullName", user.getString("name"));
+                SecurePreferences.setValue("emailAddress",user.getString("email"));
+                SecurePreferences.setValue("publicKey", user.getString("publicKey"));
+                SecurePreferences.setValue("privateKey", user.getString("privateKey"));
+                SecurePreferences.setValue("pin",user.getString("pin"));
 
-            SecurePreferences.setValue("fullName", user.getString("name"));
-            SecurePreferences.setValue("emailAddress",user.getString("email"));
-            SecurePreferences.setValue("publicKey", user.getString("publicKey"));
-            SecurePreferences.setValue("privateKey", user.getString("privateKey"));
-            SecurePreferences.setValue("pin",user.getString("pin"));
+                Toast.makeText(RestoreActivity.this, "Welcome back, Profile successfully restored!", Toast.LENGTH_SHORT).show();
 
-            Toast.makeText(RestoreActivity.this, "Welcome back, Profile successfully restored!", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
 
+                Intent intent = new Intent(RestoreActivity.this, DashboardActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                finish();
+
+            } catch (JSONException e) {
+                progressDialog.dismiss();
+                Toast.makeText(RestoreActivity.this, "Invalid Secret key!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        }else{
             progressDialog.dismiss();
-
-            Intent intent = new Intent(RestoreActivity.this, DashboardActivity.class);
-            startActivity(intent);
-            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-            finish();
-
-        } catch (JSONException e) {
             Toast.makeText(RestoreActivity.this, "Invalid Secret key!", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
         }
 
     }
@@ -229,7 +234,7 @@ public class RestoreActivity extends AppCompatActivity {
             String data = new String(buffer);
             Log.d("PRE-DECRYPT",data);
             String decrypted = AES.decrypt(data,secret);
-            Log.d("POST-DECRYPT",data);
+            //Log.d("POST-DECRYPT",decrypted);
             return decrypted;
         } catch (IOException e) {
             Log.e(TAG, "Error in Reading: " + e.getLocalizedMessage());
