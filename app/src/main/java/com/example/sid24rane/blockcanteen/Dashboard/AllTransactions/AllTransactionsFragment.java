@@ -1,8 +1,15 @@
 package com.example.sid24rane.blockcanteen.Dashboard.AllTransactions;
 
 import android.app.ProgressDialog;
+import android.arch.lifecycle.Observer;
+import android.content.Context;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -20,6 +28,8 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
+import com.example.sid24rane.blockcanteen.utilities.ConnectionLiveData;
+import com.example.sid24rane.blockcanteen.utilities.ConnectionModel;
 import com.example.sid24rane.blockcanteen.utilities.NetworkUtils;
 
 import org.json.JSONArray;
@@ -90,14 +100,18 @@ public class AllTransactionsFragment extends Fragment{
 
     }
 
-    private boolean checkConnection() {
-        //TODO :library
-        return true;
+    private void checkConnection() {
+        if (!isNetworkAvailable()){
+            linearLayout.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
     }
 
-    private void showToast(Boolean isConnected){
-        if(!isConnected)
-            Toast.makeText(getContext(), "Please connect to Internet", Toast.LENGTH_LONG).show();
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private void load() {

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -95,6 +96,10 @@ public class AmountToBeSentActivity extends AppCompatActivity {
                             if (!first){
                                 Snackbar snackbar = Snackbar
                                         .make(coordinatorLayout, "Internet Connected!", Snackbar.LENGTH_LONG);
+                                View view = snackbar.getView();
+                                CoordinatorLayout.LayoutParams params=(CoordinatorLayout.LayoutParams)view.getLayoutParams();
+                                params.gravity = Gravity.TOP;
+                                view.setLayoutParams(params);
                                 snackbar.show();
                             }
                             break;
@@ -104,8 +109,11 @@ public class AmountToBeSentActivity extends AppCompatActivity {
                     Snackbar snackbar = Snackbar
                             .make(coordinatorLayout, "No internet connection!", Snackbar.LENGTH_INDEFINITE);
                     snackbar.setActionTextColor(Color.RED);
-                    View sbView = snackbar.getView();
-                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                    View view = snackbar.getView();
+                    CoordinatorLayout.LayoutParams params=(CoordinatorLayout.LayoutParams)view.getLayoutParams();
+                    params.gravity = Gravity.TOP;
+                    view.setLayoutParams(params);
+                    TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
                     textView.setTextColor(Color.YELLOW);
                     snackbar.show();
                 }
