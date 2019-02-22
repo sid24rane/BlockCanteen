@@ -95,7 +95,7 @@ public class ProfileFragment extends Fragment {
 
     private void setUserAvatar() {
         ColorGenerator generator = ColorGenerator.MATERIAL;
-        int color = generator.getColor(SecurePreferences.getStringSetValue("emailAddress",null));
+        int color = generator.getColor(SecurePreferences.getStringValue("emailAddress",null));
         String user_name = SecurePreferences.getStringValue("fullName",null);
         TextDrawable drawable = TextDrawable.builder()
                 .buildRound(user_name.substring(0, 1).toUpperCase(), color);

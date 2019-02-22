@@ -58,7 +58,7 @@ public class RestoreActivity extends AppCompatActivity {
         uploadFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFile("application/json");
+                openFile("*/*");
             }
         });
 

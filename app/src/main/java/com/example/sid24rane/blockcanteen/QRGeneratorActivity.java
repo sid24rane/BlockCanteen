@@ -16,7 +16,6 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-import de.greenrobot.event.EventBus;
 
 public class QRGeneratorActivity extends AppCompatActivity{
     // qr code generation
@@ -28,7 +27,6 @@ public class QRGeneratorActivity extends AppCompatActivity{
     private TextView publicKey;
     private TextView infotext;
 
-    private EventBus eventBus = EventBus.getDefault();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +37,6 @@ public class QRGeneratorActivity extends AppCompatActivity{
         getSupportActionBar().hide();
 
         setContentView(R.layout.activity_qrgenerator);
-
-        eventBus.register(this);
 
 
         qrcode = (ImageView) findViewById(R.id.qrcode);
@@ -88,13 +84,4 @@ public class QRGeneratorActivity extends AppCompatActivity{
         return bitmap;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        eventBus.unregister(this);
-    }
-
-    public void onEvent(String event) {
-        Toast.makeText(QRGeneratorActivity.this, event, Toast.LENGTH_LONG).show();
-    }
 }

@@ -33,7 +33,6 @@ dependencies {
     implementation 'me.dm7.barcodescanner:zxing:1.9.8'
     implementation 'com.hanks:passcodeview:0.1.2'
     implementation 'de.adorsys.android:securestoragelibrary:1.0.3'
-    implementation 'de.greenrobot:eventbus:2.4.0'
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 
 }
