@@ -3,17 +3,22 @@ package com.example.sid24rane.blockcanteen.Dashboard;
 
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.Observer;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sid24rane.blockcanteen.Dashboard.AllTransactions.AllTransactionsFragment;
@@ -31,6 +36,8 @@ public class DashboardActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private boolean doubleBackToExitPressedOnce = false;
+    private boolean first = true;
+    private CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,8 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         checkConnection();
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -78,26 +87,6 @@ public class DashboardActivity extends AppCompatActivity {
         }
     };
 
-
- /*   @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return false;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.search_menu, menu);
-
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
-        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
-        return super.onCreateOptionsMenu(menu);
-    }
-*/
-
     private void checkConnection(){
 
         /* Live data object and setting an oberser on it */
@@ -109,14 +98,23 @@ public class DashboardActivity extends AppCompatActivity {
                 if (connection.getIsConnected()) {
                     switch (connection.getType()) {
                         case WifiData:
-                            Toast.makeText(DashboardActivity.this, String.format("Wifi turned ON"), Toast.LENGTH_SHORT).show();
-                            break;
                         case MobileData:
-                            Toast.makeText(DashboardActivity.this, String.format("Mobile data turned ON"), Toast.LENGTH_SHORT).show();
+                            if (!first){
+                                Snackbar snackbar = Snackbar
+                                        .make(coordinatorLayout, "Internet Connected!", Snackbar.LENGTH_LONG);
+                                snackbar.show();
+                            }
                             break;
                     }
                 } else {
-                    Toast.makeText(DashboardActivity.this, String.format("Connection turned OFF"), Toast.LENGTH_SHORT).show();
+                    first = false;
+                    Snackbar snackbar = Snackbar
+                            .make(coordinatorLayout, "No internet connection!", Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setActionTextColor(Color.RED);
+                    View sbView = snackbar.getView();
+                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                    textView.setTextColor(Color.YELLOW);
+                    snackbar.show();
                 }
             }
         });
@@ -147,4 +145,23 @@ public class DashboardActivity extends AppCompatActivity {
     public LifecycleRegistry getLifecycle() {
         return lifecycleRegistry;
     }
+
+     /*   @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        return super.onCreateOptionsMenu(menu);
+    }
+*/
 }

@@ -102,7 +102,7 @@ public class AmountToBeSentActivity extends AppCompatActivity {
                 } else {
                     first = false;
                     Snackbar snackbar = Snackbar
-                            .make(coordinatorLayout, "No internet connection!", Snackbar.LENGTH_LONG);
+                            .make(coordinatorLayout, "No internet connection!", Snackbar.LENGTH_INDEFINITE);
                     snackbar.setActionTextColor(Color.RED);
                     View sbView = snackbar.getView();
                     TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
