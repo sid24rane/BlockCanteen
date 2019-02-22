@@ -41,7 +41,7 @@ public class RestoreActivity extends AppCompatActivity {
     private String TAG = getClass().getSimpleName();
     private String path;
     private ProgressDialog progressDialog;
-    private static final int REQUEST_STORAGE = 1;
+    private final int REQUEST_STORAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,7 +189,6 @@ public class RestoreActivity extends AppCompatActivity {
                         String realDocId = idArr[1];
                         path = Environment.getExternalStorageDirectory() + "/" + realDocId;
                     }
-                    Toast.makeText(RestoreActivity.this, path , Toast.LENGTH_LONG).show();
                 }
                 break;
         }

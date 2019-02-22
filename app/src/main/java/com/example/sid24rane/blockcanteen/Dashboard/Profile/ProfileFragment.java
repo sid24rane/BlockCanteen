@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.example.sid24rane.blockcanteen.KeyGeneration.KeyGenerationActivity;
 import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.utilities.AES;
 
@@ -50,7 +49,7 @@ public class ProfileFragment extends Fragment {
     private EditText userSecret;
     private ImageView userAvatar;
     private final String TAG = getClass().getSimpleName();
-    private static final int REQUEST_STORAGE = 1;
+    private final int REQUEST_STORAGE = 11;
     private ImageView copyKey;
     private ProgressDialog progressDialog;
 
@@ -138,6 +137,7 @@ public class ProfileFragment extends Fragment {
                 if(!checkPermission())
                 {
                     requestPermission();
+                    storeUserProfile(user_secret);
                 }else{
                     storeUserProfile(user_secret);
                 }
