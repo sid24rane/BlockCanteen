@@ -1,5 +1,6 @@
 package com.example.sid24rane.blockcanteen;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -39,6 +40,7 @@ public class RestoreActivity extends AppCompatActivity {
     private Button restoreProfile;
     private String TAG = getClass().getSimpleName();
     private String path;
+    private ProgressDialog progressDialog;
     private static final int REQUEST_STORAGE = 1;
 
     @Override
@@ -58,7 +60,7 @@ public class RestoreActivity extends AppCompatActivity {
         uploadFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFile("*/*");
+                openFile("text/*");
             }
         });
 
@@ -81,10 +83,16 @@ public class RestoreActivity extends AppCompatActivity {
 
     }
     private void restoreUserProfile(){
+        
+        progressDialog = new ProgressDialog(RestoreActivity.this);
+        progressDialog.setMessage("Restoring profile please wait..");
+        progressDialog.setCancelable(false);
+        progressDialog.getCurrentFocus();
+        progressDialog.show();
 
         String secretKey = secret.getText().toString();
 
-        String userProfile = getDataFromPath(path,secretKey);
+        String userProfile = getDataFromPath(path, secretKey);
 
         try {
 
@@ -97,6 +105,8 @@ public class RestoreActivity extends AppCompatActivity {
             SecurePreferences.setValue("pin",user.getString("pin"));
 
             Toast.makeText(RestoreActivity.this, "Welcome back, Profile successfully restored!", Toast.LENGTH_SHORT).show();
+
+            progressDialog.dismiss();
 
             Intent intent = new Intent(RestoreActivity.this, DashboardActivity.class);
             startActivity(intent);
@@ -182,7 +192,7 @@ public class RestoreActivity extends AppCompatActivity {
 
     private void openFile(String mimeType) {
 
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType(mimeType);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
@@ -206,7 +216,7 @@ public class RestoreActivity extends AppCompatActivity {
         }
     }
 
-    public String getDataFromPath(String path,String secret) {
+    public String getDataFromPath(String path, String secret) {
         Log.d(TAG, "getDataFromPath() invoked" + path);
         try {
             File f = new File(path);

@@ -8,7 +8,12 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
+import com.example.sid24rane.blockcanteen.KeyGeneration.KeyGenerationActivity;
+import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.hanks.passcodeview.PasscodeView;
+
+import java.security.Key;
+import java.security.KeyPair;
 
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 

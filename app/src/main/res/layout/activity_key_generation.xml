@@ -83,6 +83,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textAutoComplete"
                     />
 
 
@@ -104,6 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints="Enter email address"
+                    android:inputType="textEmailAddress"
                     />
 
 
@@ -156,7 +158,7 @@
                     android:layout_height="wrap_content"
                     android:textStyle="italic"
                     android:textColor="@color/secondaryText"
-                    android:text="THis will allow you to restore your previous wallet."
+                    android:text="This will allow you to restore your previous wallet."
                     android:layout_marginLeft="10dp"
                     android:textSize="15sp"
                     android:layout_marginTop="10dp"
