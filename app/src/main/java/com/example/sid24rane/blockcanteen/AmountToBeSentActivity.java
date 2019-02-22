@@ -112,6 +112,12 @@ public class AmountToBeSentActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        first = true;
+    }
     /* required to make activity life cycle owner */
     @Override
     public LifecycleRegistry getLifecycle() {
