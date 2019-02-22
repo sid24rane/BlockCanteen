@@ -16,6 +16,8 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+import de.adorsys.android.securestoragelibrary.SecurePreferences;
+
 
 public class QRGeneratorActivity extends AppCompatActivity{
     // qr code generation
@@ -25,7 +27,7 @@ public class QRGeneratorActivity extends AppCompatActivity{
     public final static int HEIGHT = 400;
     private ImageView qrcode;
     private TextView publicKey;
-    private TextView infotext;
+    private TextView name;
 
 
     @Override
@@ -41,11 +43,11 @@ public class QRGeneratorActivity extends AppCompatActivity{
 
         qrcode = (ImageView) findViewById(R.id.qrcode);
         publicKey = (TextView) findViewById(R.id.publicKey);
-        infotext = (TextView) findViewById(R.id.infoText);
+        name = (TextView) findViewById(R.id.name);
 
         try {
             generateQRCode();
-            infotext.setText("InfoText");
+            name.setText(SecurePreferences.getStringValue("fullName", ""));
         } catch (WriterException e) {
             e.printStackTrace();
         }
@@ -54,11 +56,9 @@ public class QRGeneratorActivity extends AppCompatActivity{
 
     private void generateQRCode() throws WriterException {
         String pubKey = DataInSharedPreferences.retrievingPublicKey();
-        Log.d("PUBLIC KEY", pubKey);
         Bitmap bitmap = encodeAsBitmap(pubKey);
         qrcode.setImageBitmap(bitmap);
         publicKey.setText(pubKey);
-
     }
 
     Bitmap encodeAsBitmap(String str) throws WriterException {

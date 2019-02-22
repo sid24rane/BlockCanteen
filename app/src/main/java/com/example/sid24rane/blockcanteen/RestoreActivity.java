@@ -83,7 +83,7 @@ public class RestoreActivity extends AppCompatActivity {
 
     }
     private void restoreUserProfile(){
-        
+
         progressDialog = new ProgressDialog(RestoreActivity.this);
         progressDialog.setMessage("Restoring profile please wait..");
         progressDialog.setCancelable(false);

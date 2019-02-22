@@ -10,12 +10,12 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:id="@+id/empty_view"
-    android:visibility="gone"
-    android:layout_gravity="center_vertical">
+    android:visibility="visible"
+    android:layout_centerInParent="true">
     <ImageView
         android:layout_width="150dp"
         android:layout_height="125dp"
-        android:src="@drawable/coins128"
+        android:src="@drawable/logo"
         android:layout_gravity="center_horizontal"
         android:layout_margin="40dp"/>
 

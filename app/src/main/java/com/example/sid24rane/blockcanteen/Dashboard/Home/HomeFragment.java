@@ -1,6 +1,9 @@
 package com.example.sid24rane.blockcanteen.Dashboard.Home;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
+import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
 import com.example.sid24rane.blockcanteen.QRGeneratorActivity;
 import com.example.sid24rane.blockcanteen.QRScannerActivity;
 import com.example.sid24rane.blockcanteen.R;
@@ -32,7 +36,6 @@ public class HomeFragment extends Fragment {
     private Button receive;
     private TextView mBalanceTextView;
     private ProgressBar mLoadingIndicator;
-    private TextView mErrorMessageDisplay;
     private final String TAG = getClass().getSimpleName();
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isRefresh = false;
@@ -47,7 +50,6 @@ public class HomeFragment extends Fragment {
         receive = (Button) view.findViewById(R.id.receive);
         mBalanceTextView = (TextView)  view.findViewById(R.id.balance);
         mLoadingIndicator = (ProgressBar) view.findViewById(R.id.pb_loading_indicator);
-        mErrorMessageDisplay = (TextView) view.findViewById(R.id.error_message);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
 
         getUserBalance();
@@ -55,14 +57,12 @@ public class HomeFragment extends Fragment {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean isConnected = checkConnection();
-                if(isConnected){
-                    Intent intent = new Intent(getContext(),QRScannerActivity.class);
+                if((isNetworkAvailable())) {
+                    Intent intent = new Intent(getContext(), QRScannerActivity.class);
                     startActivity(intent);
-                    getActivity().overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                }
-                else{
-                    showToast(isConnected);
+                    getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                }else{
+                    Toast.makeText(getContext(), "Please Connect to Internet", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -96,18 +96,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private boolean checkConnection() {
-        //TODO: lib
-        return true;
-    }
-
-    private void showToast(Boolean isConnected){
-        if(!isConnected)
-            Toast.makeText(getContext(), "Please connect to Internet", Toast.LENGTH_LONG).show();
-    }
-
     private void getUserBalance() {
-
         showBalanceView();
         String publicKey = DataInSharedPreferences.retrievingPublicKey();
         new FetchBalanceTask().execute(publicKey);
@@ -115,15 +104,16 @@ public class HomeFragment extends Fragment {
 
     private void showBalanceView() {
         Log.d(TAG, "showBalanceView() invoked");
-        mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         mBalanceTextView.setVisibility(View.VISIBLE);
     }
 
-    private void showErrorMessage() {
-        Log.d(TAG, "showErrorMessage() invoked");
-        mBalanceTextView.setVisibility(View.INVISIBLE);
-        mErrorMessageDisplay.setVisibility(View.VISIBLE);
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
 
     public class FetchBalanceTask extends AsyncTask<String, Void, String> {
         @Override
@@ -164,9 +154,9 @@ public class HomeFragment extends Fragment {
                             @Override
                             public void onError(ANError anError) {
                                 Log.d(TAG, "network onError= " + anError);
+                                if (isRefresh) swipeRefreshLayout.setRefreshing(false);
                             }
                         });
-
                 return result[0];
 
             } catch (Exception e) {

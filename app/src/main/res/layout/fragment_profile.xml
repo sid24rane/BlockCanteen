@@ -16,6 +16,7 @@
             android:id="@+id/user_avatar"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="15dp"
+            android:elevation="10dp"
             />
 
         <TextView
@@ -36,7 +37,8 @@
             android:elevation="10dp"
             android:layout_margin="10dp"
             android:padding="10dp"
-            app:cardCornerRadius="25dp">
+            app:cardBackgroundColor="#fff"
+            app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -85,7 +87,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Copy Public Key => "
+                        android:text="Copy Public Key > "
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"/>
 
@@ -120,7 +122,7 @@
             android:elevation="10dp"
             android:layout_margin="10dp"
             android:padding="10dp"
-            app:cardCornerRadius="25dp">
+            app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"

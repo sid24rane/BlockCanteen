@@ -22,7 +22,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Dashboard.DashboardActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"/>
         <activity
             android:name=".QRScannerActivity"
             android:screenOrientation="portrait" />

@@ -201,6 +201,7 @@ public class AllTransactionsFragment extends Fragment{
                             @Override
                             public void onError(ANError anError) {
                                 Log.d(TAG, "network onError= " + anError);
+                                if (isRefresh) swipeRefreshLayout.setRefreshing(false);
                             }
                         });
 
