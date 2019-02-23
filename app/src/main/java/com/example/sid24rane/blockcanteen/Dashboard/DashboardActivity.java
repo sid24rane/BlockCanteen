@@ -59,6 +59,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         fragmentTransaction.replace(R.id.container, new HomeFragment()).commit();
 
