@@ -1,6 +1,8 @@
 package com.example.sid24rane.blockcanteen.Dashboard.AllTransactions;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +35,15 @@ public class TransactionsListAdapter extends RecyclerView.Adapter<TransactionsLi
         holder.amount.setText(String.valueOf(transaction.getAmount()));
         holder.timestamp.setText(String.valueOf(transaction.getUnixTimeStamp()));
 
+        if(Integer.valueOf(transaction.getAmount()) < 0){
+            //Red Colour
+            holder.transactionCard.setCardBackgroundColor(Color.parseColor("#ffebee"));
+            holder.amount.setTextColor(Color.parseColor("#f44336"));
+        }else{
+            //Green Colour
+            holder.transactionCard.setCardBackgroundColor(Color.parseColor("#e8f5e9"));
+            holder.amount.setTextColor(Color.parseColor("#4caf50"));
+        }
     }
 
     @Override
@@ -42,12 +53,14 @@ public class TransactionsListAdapter extends RecyclerView.Adapter<TransactionsLi
 
     public class ViewHolder extends  RecyclerView.ViewHolder{
 
+        public CardView transactionCard;
         public TextView address;
         public TextView amount;
         public TextView timestamp;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            this.transactionCard = (CardView) itemView.findViewById(R.id.transaction_card_view);
             this.address = (TextView) itemView.findViewById(R.id.address);
             this.amount = (TextView) itemView.findViewById(R.id.amount);
             this.timestamp = (TextView) itemView.findViewById(R.id.timestamp);

@@ -8,46 +8,54 @@
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/card_view"
+        android:id="@+id/transaction_card_view"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="4dp"
         card_view:cardElevation="4dp"
         card_view:cardUseCompatPadding="true"
-        android:layout_margin="8dp"
+        card_view:contentPadding="4dp"
+        android:layout_margin="4dp"
         android:padding="25dp">
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/address"
-                android:textSize="16dp"
+                android:id="@+id/amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="10dp"
+                android:textColor="#222222"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_alignParentTop="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                />
 
             <TextView
-                android:id="@+id/amount"
-                android:textColor="#222222"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"
-                android:layout_alignParentTop="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/amount"
+                android:text="PublicKey"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/timestamp"
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_below="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="16dp"
+                android:text="Timestamp" />
 
+        </RelativeLayout>
 
-        </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

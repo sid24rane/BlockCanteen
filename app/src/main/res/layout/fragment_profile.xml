@@ -1,6 +1,6 @@
 <ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/lightBlue"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:textSize="20sp"
-            android:textColor="#fff"
+            android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             android:text="Your Profile"
             android:layout_marginTop="15dp"
@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:textSize="20sp"
-            android:textColor="#fff"
+            android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             android:text="Backup Profile ? "
             android:layout_marginTop="15dp"

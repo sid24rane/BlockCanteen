@@ -210,6 +210,10 @@ public class RestoreActivity extends AppCompatActivity {
                             path = "/" + realDocId;
                             Toast.makeText(RestoreActivity.this, "Path: "+ path, Toast.LENGTH_SHORT).show();
                         }
+                    }else{
+                        // for Samsung Devices
+                        path = tempPath;
+                        Toast.makeText(RestoreActivity.this, "Path: "+ path, Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;

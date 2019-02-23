@@ -79,7 +79,7 @@ public class ProfileFragment extends Fragment {
         copyKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    setClipboard(getContext(),publicKey.getText().toString());
+                    setClipboard(getContext(), publicKey.getText().toString());
                 Toast.makeText(getContext(), "Public Key Copied to Clipboard", Toast.LENGTH_SHORT).show();
             }
         });
