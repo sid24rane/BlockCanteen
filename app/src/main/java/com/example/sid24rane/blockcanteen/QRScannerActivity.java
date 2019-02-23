@@ -39,7 +39,7 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
         setContentView(scannerView);
         int currentApiVersion = Build.VERSION.SDK_INT;
 
-        if(currentApiVersion >=  Build.VERSION_CODES.M)
+        if(currentApiVersion >=  Build.VERSION_CODES.LOLLIPOP)
         {
             if(!checkPermission())
             {

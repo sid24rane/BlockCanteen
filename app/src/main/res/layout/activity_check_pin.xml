@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:firstInputTip="Enter your transaction PIN "
-    android:background="?attr/colorPrimary"
+    android:background="@color/colorPrimary"
     app:passcodeLength="4"
     app:correctStateColor="#71bb4d"
     app:wrongStateColor="#ea2b46"

@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sid24rane.blockcanteen.Dashboard.DashboardActivity;
@@ -23,6 +24,7 @@ import com.example.sid24rane.blockcanteen.utilities.AES;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,6 +40,7 @@ public class RestoreActivity extends AppCompatActivity {
     private Button uploadFile;
     private EditText secret;
     private Button restoreProfile;
+    private TextView pathToFile;
     private String TAG = getClass().getSimpleName();
     private String path;
     private ProgressDialog progressDialog;
@@ -56,6 +59,7 @@ public class RestoreActivity extends AppCompatActivity {
         uploadFile = (Button)  findViewById(R.id.uploadFile);
         secret = (EditText) findViewById(R.id.secret);
         restoreProfile = (Button) findViewById(R.id.restoreProfile);
+        pathToFile = (TextView) findViewById(R.id.pathToFile);
 
         uploadFile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,35 +106,51 @@ public class RestoreActivity extends AppCompatActivity {
 
         String secretKey = secret.getText().toString();
 
-        String userProfile = getDataFromPath(path, secretKey);
-        if (userProfile != null){
-            try {
+        if(!secretKey.equals("") && secretKey.length() >= 12) {
 
-                JSONObject user = new JSONObject(userProfile);
+            if(!path.equals("")){
 
-                SecurePreferences.setValue("fullName", user.getString("name"));
-                SecurePreferences.setValue("emailAddress",user.getString("email"));
-                SecurePreferences.setValue("publicKey", user.getString("publicKey"));
-                SecurePreferences.setValue("privateKey", user.getString("privateKey"));
-                SecurePreferences.setValue("pin",user.getString("pin"));
+                String userProfile = getDataFromPath(path, secretKey);
+                if (userProfile != null){
 
-                Toast.makeText(RestoreActivity.this, "Welcome back, Profile successfully restored!", Toast.LENGTH_SHORT).show();
+                    try {
 
+                        JSONObject user = new JSONObject(userProfile);
+
+                        SecurePreferences.setValue("fullName", user.getString("name"));
+                        SecurePreferences.setValue("emailAddress",user.getString("email"));
+                        SecurePreferences.setValue("publicKey", user.getString("publicKey"));
+                        SecurePreferences.setValue("privateKey", user.getString("privateKey"));
+                        SecurePreferences.setValue("pin",user.getString("pin"));
+
+                        Toast.makeText(RestoreActivity.this, "Welcome back, Profile restored successfully!", Toast.LENGTH_SHORT).show();
+
+                        progressDialog.dismiss();
+
+                        Intent intent = new Intent(RestoreActivity.this, DashboardActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                        finish();
+
+                    } catch (JSONException e) {
+                        progressDialog.dismiss();
+                        Toast.makeText(RestoreActivity.this, "Invalid Secret key!", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
+                }else{
+                    progressDialog.dismiss();
+                    Toast.makeText(RestoreActivity.this, "Invalid Secret key!", Toast.LENGTH_SHORT).show();
+                }
+
+            }else{
                 progressDialog.dismiss();
-
-                Intent intent = new Intent(RestoreActivity.this, DashboardActivity.class);
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                finish();
-
-            } catch (JSONException e) {
-                progressDialog.dismiss();
-                Toast.makeText(RestoreActivity.this, "Invalid Secret key!", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
+                Toast.makeText(RestoreActivity.this, "Invalid Path!", Toast.LENGTH_SHORT).show();
             }
+
         }else{
             progressDialog.dismiss();
-            Toast.makeText(RestoreActivity.this, "Invalid Secret key!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RestoreActivity.this, "Secret key should be 12 characters or more!", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -203,6 +223,7 @@ public class RestoreActivity extends AppCompatActivity {
                             Toast.makeText(RestoreActivity.this, "Path: "+ path, Toast.LENGTH_SHORT).show();
                         }
                     } else if(tempPath.contains("//")){
+                        // for xiaomi devices
                         String arr[] = tempPath.split("//");
                         if(arr.length == 2)
                         {
@@ -215,6 +236,9 @@ public class RestoreActivity extends AppCompatActivity {
                         path = tempPath;
                         Toast.makeText(RestoreActivity.this, "Path: "+ path, Toast.LENGTH_SHORT).show();
                     }
+
+                    //Setting the textView with the path
+                    pathToFile.setText(path);
                 }
                 break;
         }
