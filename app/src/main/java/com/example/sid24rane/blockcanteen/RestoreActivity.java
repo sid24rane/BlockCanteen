@@ -60,7 +60,17 @@ public class RestoreActivity extends AppCompatActivity {
         uploadFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFile("text/*");
+
+                if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.LOLLIPOP)
+                {
+                    if(!checkPermission())
+                    {
+                        requestPermission();
+                    }else{
+                        openFile("text/*");
+                    }
+                }
+
             }
         });
 
@@ -68,7 +78,7 @@ public class RestoreActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.M)
+                if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.LOLLIPOP)
                 {
                     if(!checkPermission())
                     {
@@ -182,12 +192,24 @@ public class RestoreActivity extends AppCompatActivity {
             case 7:
                 if(resultCode==RESULT_OK){
                     String tempPath = data.getData().getPath();
-                    String idArr[] = tempPath.split(":");
-                    if(idArr.length == 2)
-                    {
-                        String type = idArr[0];
-                        String realDocId = idArr[1];
-                        path = Environment.getExternalStorageDirectory() + "/" + realDocId;
+                    Log.d(TAG, "FilePath "+ tempPath);
+                    if(tempPath.contains(":")){
+                        String idArr[] = tempPath.split(":");
+                        if(idArr.length == 2)
+                        {
+                            String type = idArr[0];
+                            String realDocId = idArr[1];
+                            path = Environment.getExternalStorageDirectory() + "/" + realDocId;
+                            Toast.makeText(RestoreActivity.this, "Path: "+ path, Toast.LENGTH_SHORT).show();
+                        }
+                    } else if(tempPath.contains("//")){
+                        String arr[] = tempPath.split("//");
+                        if(arr.length == 2)
+                        {
+                            String realDocId = arr[1];
+                            path = "/" + realDocId;
+                            Toast.makeText(RestoreActivity.this, "Path: "+ path, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
                 break;
@@ -221,7 +243,7 @@ public class RestoreActivity extends AppCompatActivity {
     }
 
     public String getDataFromPath(String path, String secret) {
-        Log.d(TAG, "getDataFromPath() invoked" + path);
+        Log.d(TAG, "getDataFromPath() invoked " + path);
         try {
             File f = new File(path);
             //check whether file exists

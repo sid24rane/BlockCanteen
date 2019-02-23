@@ -132,7 +132,7 @@ public class ProfileFragment extends Fragment {
         Log.d(TAG, "downloadProfile");
         String user_secret = userSecret.getText().toString();
         if (!TextUtils.isEmpty(user_secret)){
-            if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.M)
+            if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.LOLLIPOP)
             {
                 if(!checkPermission())
                 {

@@ -30,10 +30,7 @@ public class TransactionResultActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         setContentView(R.layout.activity_transaction_result);
-
         init();
-
-    
     }
 
     private void init() {
@@ -53,13 +50,14 @@ public class TransactionResultActivity extends AppCompatActivity {
             result.setText("The transaction was successful !");
             result_image.setImageResource(R.drawable.ic_check_circle_green_500_24dp);
             sub_result.setText("You have successfully sent");
-            amount.setText(amt + " VJC");
+            amount.setText(amt + " VJ-Coins");
         }else{
             result.setText("Oops! The transaction has failed! Please try again later.");
             result_image.setImageResource(R.drawable.ic_highlight_off_red_500_24dp);
             sub_result.setText("You have failed to send");
-            amount.setText(amt + " VJC");
+            amount.setText(amt + " VJ-Coins");
         }
+
         backTodashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

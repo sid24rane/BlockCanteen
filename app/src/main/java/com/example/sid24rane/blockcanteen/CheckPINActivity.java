@@ -114,6 +114,13 @@ public class CheckPINActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         Log.d("makeTransaction err:", anError.toString());
+                        Intent i = new Intent(CheckPINActivity.this, TransactionResultActivity.class);
+                        i.putExtra("result", "false");
+                        i.putExtra("amount",amount);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                        startActivity(i);
+                        finish();
 
                     }
                 });

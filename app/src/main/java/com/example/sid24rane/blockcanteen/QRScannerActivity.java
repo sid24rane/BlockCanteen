@@ -53,7 +53,7 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
         super.onResume();
         Log.d(TAG, "onResume() invoked");
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-        if (currentapiVersion >= android.os.Build.VERSION_CODES.M) {
+        if (currentapiVersion >= Build.VERSION_CODES.LOLLIPOP) {
             if (checkPermission()) {
                 if(scannerView == null) {
                     scannerView = new ZXingScannerView(this);
