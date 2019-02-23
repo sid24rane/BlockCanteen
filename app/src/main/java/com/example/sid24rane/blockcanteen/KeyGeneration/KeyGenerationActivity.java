@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.example.sid24rane.blockcanteen.R;
 import com.example.sid24rane.blockcanteen.RegisterPINActivity;
-import com.example.sid24rane.blockcanteen.RestoreActivity;
+import com.example.sid24rane.blockcanteen.RestoreWalletActivity;
 import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 
 import java.security.KeyPair;
@@ -61,7 +61,7 @@ public class KeyGenerationActivity extends AppCompatActivity {
         restore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(KeyGenerationActivity.this,RestoreActivity.class);
+                Intent intent = new Intent(KeyGenerationActivity.this,RestoreWalletActivity.class);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
             }
