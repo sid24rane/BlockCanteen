@@ -61,10 +61,10 @@ public class AmountToBeSentActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int amt = Integer.valueOf(amount.getText().toString());
-                if (!(amt <=0)){
+                int amt = Integer.valueOf(String.valueOf(amount.getText()));
+                if (!(amt <= 0)){
                     Intent intent = new Intent(AmountToBeSentActivity.this, CheckPINActivity.class);
-                    intent.putExtra("amount", amount.getText().toString());
+                    intent.putExtra("amount", String.valueOf(amount.getText()));
                     intent.putExtra("receiverPublicKey", receiverPublicKey);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);

@@ -54,6 +54,8 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
                     android:hint="Eg. 100"
+                    android:digits="0123456789"
+                    android:inputType="number|none"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
