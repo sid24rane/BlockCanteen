@@ -3,12 +3,10 @@ package com.example.sid24rane.blockcanteen;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.google.zxing.BarcodeFormat;
@@ -28,6 +26,7 @@ public class QRGeneratorActivity extends AppCompatActivity{
     private ImageView qrcode;
     private TextView publicKey;
     private TextView name;
+    private TextView note;
 
 
     @Override
@@ -44,10 +43,10 @@ public class QRGeneratorActivity extends AppCompatActivity{
         qrcode = (ImageView) findViewById(R.id.qrcode);
         publicKey = (TextView) findViewById(R.id.publicKey);
         name = (TextView) findViewById(R.id.name);
+        note = (TextView) findViewById(R.id.note);
 
         try {
             generateQRCode();
-            name.setText(SecurePreferences.getStringValue("fullName", ""));
         } catch (WriterException e) {
             e.printStackTrace();
         }
@@ -59,6 +58,8 @@ public class QRGeneratorActivity extends AppCompatActivity{
         Bitmap bitmap = encodeAsBitmap(pubKey);
         qrcode.setImageBitmap(bitmap);
         publicKey.setText(pubKey);
+        name.setText(SecurePreferences.getStringValue("fullName", ""));
+        note.setText("NOTE: Share this QR code or Public Key to receive coins");
     }
 
     Bitmap encodeAsBitmap(String str) throws WriterException {
