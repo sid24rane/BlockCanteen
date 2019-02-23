@@ -44,7 +44,7 @@ public class TransactionResultActivity extends AppCompatActivity {
         Intent i = getIntent();
         String res = i.getStringExtra("result");
         String amt = i.getStringExtra("amount");
-        Toast.makeText(TransactionResultActivity.this, res, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(TransactionResultActivity.this, res, Toast.LENGTH_SHORT).show();
 
         if (res.equals("true")){
             result.setText("The transaction was successful !");
