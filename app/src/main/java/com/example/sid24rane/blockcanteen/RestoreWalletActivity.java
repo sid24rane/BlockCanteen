@@ -71,7 +71,7 @@ public class RestoreWalletActivity extends AppCompatActivity {
                     {
                         requestPermission();
                     }else{
-                        openFile("text/*");
+                        openFile("text/plain");
                     }
                 }
 
