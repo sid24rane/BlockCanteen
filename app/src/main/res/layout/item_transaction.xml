@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerInParent="true"
-                android:layout_marginRight="10dp"
+                android:layout_margin="4dp"
                 android:textColor="#222222"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -44,7 +44,9 @@
                 android:layout_toStartOf="@+id/amount"
                 android:text="PublicKey"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_margin="4dp"
+                android:textIsSelectable="true"/>
 
             <TextView
                 android:id="@+id/timestamp"
@@ -52,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="16dp"
+                android:layout_margin="4dp"
                 android:text="Timestamp" />
 
         </RelativeLayout>

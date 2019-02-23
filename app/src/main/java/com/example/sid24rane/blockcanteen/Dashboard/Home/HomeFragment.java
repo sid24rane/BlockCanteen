@@ -2,6 +2,7 @@ package com.example.sid24rane.blockcanteen.Dashboard.Home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -28,6 +29,8 @@ import com.example.sid24rane.blockcanteen.data.DataInSharedPreferences;
 import com.example.sid24rane.blockcanteen.utilities.NetworkUtils;
 
 import org.json.JSONObject;
+
+import java.util.Objects;
 
 
 public class HomeFragment extends Fragment {

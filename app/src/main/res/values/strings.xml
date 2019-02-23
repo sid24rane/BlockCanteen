@@ -1,11 +1,7 @@
 <resources>
     <string name="app_name">VJTI Blockchain</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Canteen Menu</string>
-    <string name="error_message">An error has occured..please refresh</string>
     <string name="title_notifications">Transaction History</string>
-    <string name="digits">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

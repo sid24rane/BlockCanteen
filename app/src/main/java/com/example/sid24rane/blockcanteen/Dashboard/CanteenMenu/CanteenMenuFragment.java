@@ -88,7 +88,8 @@ public class CanteenMenuFragment extends Fragment {
 
         super.onPrepareOptionsMenu(menu);
 
-        MenuItem searchItem = menu.findItem(R.id.search);
+        // Rewrite this menu
+        MenuItem searchItem = menu.findItem(R.id.publicKey);
         SearchView searchView = new SearchView(((DashboardActivity) getActivity()).getSupportActionBar().getThemedContext());
         searchView.setQueryHint("Search Items");
         MenuItemCompat.setShowAsAction(searchItem, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);

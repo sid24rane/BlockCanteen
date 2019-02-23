@@ -70,7 +70,6 @@ public class RestoreWalletActivity extends AppCompatActivity {
                     if(!checkPermission())
                     {
                         requestPermission();
-                        openFile("text/*");
                     }else{
                         openFile("text/*");
                     }
@@ -131,7 +130,7 @@ public class RestoreWalletActivity extends AppCompatActivity {
                                     SecurePreferences.setValue("privateKey", user.getString("privateKey"));
                                     SecurePreferences.setValue("pin",user.getString("pin"));
 
-                                    Toast.makeText(RestoreWalletActivity.this, "Welcome back, Profile restored successfully!", Toast.LENGTH_SHORT).show();
+                                    showToast("Welcome back, Profile restored successfully!");
 
                                     progressDialog.dismiss();
 
