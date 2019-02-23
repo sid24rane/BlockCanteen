@@ -96,12 +96,9 @@ public class ProfileFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.getCurrentFocus();
         progressDialog.show();
-
         //TODO Async
         setUserAvatar();
         loadUserDetailsFromSharedPreferences();
-
-
     }
 
 
@@ -132,15 +129,19 @@ public class ProfileFragment extends Fragment {
         Log.d(TAG, "downloadProfile");
         String user_secret = userSecret.getText().toString();
         if (!TextUtils.isEmpty(user_secret)){
-            if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.LOLLIPOP)
-            {
-                if(!checkPermission())
+            if(user_secret.length() > 12){
+                if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.LOLLIPOP)
                 {
-                    requestPermission();
-                    storeUserProfile(user_secret);
-                }else{
-                    storeUserProfile(user_secret);
+                    if(!checkPermission())
+                    {
+                        requestPermission();
+                        storeUserProfile(user_secret);
+                    }else{
+                        storeUserProfile(user_secret);
+                    }
                 }
+            }else{
+                Toast.makeText(getContext(), "Secret must be 12 characters or more!", Toast.LENGTH_SHORT).show();
             }
         }else{
             Toast.makeText(getContext(), "Please enter Secret phrase!", Toast.LENGTH_SHORT).show();
