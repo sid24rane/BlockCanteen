@@ -26,7 +26,6 @@ public class QRGeneratorActivity extends AppCompatActivity{
     private ImageView qrcode;
     private TextView publicKey;
     private TextView name;
-    private TextView note;
 
 
     @Override
@@ -43,7 +42,6 @@ public class QRGeneratorActivity extends AppCompatActivity{
         qrcode = (ImageView) findViewById(R.id.qrcode);
         publicKey = (TextView) findViewById(R.id.publicKey);
         name = (TextView) findViewById(R.id.name);
-        note = (TextView) findViewById(R.id.note);
 
         try {
             generateQRCode();
@@ -59,7 +57,6 @@ public class QRGeneratorActivity extends AppCompatActivity{
         qrcode.setImageBitmap(bitmap);
         publicKey.setText(pubKey);
         name.setText(SecurePreferences.getStringValue("fullName", ""));
-        note.setText("NOTE: Share this QR code or Public Key to receive coins");
     }
 
     Bitmap encodeAsBitmap(String str) throws WriterException {
