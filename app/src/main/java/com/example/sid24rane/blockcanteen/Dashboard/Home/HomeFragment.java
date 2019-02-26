@@ -38,7 +38,6 @@ public class HomeFragment extends Fragment {
     private Button send;
     private Button receive;
     private TextView mBalanceTextView;
-    private ProgressBar mLoadingIndicator;
     private final String TAG = getClass().getSimpleName();
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isRefresh = false;
@@ -52,7 +51,6 @@ public class HomeFragment extends Fragment {
         send = (Button) view.findViewById(R.id.send);
         receive = (Button) view.findViewById(R.id.receive);
         mBalanceTextView = (TextView)  view.findViewById(R.id.balance);
-        mLoadingIndicator = (ProgressBar) view.findViewById(R.id.pb_loading_indicator);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
 
         getUserBalance();
@@ -123,7 +121,6 @@ public class HomeFragment extends Fragment {
         protected void onPreExecute() {
             Log.d(TAG, "onPreExecute() invoked");
             super.onPreExecute();
-            mLoadingIndicator.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -171,7 +168,6 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(String balance) {
             Log.d(TAG, "onPostExecute() invoked with balance:" + balance);
-            mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (balance != null) {
                 showBalanceView();
                 mBalanceTextView.setText(balance);
