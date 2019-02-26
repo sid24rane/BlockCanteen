@@ -1,10 +1,9 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.example.sid24rane.blockcanteen"
+        applicationId "com.vjti.blockchain.wallet"
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
@@ -41,5 +40,3 @@ dependencies {
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 
 }
-apply plugin: 'com.google.gms.google-services'
-com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
