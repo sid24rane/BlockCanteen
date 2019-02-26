@@ -36,7 +36,6 @@ import java.io.FileOutputStream;
 
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 
-import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 
@@ -72,7 +71,16 @@ public class ProfileFragment extends Fragment {
         downloadProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadProfile();
+
+                if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.LOLLIPOP)
+                {
+                    if(!checkPermission())
+                    {
+                        requestPermission();
+                    }else{
+                        downloadProfile();
+                    }
+                }
             }
         });
 
@@ -96,27 +104,42 @@ public class ProfileFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.getCurrentFocus();
         progressDialog.show();
-        //TODO Async
-        setUserAvatar();
-        loadUserDetailsFromSharedPreferences();
+
+        Thread mThread = new Thread() {
+            @Override
+            public void run() {
+                setUserDetails();
+            }
+        };
+
+        mThread.start();
+
     }
 
 
-    private void setUserAvatar() {
+    private TextDrawable setUserAvatar() {
         ColorGenerator generator = ColorGenerator.MATERIAL;
         String user_name = SecurePreferences.getStringValue("fullName",null);
         int color = generator.getColor(user_name);
         TextDrawable drawable = TextDrawable.builder()
                 .buildRound(user_name.substring(0, 1).toUpperCase(), color);
-        userAvatar.setImageDrawable(drawable);
+         return drawable;
     }
 
-    private void loadUserDetailsFromSharedPreferences(){
-        Log.d(TAG,"loadUserDetailsFromSharedPreferences()" );
-        name.setText(SecurePreferences.getStringValue("fullName", ""));
-        emailAddress.setText(SecurePreferences.getStringValue("emailAddress", ""));
-        publicKey.setText(SecurePreferences.getStringValue("publicKey", ""));
-        progressDialog.dismiss();
+    private void setUserDetails(){
+        Log.d(TAG,"setUserDetails()" );
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                TextDrawable drawable = setUserAvatar();
+                name.setText(SecurePreferences.getStringValue("fullName", ""));
+                emailAddress.setText(SecurePreferences.getStringValue("emailAddress", ""));
+                publicKey.setText(SecurePreferences.getStringValue("publicKey", ""));
+                userAvatar.setImageDrawable(drawable);
+                progressDialog.dismiss();
+            }
+        });
+
     }
 
     private void setClipboard(Context context, String text) {
@@ -130,16 +153,7 @@ public class ProfileFragment extends Fragment {
         String user_secret = userSecret.getText().toString();
         if (!TextUtils.isEmpty(user_secret)){
             if(user_secret.length() >= 12){
-                if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.LOLLIPOP)
-                {
-                    if(!checkPermission())
-                    {
-                        requestPermission();
-                        storeUserProfile(user_secret);
-                    }else{
-                        storeUserProfile(user_secret);
-                    }
-                }
+                storeUserProfile(user_secret);
             }else{
                 Toast.makeText(getContext(), "Secret must be 12 characters or more!", Toast.LENGTH_SHORT).show();
             }
@@ -185,14 +199,13 @@ public class ProfileFragment extends Fragment {
             case REQUEST_STORAGE:
                 if (grantResults.length > 0) {
 
-                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (cameraAccepted){
+                    boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (storageAccepted){
                         Toast.makeText(getContext(), "Permission Granted, Storing your wallet!", Toast.LENGTH_LONG).show();
-                        storeUserProfile(userSecret.getText().toString());
                     }else {
                         Toast.makeText(getContext(), "Permission Denied, We need storage permission to store your wallet securely!", Toast.LENGTH_LONG).show();
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (shouldShowRequestPermissionRationale(CAMERA)) {
+                            if (shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE)) {
                                 showMessageOKCancel("You need to allow access to both the permissions",
                                         new DialogInterface.OnClickListener() {
                                             @Override
@@ -200,7 +213,8 @@ public class ProfileFragment extends Fragment {
                                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                                     requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE},
                                                             REQUEST_STORAGE);
-                                                }
+                                                    }
+
                                             }
                                         });
                                 return;

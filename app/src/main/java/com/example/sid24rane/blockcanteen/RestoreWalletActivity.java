@@ -32,7 +32,6 @@ import java.io.IOException;
 
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 
-import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class RestoreWalletActivity extends AppCompatActivity {
@@ -67,10 +66,11 @@ public class RestoreWalletActivity extends AppCompatActivity {
 
                 if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.LOLLIPOP)
                 {
-                    if(!checkPermission())
+                    if(checkPermission())
                     {
-                        requestPermission();
+                        openFile("text/plain");
                     }else{
+                        requestPermission();
                         openFile("text/plain");
                     }
                 }
@@ -84,12 +84,12 @@ public class RestoreWalletActivity extends AppCompatActivity {
 
                 if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.LOLLIPOP)
                 {
-                    if(!checkPermission())
+                    if(checkPermission())
                     {
-                        requestPermission();
                         restoreUserProfile();
 
                     }else{
+                        requestPermission();
                         restoreUserProfile();
                     }
                 }
@@ -192,14 +192,13 @@ public class RestoreWalletActivity extends AppCompatActivity {
             case REQUEST_STORAGE:
                 if (grantResults.length > 0) {
 
-                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (cameraAccepted){
+                    boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (storageAccepted){
                         Toast.makeText(RestoreWalletActivity.this, "Permission Granted!", Toast.LENGTH_LONG).show();
-                        restoreUserProfile();
                     }else {
                         Toast.makeText(RestoreWalletActivity.this, "Permission Denied! We need storage permission to restore your wallet", Toast.LENGTH_LONG).show();
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (shouldShowRequestPermissionRationale(CAMERA)) {
+                            if (shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE)) {
                                 showMessageOKCancel("You need to allow access to both the permissions",
                                         new DialogInterface.OnClickListener() {
                                             @Override
