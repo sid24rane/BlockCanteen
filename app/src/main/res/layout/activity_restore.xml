@@ -18,6 +18,24 @@
             android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
+            <ImageView
+                android:layout_marginTop="50dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/restore_icon"
+                android:layout_gravity="center_horizontal"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textStyle="normal|bold"
+                android:textSize="20dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:text="Restore your Wallet with Secret Phrase"/>
+
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -38,14 +56,14 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
                             android:layout_marginTop="10dp"
-                            android:text="File : "
+                            android:text="Please upload your Credentials.txt file to restore your wallet"
                             android:textColor="#000000"
                             android:textStyle="italic"
                             />
@@ -53,9 +71,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
+                            android:layout_marginBottom="10dp"
                             android:layout_marginTop="10dp"
-                            android:textColor="#000000"
+                            android:textColor=" #33691e"
                             android:textStyle="italic"
                             android:id="@+id/pathToFile"/>
 
@@ -66,9 +84,8 @@
                         android:id="@+id/uploadFile"
                         android:layout_width="180dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="10dp"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="10dp"
                         android:background="@layout/button_border_corner_circle_"
                         android:text="Upload file"
                         android:textColor="#fff"
@@ -79,7 +96,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="10dp"
-                        android:text="Secret :"
+                        android:text="Please enter your Secret phrase (12+ Characters)"
                         android:textColor="#000000"
                         android:textStyle="italic" />
 
@@ -88,7 +105,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:hint="Your 12 Character Secret"
+                        android:hint="Eg: I love VJTI Blockchain Wallet"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="10dp" />
 
@@ -96,11 +113,10 @@
                         android:id="@+id/restoreProfile"
                         android:layout_width="180dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="10dp"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="10dp"
                         android:background="@layout/button_border_corner_circle_"
-                        android:text="Ready to restore?"
+                        android:text="Restore"
                         android:textColor="#fff"
                         android:textSize="16dp" />
 

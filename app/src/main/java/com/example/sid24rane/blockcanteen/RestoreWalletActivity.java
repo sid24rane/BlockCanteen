@@ -259,7 +259,7 @@ public class RestoreWalletActivity extends AppCompatActivity {
                     }
 
                     //Setting the textView with the path
-                    pathToFile.setText(path);
+                    pathToFile.setText("File Location : " + path);
                 }
                 break;
         }
