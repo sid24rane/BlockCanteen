@@ -114,7 +114,7 @@
                         android:layout_width="180dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="10dp"
                         android:background="@layout/button_border_corner_circle_"
                         android:text="Restore"
                         android:textColor="#fff"
