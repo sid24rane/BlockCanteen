@@ -17,7 +17,7 @@ import com.google.zxing.common.BitMatrix;
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 
 
-public class ReceiveCoins extends AppCompatActivity{
+public class ReceiveCoinsActivity extends AppCompatActivity{
     // qr code generation
     public final static int WHITE = 0xFFFFFFFF;
     public final static int BLACK = 0xFF000000;
@@ -36,7 +36,7 @@ public class ReceiveCoins extends AppCompatActivity{
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
 
-        setContentView(R.layout.activity_qrgenerator);
+        setContentView(R.layout.activity_receive_coins);
 
 
         qrcode = (ImageView) findViewById(R.id.qrcode);

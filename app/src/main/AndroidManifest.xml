@@ -44,7 +44,7 @@
             android:name=".KeyGeneration.KeyGenerationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ReceiveCoins"
+            android:name=".ReceiveCoinsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".RestoreWalletActivity"
@@ -59,7 +59,7 @@
             android:name=".TransactionResultActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SendCoins"
+            android:name=".SendCoinsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_send_using_public_key"
             android:theme="@style/FullscreenTheme"></activity>

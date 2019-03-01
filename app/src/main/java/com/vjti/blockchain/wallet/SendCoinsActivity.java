@@ -24,7 +24,7 @@ import android.widget.TextView;
 import com.vjti.blockchain.wallet.utilities.ConnectionLiveData;
 import com.vjti.blockchain.wallet.utilities.ConnectionModel;
 
-public class SendCoins extends AppCompatActivity {
+public class SendCoinsActivity extends AppCompatActivity {
 
     private Button sendUsingPublicKey;
     private Button sendUsingQr;
@@ -107,7 +107,7 @@ public class SendCoins extends AppCompatActivity {
                 }
 
                 if(checkField){
-                    Intent intent = new Intent(SendCoins.this, CheckPinAndMakeTransactionActivity.class);
+                    Intent intent = new Intent(SendCoinsActivity.this, CheckPinAndMakeTransactionActivity.class);
                     intent.putExtra("amount", String.valueOf(amt));
                     intent.putExtra("message", name + ": " + messageTyped);
                     intent.putExtra("receiverPublicKey", publicKey);
