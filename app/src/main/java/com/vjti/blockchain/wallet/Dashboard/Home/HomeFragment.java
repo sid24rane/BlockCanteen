@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
-import com.vjti.blockchain.wallet.QRGeneratorActivity;
+import com.vjti.blockchain.wallet.ReceiveCoins;
 import com.vjti.blockchain.wallet.R;
 import com.vjti.blockchain.wallet.SendCoins;
 import com.vjti.blockchain.wallet.data.DataInSharedPreferences;
@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment {
         receive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(),QRGeneratorActivity.class);
+                Intent intent = new Intent(getContext(),ReceiveCoins.class);
                 startActivity(intent);
                 getActivity().overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
             }

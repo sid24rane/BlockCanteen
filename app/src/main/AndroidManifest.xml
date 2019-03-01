@@ -44,7 +44,7 @@
             android:name=".KeyGeneration.KeyGenerationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".QRGeneratorActivity"
+            android:name=".ReceiveCoins"
             android:screenOrientation="portrait" />
         <activity
             android:name=".RestoreWalletActivity"

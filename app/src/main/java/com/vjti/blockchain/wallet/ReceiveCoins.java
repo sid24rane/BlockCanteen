@@ -17,7 +17,7 @@ import com.google.zxing.common.BitMatrix;
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 
 
-public class QRGeneratorActivity extends AppCompatActivity{
+public class ReceiveCoins extends AppCompatActivity{
     // qr code generation
     public final static int WHITE = 0xFFFFFFFF;
     public final static int BLACK = 0xFF000000;
