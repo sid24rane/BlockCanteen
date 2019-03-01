@@ -54,8 +54,7 @@ public class ReceiveCoinsActivity extends AppCompatActivity{
     private void generateQRCode() throws WriterException {
         String pubKey = DataInSharedPreferences.retrievingPublicKey();
         String userName = SecurePreferences.getStringValue("fullName", "");
-        String qrString = userName + ":" + pubKey;
-        Bitmap bitmap = encodeAsBitmap(qrString);
+        Bitmap bitmap = encodeAsBitmap(pubKey);
         qrcode.setImageBitmap(bitmap);
         publicKey.setText(pubKey);
         name.setText(userName);

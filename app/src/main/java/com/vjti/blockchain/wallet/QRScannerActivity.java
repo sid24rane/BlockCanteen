@@ -132,14 +132,8 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
 
         Intent i = new Intent(QRScannerActivity.this, AdditionalQrDetails.class);
         String qrString = result.getText().toString();
-        //for compatibility with v1.0
-        if(qrString.contains(":")){
-            String qrValues[] = qrString.split(":");
-            i.putExtra("publicKey", qrValues[1]);
-            i.putExtra("receiverName", qrValues[0]);
-        }else{
-            i.putExtra("publicKey", qrString);
-        }
+
+        i.putExtra("publicKey", qrString);
         startActivity(i);
         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
 

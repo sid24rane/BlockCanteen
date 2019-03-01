@@ -29,7 +29,6 @@ public class SendCoinsActivity extends AppCompatActivity {
     private Button sendUsingPublicKey;
     private Button sendUsingQr;
     private EditText receiverPublicKey;
-    private EditText receiverName;
     private EditText amount;
     private EditText message;
     private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
@@ -61,7 +60,6 @@ public class SendCoinsActivity extends AppCompatActivity {
         amount = (EditText) findViewById(R.id.amount);
         message = (EditText)findViewById(R.id.message);
         receiverPublicKey = (EditText) findViewById(R.id.publicKey);;
-        receiverName = (EditText) findViewById(R.id.name);
 
         sendUsingQr.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,13 +76,11 @@ public class SendCoinsActivity extends AppCompatActivity {
 
                 int amt = 0;
                 String publicKey = null;
-                String name= null;
                 String messageTyped= null;
 
                 try{
                     amt = Integer.valueOf(String.valueOf(amount.getText()));
                     publicKey = receiverPublicKey.getText().toString().trim();
-                    name = receiverName.getText().toString().trim();
                     messageTyped = message.getText().toString().trim();
                 }catch (Exception e){
                     Log.d("Send", e.toString());
@@ -95,14 +91,11 @@ public class SendCoinsActivity extends AppCompatActivity {
                 if(TextUtils.isEmpty(publicKey) || publicKey.length() != 124){
                     showErrorInSnackBar("Please enter a valid public key!");
                     checkField = false;
-                } else if(TextUtils.isEmpty(name)){
-                    showErrorInSnackBar("Please type receiver's name!");
-                    checkField = false;
-                } else if ((amt <= 0)){
+                }else if ((amt <= 0)){
                     showErrorInSnackBar(" Cheeky! But amount must be greater than 0");
                     checkField = false;
                 } else if(TextUtils.isEmpty(messageTyped) ){
-                    if( messageTyped.length() >= name.length() + messageTyped.length())
+                    if( messageTyped.length() >= messageTyped.length())
                         showErrorInSnackBar("Too long Message!");
                     else
                         showErrorInSnackBar("Please type a lovely message!");
@@ -112,7 +105,7 @@ public class SendCoinsActivity extends AppCompatActivity {
                 if(checkField){
                     Intent intent = new Intent(SendCoinsActivity.this, CheckPinAndMakeTransactionActivity.class);
                     intent.putExtra("amount", String.valueOf(amt));
-                    intent.putExtra("message", name + ": " + messageTyped);
+                    intent.putExtra("message", messageTyped);
                     intent.putExtra("receiverPublicKey", publicKey);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);

@@ -80,19 +80,7 @@
                         android:id="@+id/amount"
                         android:text="40 VJC"
                         android:layout_gravity="center_horizontal"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/text_black"
-                        android:layout_marginTop="20dp"
-                        android:textSize="14dp"
-                        android:textAlignment="center"
-                        android:textStyle="bold"
-                        android:id="@+id/receiver"
-                        android:text="Receiver Name"
-                        android:layout_gravity="center_horizontal"/>
-
+                    
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
