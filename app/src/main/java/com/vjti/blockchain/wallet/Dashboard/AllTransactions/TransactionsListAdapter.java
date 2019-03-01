@@ -13,6 +13,8 @@ import com.vjti.blockchain.wallet.R;
 
 import java.util.ArrayList;
 
+import im.delight.android.identicons.*;
+
 public class TransactionsListAdapter extends RecyclerView.Adapter<TransactionsListAdapter.ViewHolder> {
 
     private ArrayList<TransactionModel> transactionModelArrayList;
@@ -31,9 +33,10 @@ public class TransactionsListAdapter extends RecyclerView.Adapter<TransactionsLi
     @Override
     public void onBindViewHolder(@NonNull TransactionsListAdapter.ViewHolder holder, int position) {
         TransactionModel transaction = transactionModelArrayList.get(position);
-        holder.address.setText(String.valueOf(transaction.getReceiverKey()));
+        holder.address.setText(String.valueOf(transaction.getReceiverKey().substring(100,124)));
         holder.amount.setText(String.valueOf(transaction.getAmount()));
         holder.timestamp.setText(String.valueOf(transaction.getUnixTimeStamp()));
+        holder.identicon.show(String.valueOf(transaction.getReceiverKey()));
 
         if(Integer.valueOf(transaction.getAmount()) < 0){
             //Red Colour
@@ -57,6 +60,7 @@ public class TransactionsListAdapter extends RecyclerView.Adapter<TransactionsLi
         public TextView address;
         public TextView amount;
         public TextView timestamp;
+        public Identicon identicon;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -64,6 +68,8 @@ public class TransactionsListAdapter extends RecyclerView.Adapter<TransactionsLi
             this.address = (TextView) itemView.findViewById(R.id.address);
             this.amount = (TextView) itemView.findViewById(R.id.amount);
             this.timestamp = (TextView) itemView.findViewById(R.id.timestamp);
+            this.identicon = (Identicon) itemView.findViewById(R.id.identicon);
+
         }
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -24,38 +25,60 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:id="@+id/identiconLayout">
+
+                <im.delight.android.identicons.AsymmetricIdenticon
+                    android:id="@+id/identicon"
+                    android:layout_gravity="center"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/transactionContentLayout"
+                android:layout_toEndOf="@+id/identiconLayout"
+                android:layout_marginLeft="8dp">
+
+                <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="PublicKey"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_margin="4dp"
+                android:textIsSelectable="true" />
+
+                <TextView
+                    android:id="@+id/timestamp"
+                    android:layout_below="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="4dp"
+                    android:text="Timestamp" />
+
+            </RelativeLayout>
+
             <TextView
                 android:id="@+id/amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerInParent="true"
                 android:layout_margin="4dp"
                 android:textColor="#222222"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 />
-
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_toStartOf="@+id/amount"
-                android:text="PublicKey"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_margin="4dp"
-                android:textIsSelectable="true"/>
-
-            <TextView
-                android:id="@+id/timestamp"
-                android:layout_below="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_margin="4dp"
-                android:text="Timestamp" />
 
         </RelativeLayout>
 
