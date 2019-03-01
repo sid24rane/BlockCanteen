@@ -2,7 +2,6 @@ package com.vjti.blockchain.wallet.Dashboard.Home;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -14,23 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
-import com.vjti.blockchain.wallet.Dashboard.DashboardActivity;
 import com.vjti.blockchain.wallet.QRGeneratorActivity;
-import com.vjti.blockchain.wallet.QRScannerActivity;
 import com.vjti.blockchain.wallet.R;
+import com.vjti.blockchain.wallet.SendCoins;
 import com.vjti.blockchain.wallet.data.DataInSharedPreferences;
 import com.vjti.blockchain.wallet.utilities.NetworkUtils;
 
 import org.json.JSONObject;
-
-import java.util.Objects;
 
 
 public class HomeFragment extends Fragment {
@@ -59,7 +54,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if((isNetworkAvailable())) {
-                    Intent intent = new Intent(getContext(), QRScannerActivity.class);
+                    Intent intent = new Intent(getContext(), SendCoins.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 }else{

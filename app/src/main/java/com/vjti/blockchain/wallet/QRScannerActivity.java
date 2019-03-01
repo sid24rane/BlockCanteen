@@ -130,7 +130,7 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
         Log.d("QRCodeScanner", result.getText());
         Log.d("QRCodeScanner", result.getBarcodeFormat().toString());
 
-        Intent i = new Intent(QRScannerActivity.this, AmountToBeSentActivity.class);
+        Intent i = new Intent(QRScannerActivity.this, AdditionalQrDetails.class);
         String qrString = result.getText().toString();
         //for compatibility with v1.0
         if(qrString.contains(":")){

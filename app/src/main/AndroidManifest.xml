@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <application
         android:allowBackup="true"
         android:fullBackupContent="false"
@@ -22,13 +21,13 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Dashboard.DashboardActivity"
-            android:screenOrientation="portrait"
-            android:hardwareAccelerated="true"/>
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".QRScannerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AmountToBeSentActivity"
+            android:name=".AdditionalQrDetails"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SplashScreenActivity"
@@ -50,12 +49,20 @@
         <activity
             android:name=".RestoreWalletActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".RegisterPINActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".CheckPINActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".TransactionResultActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".RegisterPINActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CheckPinAndMakeTransactionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TransactionResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SendCoins"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_send_using_public_key"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

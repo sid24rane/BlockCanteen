@@ -10,22 +10,21 @@ import android.view.WindowManager;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
+import com.hanks.passcodeview.PasscodeView;
 import com.vjti.blockchain.wallet.data.DataInSharedPreferences;
 import com.vjti.blockchain.wallet.utilities.NetworkUtils;
 import com.vjti.blockchain.wallet.utilities.TransactionUtils;
-import com.hanks.passcodeview.PasscodeView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 
-public class CheckPINActivity extends AppCompatActivity {
+public class CheckPinAndMakeTransactionActivity extends AppCompatActivity {
 
     private final String TAG = getClass().getSimpleName();
     private String amount;
     private String receiverPublicKey;
-    private String receiverName;
     private String message;
 
     @Override
@@ -89,7 +88,7 @@ public class CheckPINActivity extends AppCompatActivity {
                         Log.d("makeTransaction res: ", response.toString());
 
                         if(response.split(" ")[0].equals("False")){
-                            Intent i = new Intent(CheckPINActivity.this, TransactionResultActivity.class);
+                            Intent i = new Intent(CheckPinAndMakeTransactionActivity.this, TransactionResultActivity.class);
                             i.putExtra("result", "false");
                             i.putExtra("amount", amount);
                             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -106,7 +105,7 @@ public class CheckPINActivity extends AppCompatActivity {
                             Log.d(TAG, "send_this : "+  send_this);
                             Log.d(TAG, "sign_this : " + sign_this);
 
-                            String signedString = new TransactionUtils().signString(sign_this, CheckPINActivity.this);
+                            String signedString = new TransactionUtils().signString(sign_this, CheckPinAndMakeTransactionActivity.this);
 
                             sendTransaction(send_this, signedString);
 
@@ -119,7 +118,7 @@ public class CheckPINActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         Log.d("makeTransaction err:", anError.toString());
-                        Intent i = new Intent(CheckPINActivity.this, TransactionResultActivity.class);
+                        Intent i = new Intent(CheckPinAndMakeTransactionActivity.this, TransactionResultActivity.class);
                         i.putExtra("result", "false");
                         i.putExtra("amount",amount);
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -154,7 +153,7 @@ public class CheckPINActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, "sndTxn onResponse= " + response.toString());
-                        Intent i = new Intent(CheckPINActivity.this, TransactionResultActivity.class);
+                        Intent i = new Intent(CheckPinAndMakeTransactionActivity.this, TransactionResultActivity.class);
                         i.putExtra("result","true");
                         i.putExtra("amount", amount);
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

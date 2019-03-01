@@ -18,13 +18,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.vjti.blockchain.wallet.Dashboard.DashboardActivity;
 import com.vjti.blockchain.wallet.utilities.ConnectionLiveData;
 import com.vjti.blockchain.wallet.utilities.ConnectionModel;
 
-public class AmountToBeSentActivity extends AppCompatActivity {
+public class AdditionalQrDetails extends AppCompatActivity {
 
     private Button send;
     private String receiverPublicKey;
@@ -44,7 +42,7 @@ public class AmountToBeSentActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
-        setContentView(R.layout.activity_send);
+        setContentView(R.layout.activity_qr_additional_details);
 
         checkConnection();
         init();
@@ -71,7 +69,7 @@ public class AmountToBeSentActivity extends AppCompatActivity {
                     String messageTyped = message.getText().toString();
                     if(!TextUtils.isEmpty(messageTyped)){
                         Log.d("Message", messageTyped);
-                        Intent intent = new Intent(AmountToBeSentActivity.this, CheckPINActivity.class);
+                        Intent intent = new Intent(AdditionalQrDetails.this, CheckPinAndMakeTransactionActivity.class);
                         intent.putExtra("amount", String.valueOf(amount.getText()));
                         intent.putExtra("message", receiverName + ": " + messageTyped);
                         intent.putExtra("receiverPublicKey", receiverPublicKey);

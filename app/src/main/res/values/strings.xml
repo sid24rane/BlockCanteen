@@ -2,6 +2,10 @@
     <string name="app_name">VJTI Blockchain</string>
     <string name="title_home">Home</string>
     <string name="title_notifications">Transaction History</string>
+
+    <string name="title_activity_send_using_public_key">SendUsingPublicKey</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 </resources>
