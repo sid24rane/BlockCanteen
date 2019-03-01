@@ -26,7 +26,6 @@ public class AdditionalQrDetails extends AppCompatActivity {
 
     private Button send;
     private String receiverPublicKey;
-    private String receiverName;
     private EditText amount;
     private EditText message;
     private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
@@ -55,7 +54,6 @@ public class AdditionalQrDetails extends AppCompatActivity {
 
         Intent i = getIntent();
         receiverPublicKey = i.getStringExtra("publicKey");
-        receiverName = i.getStringExtra("receiverName");
 
         send = (Button) findViewById(R.id.send);
         amount = (EditText) findViewById(R.id.amount);
@@ -71,7 +69,7 @@ public class AdditionalQrDetails extends AppCompatActivity {
                         Log.d("Message", messageTyped);
                         Intent intent = new Intent(AdditionalQrDetails.this, CheckPinAndMakeTransactionActivity.class);
                         intent.putExtra("amount", String.valueOf(amount.getText()));
-                        intent.putExtra("message", receiverName + ": " + messageTyped);
+                        intent.putExtra("message", messageTyped);
                         intent.putExtra("receiverPublicKey", receiverPublicKey);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
