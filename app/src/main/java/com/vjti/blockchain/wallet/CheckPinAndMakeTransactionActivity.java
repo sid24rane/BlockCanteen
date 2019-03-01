@@ -156,6 +156,7 @@ public class CheckPinAndMakeTransactionActivity extends AppCompatActivity {
                         Intent i = new Intent(CheckPinAndMakeTransactionActivity.this, TransactionResultActivity.class);
                         i.putExtra("result","true");
                         i.putExtra("amount", amount);
+                        i.putExtra("message", message);
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                         startActivity(i);

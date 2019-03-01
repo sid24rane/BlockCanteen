@@ -145,13 +145,14 @@ public class AllTransactionsFragment extends Fragment{
                     String amt = jsonObject.getString("amount");
                     String address = jsonObject.getString("address");
                     String unixSeconds = jsonObject.getString("timestamp");
+                    String message = jsonObject.getString("message");
 
                     Date date = new java.util.Date(Long.valueOf(unixSeconds)*1000L);
                     SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
                     sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+5:30"));
                     String formattedDate = sdf.format(date);
 
-                    TransactionModel transactionModel = new TransactionModel(amt, address, formattedDate);
+                    TransactionModel transactionModel = new TransactionModel(amt, address, formattedDate, message);
                     transactionModelArrayList.add(transactionModel);
                     transactionsListAdapter.notifyDataSetChanged();
                 }

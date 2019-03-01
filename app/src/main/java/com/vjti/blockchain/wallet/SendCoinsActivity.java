@@ -83,9 +83,9 @@ public class SendCoinsActivity extends AppCompatActivity {
 
                 try{
                     amt = Integer.valueOf(String.valueOf(amount.getText()));
-                    publicKey = receiverPublicKey.getText().toString();
-                    name = receiverName.getText().toString();
-                    messageTyped = message.getText().toString();
+                    publicKey = receiverPublicKey.getText().toString().trim();
+                    name = receiverName.getText().toString().trim();
+                    messageTyped = message.getText().toString().trim();
                 }catch (Exception e){
                     Log.d("Send", e.toString());
                 }
@@ -101,8 +101,11 @@ public class SendCoinsActivity extends AppCompatActivity {
                 } else if ((amt <= 0)){
                     showErrorInSnackBar(" Cheeky! But amount must be greater than 0");
                     checkField = false;
-                } else if(TextUtils.isEmpty(messageTyped)){
-                    showErrorInSnackBar("Please type a lovely message!");
+                } else if(TextUtils.isEmpty(messageTyped) ){
+                    if( messageTyped.length() >= name.length() + messageTyped.length())
+                        showErrorInSnackBar("Too long Message!");
+                    else
+                        showErrorInSnackBar("Please type a lovely message!");
                     checkField = false;
                 }
 

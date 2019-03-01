@@ -48,20 +48,21 @@
                 android:layout_toEndOf="@+id/identiconLayout"
                 android:layout_marginLeft="8dp">
 
+
                 <TextView
-                android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:text="PublicKey"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_margin="4dp"
-                android:textIsSelectable="true" />
+                    android:id="@+id/message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="Message"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_margin="4dp"
+                    android:textIsSelectable="true" />
 
                 <TextView
                     android:id="@+id/timestamp"
-                    android:layout_below="@+id/address"
+                    android:layout_below="@+id/message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"

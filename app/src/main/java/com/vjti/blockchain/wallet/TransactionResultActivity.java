@@ -20,6 +20,8 @@ public class TransactionResultActivity extends AppCompatActivity {
     private ImageView result_image;
     private TextView amount;
     private TextView sub_result;
+    private TextView receiverName;
+    private TextView message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,17 +42,28 @@ public class TransactionResultActivity extends AppCompatActivity {
         result_image = (ImageView) findViewById(R.id.res_image);
         amount = (TextView) findViewById(R.id.amount);
         sub_result = (TextView) findViewById(R.id.sub_result);
+        message = (TextView) findViewById(R.id.message);
+        receiverName = (TextView) findViewById(R.id.receiver);
 
         Intent i = getIntent();
         String res = i.getStringExtra("result");
         String amt = i.getStringExtra("amount");
-        //Toast.makeText(TransactionResultActivity.this, res, Toast.LENGTH_SHORT).show();
+        String qrString = i.getStringExtra("message");
+
+        String messageString = null, receiverNameString = null;
+        if(qrString.contains(":")){
+            receiverNameString = qrString.split(":")[0];
+            messageString = qrString.split(":")[1];
+        }
 
         if (res.equals("true")){
             result.setText("The transaction was successful !");
             result_image.setImageResource(R.drawable.ic_check_circle_green_500_24dp);
             sub_result.setText("You have successfully sent");
             amount.setText(amt + " VJ-Coins");
+            receiverName.setText( "Receiver: " + receiverNameString);
+            message.setText("Message: "  + messageString);
+
         }else{
             result.setText("Oops! The transaction has failed! Please try again later.");
             result_image.setImageResource(R.drawable.ic_highlight_off_red_500_24dp);
