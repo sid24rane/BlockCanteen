@@ -53,10 +53,12 @@ public class QRGeneratorActivity extends AppCompatActivity{
 
     private void generateQRCode() throws WriterException {
         String pubKey = DataInSharedPreferences.retrievingPublicKey();
-        Bitmap bitmap = encodeAsBitmap(pubKey);
+        String userName = SecurePreferences.getStringValue("fullName", "");
+        String qrString = userName + ":" + pubKey;
+        Bitmap bitmap = encodeAsBitmap(qrString);
         qrcode.setImageBitmap(bitmap);
         publicKey.setText(pubKey);
-        name.setText(SecurePreferences.getStringValue("fullName", ""));
+        name.setText(userName);
     }
 
     Bitmap encodeAsBitmap(String str) throws WriterException {

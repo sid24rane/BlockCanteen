@@ -62,7 +62,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="ffffff" />
+                                      <entry key="backgroundColor" value="1c1d1d" />
                                       <entry key="foregroundImage" value="$PROJECT_DIR$/app/src/main/res/drawable/logo_app.png" />
                                     </map>
                                   </option>

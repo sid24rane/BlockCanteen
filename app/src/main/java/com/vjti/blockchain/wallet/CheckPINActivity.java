@@ -25,6 +25,8 @@ public class CheckPINActivity extends AppCompatActivity {
     private final String TAG = getClass().getSimpleName();
     private String amount;
     private String receiverPublicKey;
+    private String receiverName;
+    private String message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +37,11 @@ public class CheckPINActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_check_pin);
 
-        Intent i = getIntent();
-        receiverPublicKey = i.getStringExtra("receiverPublicKey");
-        amount = i.getStringExtra("amount");
+        Intent intent = getIntent();
+        amount = intent.getStringExtra("amount");
+        message = intent.getStringExtra("message");
+        receiverPublicKey = intent.getStringExtra("receiverPublicKey");
+
 
         PasscodeView passcodeView = (PasscodeView) findViewById(R.id.password);
         String pin = SecurePreferences.getStringValue("pin", "");
@@ -69,6 +73,7 @@ public class CheckPINActivity extends AppCompatActivity {
             json.put("bounty",amount);
             json.put("receiver_public_key", receiver_pub);
             json.put("sender_public_key",sender_pub);
+            json.put("message", message);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -86,7 +91,7 @@ public class CheckPINActivity extends AppCompatActivity {
                         if(response.split(" ")[0].equals("False")){
                             Intent i = new Intent(CheckPINActivity.this, TransactionResultActivity.class);
                             i.putExtra("result", "false");
-                            i.putExtra("amount",amount);
+                            i.putExtra("amount", amount);
                             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                             startActivity(i);
@@ -151,7 +156,7 @@ public class CheckPINActivity extends AppCompatActivity {
                         Log.d(TAG, "sndTxn onResponse= " + response.toString());
                         Intent i = new Intent(CheckPINActivity.this, TransactionResultActivity.class);
                         i.putExtra("result","true");
-                        i.putExtra("amount",amount);
+                        i.putExtra("amount", amount);
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                         startActivity(i);

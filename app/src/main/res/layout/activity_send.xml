@@ -67,6 +67,28 @@
                     android:layout_height="wrap_content"
                     />
 
+                <TextView
+                    android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:textStyle="italic"
+                    android:textSize="20dp"
+                    android:text="Message for the receiver"
+                    />
+
+                <EditText
+                    android:id="@+id/message"
+                    android:layout_margin="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:hint="Eg. Bought pencils"
+                    android:inputType="text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
                 <Button
                     android:id="@+id/send"
                     android:layout_width="180dp"

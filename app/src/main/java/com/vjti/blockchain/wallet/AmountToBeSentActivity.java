@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -26,7 +28,9 @@ public class AmountToBeSentActivity extends AppCompatActivity {
 
     private Button send;
     private String receiverPublicKey;
+    private String receiverName;
     private EditText amount;
+    private EditText message;
     private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     public static final int MobileData = 2;
     public static final int WifiData = 1;
@@ -49,25 +53,39 @@ public class AmountToBeSentActivity extends AppCompatActivity {
 
     private void init() {
 
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
         Intent i = getIntent();
         receiverPublicKey = i.getStringExtra("publicKey");
-
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+        receiverName = i.getStringExtra("receiverName");
 
         send = (Button) findViewById(R.id.send);
         amount = (EditText) findViewById(R.id.amount);
+        message = (EditText)findViewById(R.id.message);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int amt = Integer.valueOf(String.valueOf(amount.getText()));
                 if (!(amt <= 0)){
-                    Intent intent = new Intent(AmountToBeSentActivity.this, CheckPINActivity.class);
-                    intent.putExtra("amount", String.valueOf(amount.getText()));
-                    intent.putExtra("receiverPublicKey", receiverPublicKey);
-                    startActivity(intent);
-                    overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                    String messageTyped = message.getText().toString();
+                    if(!TextUtils.isEmpty(messageTyped)){
+                        Log.d("Message", messageTyped);
+                        Intent intent = new Intent(AmountToBeSentActivity.this, CheckPINActivity.class);
+                        intent.putExtra("amount", String.valueOf(amount.getText()));
+                        intent.putExtra("message", receiverName + ": " + messageTyped);
+                        intent.putExtra("receiverPublicKey", receiverPublicKey);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+
+                    }else{
+                        Snackbar snackbar = Snackbar
+                                .make(coordinatorLayout, "Please type a lovely message!", Snackbar.LENGTH_LONG);
+                        View sbView = snackbar.getView();
+                        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                        textView.setTextColor(Color.RED);
+                        snackbar.show();
+                    }
                 }else{
                     Snackbar snackbar = Snackbar
                             .make(coordinatorLayout, " Cheeky! But amount must be greater than 0", Snackbar.LENGTH_LONG);
