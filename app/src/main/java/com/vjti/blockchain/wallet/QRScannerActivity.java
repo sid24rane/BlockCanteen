@@ -71,6 +71,7 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy() invoked");
+        scannerView = null;
         scannerView.stopCamera();
     }
 

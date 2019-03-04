@@ -23,8 +23,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amulyakhare.textdrawable.TextDrawable;
-import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.vjti.blockchain.wallet.R;
 import com.vjti.blockchain.wallet.utilities.AES;
 
@@ -35,6 +33,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
+import im.delight.android.identicons.Identicon;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -46,7 +45,7 @@ public class ProfileFragment extends Fragment {
     private TextView publicKey;
     private Button downloadProfile;
     private EditText userSecret;
-    private ImageView userAvatar;
+    private Identicon userAvatar;
     private final String TAG = getClass().getSimpleName();
     private final int REQUEST_STORAGE = 11;
     private ImageView copyKey;
@@ -65,7 +64,7 @@ public class ProfileFragment extends Fragment {
 
         downloadProfile = (Button) view.findViewById(R.id.downloadProfile) ;
         userSecret = (EditText) view.findViewById(R.id.userSecret);
-        userAvatar = (ImageView) view.findViewById(R.id.user_avatar);
+        userAvatar = (Identicon) view.findViewById(R.id.user_avatar);
         copyKey = (ImageView) view.findViewById(R.id.copy);
 
         downloadProfile.setOnClickListener(new View.OnClickListener() {
@@ -117,25 +116,16 @@ public class ProfileFragment extends Fragment {
     }
 
 
-    private TextDrawable setUserAvatar() {
-        ColorGenerator generator = ColorGenerator.MATERIAL;
-        String user_name = SecurePreferences.getStringValue("fullName",null);
-        int color = generator.getColor(user_name);
-        TextDrawable drawable = TextDrawable.builder()
-                .buildRound(user_name.substring(0, 1).toUpperCase(), color);
-         return drawable;
-    }
-
     private void setUserDetails(){
         Log.d(TAG,"setUserDetails()" );
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                TextDrawable drawable = setUserAvatar();
+                String public_key = SecurePreferences.getStringValue("publicKey", "");
                 name.setText(SecurePreferences.getStringValue("fullName", ""));
                 emailAddress.setText(SecurePreferences.getStringValue("emailAddress", ""));
-                publicKey.setText(SecurePreferences.getStringValue("publicKey", ""));
-                userAvatar.setImageDrawable(drawable);
+                publicKey.setText(public_key);
+                userAvatar.show(public_key);
                 progressDialog.dismiss();
             }
         });

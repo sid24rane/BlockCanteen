@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageView
+        <im.delight.android.identicons.AsymmetricIdenticon
             android:layout_marginTop="44dp"
             android:layout_width="80dp"
             android:layout_height="80dp"

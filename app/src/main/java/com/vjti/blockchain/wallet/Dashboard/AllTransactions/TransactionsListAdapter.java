@@ -1,5 +1,6 @@
 package com.vjti.blockchain.wallet.Dashboard.AllTransactions;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -8,13 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.amulyakhare.textdrawable.TextDrawable;
 import com.vjti.blockchain.wallet.R;
 
 import java.util.ArrayList;
 
-import im.delight.android.identicons.*;
+import im.delight.android.identicons.Identicon;
 
 public class TransactionsListAdapter extends RecyclerView.Adapter<TransactionsListAdapter.ViewHolder> {
 
@@ -48,6 +49,16 @@ public class TransactionsListAdapter extends RecyclerView.Adapter<TransactionsLi
             holder.transactionCard.setCardBackgroundColor(Color.parseColor("#e8f5e9"));
             holder.amount.setTextColor(Color.parseColor("#4caf50"));
         }
+
+        holder.identicon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) view.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                android.content.ClipData clip = android.content.ClipData.newPlainText("Public Key Copied", transaction.getReceiverKey());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(view.getContext(), "Public Key Copied to Clipboard", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
