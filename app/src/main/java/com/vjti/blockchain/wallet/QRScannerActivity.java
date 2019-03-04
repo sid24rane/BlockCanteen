@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
+import com.vjti.blockchain.wallet.Dashboard.DashboardActivity;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -61,9 +62,9 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
                 }
                 scannerView.setResultHandler(this);
                 scannerView.startCamera();
-            } else {
+            } /*else {
                 requestPermission();
-            }
+            }*/
         }
     }
 
@@ -71,7 +72,6 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy() invoked");
-        scannerView = null;
         scannerView.stopCamera();
     }
 
@@ -89,40 +89,19 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
         switch (requestCode) {
             case REQUEST_CAMERA:
                 if (grantResults.length > 0) {
-
                     boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if (cameraAccepted){
                         Toast.makeText(getApplicationContext(), "Permission Granted, Now you can scan QR Code using Camera", Toast.LENGTH_LONG).show();
                     }else {
                         Toast.makeText(getApplicationContext(), "Permission Denied, You cannot access Camera", Toast.LENGTH_LONG).show();
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (shouldShowRequestPermissionRationale(CAMERA)) {
-                                showMessageOKCancel("You need to allow access to both the permissions",
-                                        new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                    requestPermissions(new String[]{CAMERA},
-                                                            REQUEST_CAMERA);
-                                                }
-                                            }
-                                        });
-                                return;
-                            }
-                        }
+                        Intent i = new Intent(QRScannerActivity.this,SendCoinsActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(i);
+                        finish();
                     }
                 }
                 break;
         }
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new android.support.v7.app.AlertDialog.Builder(QRScannerActivity.this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
     }
 
     @Override
